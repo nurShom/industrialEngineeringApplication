@@ -1,27 +1,64 @@
 package edu.ohio.ise.ise6900.geometry.rectangle;
-
+/*
+ * ISE6900 Object Oriented Application in Industrial Engineering
+ * Programming Project 01 
+ * 
+ * @author Nur Shomik Arafat
+ * Date: 2017-01-14
+ * @version 1.0
+ * 
+ */
 import java.util.Scanner;
 
+/**
+ * Class Rectangle represents a geometric Rectangle.
+ * It has two attributes: width and height. 
+ * The class has methods that calculate other measurements
+ * for the rectangle using the width and the height. 
+ * 
+ * @author Nur Shomik Arafat
+ *
+ */
 public class Rectangle {
 	
+	/**
+	 * Class attributes:
+	 * Class Rectangle has two attributes:
+	 * Width and Height
+	 */
 	private double width, height;
 	
+	/**
+	 * @return the area of the rectangle
+	 */
 	protected double getArea(){
 		return this.width * this.height;
 	}
 	
+	/**
+	 * @return the perimeter of the rectangle
+	 */
 	protected double getPerimiter(){
 		return 2 * (this.width + this.height);
 	}
 	
+	/**
+	 * @return the diagonal of the rectangle
+	 */
 	protected double getDiagonal(){
 		return Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2));
 	}
 	
+	/**
+	 * @return the area of the circumscribed circle 
+	 */
 	protected double getAreaOfCircumscribedCircle(){
 		return Math.PI * Math.pow((this.getDiagonal()/2), 2);
 	}
 
+	/**
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		
 		Rectangle rec = new Rectangle();
@@ -41,6 +78,9 @@ public class Rectangle {
 	}
 
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		return "Rectangle [width=" + width + ", height=" + height + "]";
@@ -81,7 +121,7 @@ public class Rectangle {
 
 
 	/**
-	 * @return the width
+	 * @return the width of the rectangle
 	 */
 	public double getWidth() {
 		return width;
@@ -89,7 +129,7 @@ public class Rectangle {
 
 
 	/**
-	 * @param width the width to set
+	 * @param width the width to set of the rectangle
 	 */
 	public void setWidth(double width) {
 		this.width = width;
@@ -97,7 +137,7 @@ public class Rectangle {
 
 
 	/**
-	 * @return the height
+	 * @return the height of the rectangle
 	 */
 	public double getHeight() {
 		return height;
@@ -105,7 +145,7 @@ public class Rectangle {
 
 
 	/**
-	 * @param height the height to set
+	 * @param height the height to set of the rectangle
 	 */
 	public void setHeight(double height) {
 		this.height = height;
