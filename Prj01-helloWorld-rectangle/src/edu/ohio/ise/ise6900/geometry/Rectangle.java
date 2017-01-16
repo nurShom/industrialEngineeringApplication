@@ -1,4 +1,4 @@
-package edu.ohio.ise.ise6900.geometry.rectangle;
+package edu.ohio.ise.ise6900.geometry;
 /*
  * ISE6900 Object Oriented Application in Industrial Engineering
  * Programming Project 01 
