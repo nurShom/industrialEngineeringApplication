@@ -9,7 +9,6 @@ package edu.ohio.ise.ise6900.geometry;
  * 
  */
 import java.util.Scanner;
-
 /**
  * Class Rectangle represents a geometric Rectangle.
  * It has two attributes: width and height. 
