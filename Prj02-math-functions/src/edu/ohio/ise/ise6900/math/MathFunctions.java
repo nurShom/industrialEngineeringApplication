@@ -36,7 +36,7 @@ public class MathFunctions {
 			SQRT = 8,
 			POW = 9,
 			FACT = 10;
-	private String errMsg, outMsg;
+	private String errMsg, outputMsg;
 	/**
 	 * @param args
 	 * @throws InterruptedException 
@@ -69,14 +69,36 @@ public class MathFunctions {
 			
 			switch(choice) {
 			case SIN:
-				mf.setOutMsg("sin(" +input + ") = " + mf.getSinResult(input));
+				mf.setOutputMsg("sin(" +input + ") = " + mf.getSinResult(input));
+				break;
+			case COS:
+				mf.setOutputMsg("cos(" +input + ") = " + mf.getCosResult(input));
+				break;
+			case TAN:
+				mf.setOutputMsg("tan(" +input + ") = " + mf.getTanResult(input));
 				break;
 			case ASIN:
 				if(mf.isAsinParameterValid(input)){
-					mf.setOutMsg("asin(" +input + ") = " + mf.getAsinResult(input) + " degrees");
+					mf.setOutputMsg("asin(" +input + ") = " + mf.getAsinResult(input) + " degrees");
 				}
 				else{
 					mf.setErrMsg("Please enter a number between -1.0 and 1.0 for arcsin");
+				}
+				break;
+			case ACOS:
+				if(mf.isAcosParameterValid(input)){
+					mf.setOutputMsg("acos(" +input + ") = " + mf.getAcosResult(input) + " degrees");
+				}
+				else{
+					mf.setErrMsg("Please enter a number between -1.0 and 1.0 for arccos");
+				}
+				break;
+			case ATAN:
+				if(mf.isAtanParameterValid(input)){
+					mf.setOutputMsg("atan(" +input + ") = " + mf.getAtanResult(input) + " degrees");
+				}
+				else{
+					mf.setErrMsg("Please enter a number between -1.0 and 1.0 for arctan");
 				}
 				break;
 				
@@ -91,11 +113,42 @@ public class MathFunctions {
 		return Math.sin(Math.toRadians(input));
 	}
 	
+	private double getCosResult(double input) {
+		return Math.cos(Math.toRadians(input));
+	}
+	
+	private double getTanResult(double input) {
+		return Math.tan(Math.toRadians(input));
+	}
+	
 	private double getAsinResult(double input) {
 		return Math.toDegrees((Math.asin(input)));
 	}
 
 	private boolean isAsinParameterValid(double input) {
+		if(input>=-1 && input<=1){
+			return true;
+		}
+		return false;
+	}
+		
+	private double getAcosResult(double input) {
+		return Math.toDegrees((Math.acos(input)));
+	}
+
+	private boolean isAcosParameterValid(double input) {
+		if(input>=-1 && input<=1){
+			return true;
+		}
+		return false;
+	}	
+	
+	private double getAtanResult(double input) {
+		return Math.toDegrees((Math.atan(input)));
+	}
+
+	private boolean isAtanParameterValid(double input) {
+		// TODO check function validity
 		if(input>=-1 && input<=1){
 			return true;
 		}
@@ -108,16 +161,17 @@ public class MathFunctions {
 //				+ "\n  Selection of any of the math functions is required to proceed."
 				+ "\n  (Enter 'exit' or 'quit' to exit the program)\n"
 				+ "\n  Enter any of the following numbers:" 
-				+ "\n  ->sin      :  1"
-				+ "\n  ->cos      :  2" 
-				+ "\n  ->tan      :  3" 
-				+ "\n  ->asin     :  4" 
-				+ "\n  ->acos     :  5" 
-				+ "\n  ->atan     :  6"
-				+ "\n  ->ln       :  7" 
-				+ "\n  ->sqrt     :  8" 
-				+ "\n  ->pow      :  9" 
-				+ "\n  ->factorial: 10\n");
+				+ "\n  ->sin      :  " + MathFunctions.SIN
+				+ "\n  ->cos      :  " + MathFunctions.COS
+				+ "\n  ->tan      :  " + MathFunctions.TAN
+				+ "\n  ->asin     :  " + MathFunctions.ASIN
+				+ "\n  ->acos     :  " + MathFunctions.ACOS
+				+ "\n  ->atan     :  " + MathFunctions.ATAN
+				+ "\n  ->ln       :  " + MathFunctions.LN
+				+ "\n  ->sqrt     :  " + MathFunctions.SQRT
+				+ "\n  ->pow      :  " + MathFunctions.POW
+				+ "\n  ->factorial: "  + MathFunctions.FACT  
+				+ "\n");
 		
 		if(this.getErrMsg() != null){
 			System.out.flush();
@@ -138,9 +192,9 @@ public class MathFunctions {
 			}
 		}
 		
-		if(this.getOutMsg() != null){
+		if(this.getOutputMsg() != null){
 			System.out.println(" LAST RESULT:\n"
-					+ " ##> " + this.getOutMsg() + "\n");
+					+ " ##> " + this.getOutputMsg() + "\n");
 		}
 		
 		System.out.print("  $$ select ->");
@@ -163,15 +217,15 @@ public class MathFunctions {
 	/**
 	 * @return the outMsg
 	 */
-	public String getOutMsg() {
-		return outMsg;
+	public String getOutputMsg() {
+		return outputMsg;
 	}
 
 	/**
 	 * @param outMsg the outMsg to set
 	 */
-	public void setOutMsg(String outMsg) {
-		this.outMsg = outMsg;
+	public void setOutputMsg(String outMsg) {
+		this.outputMsg = outMsg;
 	}
 
 }
