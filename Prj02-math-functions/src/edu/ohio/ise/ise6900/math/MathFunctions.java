@@ -1,4 +1,5 @@
 package edu.ohio.ise.ise6900.math;
+import java.math.BigInteger;
 /*
  * ISE6900 Object Oriented Application in Industrial Engineering
  * Programming Project 01 
@@ -68,16 +69,16 @@ public class MathFunctions {
 			}
 			
 			switch(choice) {
-			case SIN:
+			case MathFunctions.SIN:
 				mf.setOutputMsg("sin(" +input + ") = " + mf.getSinResult(input));
 				break;
-			case COS:
+			case MathFunctions.COS:
 				mf.setOutputMsg("cos(" +input + ") = " + mf.getCosResult(input));
 				break;
-			case TAN:
+			case MathFunctions.TAN:
 				mf.setOutputMsg("tan(" +input + ") = " + mf.getTanResult(input));
 				break;
-			case ASIN:
+			case MathFunctions.ASIN:
 				if(mf.isAsinParameterValid(input)){
 					mf.setOutputMsg("asin(" +input + ") = " + mf.getAsinResult(input) + " degrees");
 				}
@@ -85,7 +86,7 @@ public class MathFunctions {
 					mf.setErrMsg("Please enter a number between -1.0 and 1.0 for arcsin");
 				}
 				break;
-			case ACOS:
+			case MathFunctions.ACOS:
 				if(mf.isAcosParameterValid(input)){
 					mf.setOutputMsg("acos(" +input + ") = " + mf.getAcosResult(input) + " degrees");
 				}
@@ -93,12 +94,39 @@ public class MathFunctions {
 					mf.setErrMsg("Please enter a number between -1.0 and 1.0 for arccos");
 				}
 				break;
-			case ATAN:
+			case MathFunctions.ATAN:
 				if(mf.isAtanParameterValid(input)){
 					mf.setOutputMsg("atan(" +input + ") = " + mf.getAtanResult(input) + " degrees");
 				}
 				else{
-					mf.setErrMsg("Please enter a number between -1.0 and 1.0 for arctan");
+					mf.setErrMsg("Please enter a valid number");// TODO 
+				}
+				break;
+			case MathFunctions.LN:
+				if(mf.isLnParameterValid(input)){
+					mf.setOutputMsg("ln(" +input + ") = " + mf.getLnResult(input));
+				}
+				else{
+					mf.setErrMsg("Please enter a positive number");
+				}
+				break;
+			case MathFunctions.SQRT:
+				if(mf.isSqrtParameterValid(input)){
+					mf.setOutputMsg("sqrt(" +input + ") = " + mf.getSqrtResult(input));
+				}
+				else{
+					mf.setErrMsg("Please enter a positive number or zero");
+				}
+				break;
+			case MathFunctions.POW:
+				mf.setOutputMsg("pow(" +input + ", 2) = " + mf.getPowResult(input,2));
+				break;
+			case MathFunctions.FACT:
+				if(mf.isFactParameterValid(input)){
+					mf.setOutputMsg("sqrt(" +input + ") = " + mf.getFactResult(input));
+				}
+				else{
+					mf.setErrMsg("Please enter a positive integer or zero");
 				}
 				break;
 				
@@ -108,7 +136,7 @@ public class MathFunctions {
 		scan.close();
 
 	}
-
+	
 	private double getSinResult(double input) {
 		return Math.sin(Math.toRadians(input));
 	}
@@ -149,10 +177,80 @@ public class MathFunctions {
 
 	private boolean isAtanParameterValid(double input) {
 		// TODO check function validity
-		if(input>=-1 && input<=1){
+		return true;
+	}
+
+	private double getLnResult(double input) {
+		return Math.log(input);
+	}
+	
+	private boolean isLnParameterValid(double input) {
+		if(input > 0){
 			return true;
 		}
 		return false;
+	}
+
+	private double getSqrtResult(double input) {
+		return Math.sqrt(input);
+	}
+	
+	private boolean isSqrtParameterValid(double input) {
+		if(input >= 0){
+			return true;
+		}
+		return false;
+	}
+
+	private double getPowResult(double base, double power) {
+		return Math.pow(base, power);
+	}
+	
+	private boolean isFactParameterValid(double input) {
+		if(input < 0){
+			return false;
+		}
+		
+		if(input>Math.floor(input)){
+			return false;
+		}
+		
+		return true;
+	}
+
+	private double getFactResult(double input) {
+		if(input<13){
+			return this.factorialInt((int) input);
+		}
+		else if(input<21){
+			return this.factorialLong((long) input);
+		}
+		else{
+			this.factorialBig(BigInteger.valueOf((long) input));
+			// TODO return value
+		}
+		return 0;
+	}
+	
+	private int factorialInt(int input) {
+		if(input==0 || input==1){
+			return 1;
+		}
+		return factorialInt(input-1)*input;
+	}
+	
+	private long factorialLong(long input) {
+		if(input==0 || input==1){
+			return 1;
+		}
+		return factorialLong(input-1) * input;
+	}
+	
+	private BigInteger factorialBig(BigInteger num){
+		if(num.equals(BigInteger.ZERO) || num.equals(BigInteger.ONE) ){
+			return BigInteger.ONE;
+		}
+		return (factorialBig(num.subtract(BigInteger.ONE))).multiply(num);
 	}
 
 	protected void promptUser(){
