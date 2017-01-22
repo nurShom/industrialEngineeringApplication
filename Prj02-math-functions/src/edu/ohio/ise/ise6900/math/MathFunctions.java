@@ -1,5 +1,7 @@
 package edu.ohio.ise.ise6900.math;
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Arrays;
 /*
  * ISE6900 Object Oriented Application in Industrial Engineering
  * Programming Project 01 
@@ -37,6 +39,38 @@ public class MathFunctions {
 			SQRT = 8,
 			POW = 9,
 			FACT = 10;
+	protected static enum Options {
+		SIN(1),
+		COS(2),
+		TAN(3),
+		ASIN(4),
+		ACOS(5),
+		ATAN(6),
+		LN(7),
+		SQRT(8),
+		POW(9),
+		FACT(10);
+		private int option;
+		private ArrayList options;
+		Options(int choice){
+			this.setOption(choice);
+			Options[] optSet = Options.values();
+			ArrayList<Options> optionSet = new ArrayList<Options>(Arrays.asList(optSet));
+			this.options = optionSet;
+		}
+		public int getOption() {
+			return option;
+		}
+		public void setOption(int choice) {
+			this.option = choice;
+		}
+		public boolean contains(int opt){
+			if(this.options.contains("")){
+				//TODO how to compare this??
+			}
+			return false;
+		}
+	}
 	private String errMsg, outputMsg;
 	/**
 	 * @param args
@@ -49,7 +83,7 @@ public class MathFunctions {
 		Scanner scan = new Scanner(System.in);
 		String option = null;
 		MathFunctions mf = new MathFunctions();
-		
+
 		while (true) {
 			mf.promptUser();
 			option = scan.nextLine();
@@ -58,8 +92,11 @@ public class MathFunctions {
 				System.out.println("\nThank you for using MathFunctions!");
 				break;
 			}
-			try{
-				choice = Integer.parseInt(option);				
+			try {
+				choice = Integer.parseInt(option);
+//				if(choice){
+//					
+//				}
 				System.out.print("  Enter input:");
 				input = Double.parseDouble(scan.nextLine());
 			} catch (NumberFormatException nfe) {
@@ -67,69 +104,77 @@ public class MathFunctions {
 				mf.setErrMsg("Please enter a valid number");
 				continue;
 			}
+
+			Options.SIN.getOption();
 			
-			switch(choice) {
+			switch (choice) {
 			case MathFunctions.SIN:
-				mf.setOutputMsg("sin(" +input + ") = " + mf.getSinResult(input));
+				mf.setOutputMsg("sin(" + input + ") = " + mf.getSinResult(input));
 				break;
 			case MathFunctions.COS:
-				mf.setOutputMsg("cos(" +input + ") = " + mf.getCosResult(input));
+				mf.setOutputMsg("cos(" + input + ") = " + mf.getCosResult(input));
 				break;
 			case MathFunctions.TAN:
-				mf.setOutputMsg("tan(" +input + ") = " + mf.getTanResult(input));
+				mf.setOutputMsg("tan(" + input + ") = " + mf.getTanResult(input));
 				break;
 			case MathFunctions.ASIN:
-				if(mf.isAsinParameterValid(input)){
-					mf.setOutputMsg("asin(" +input + ") = " + mf.getAsinResult(input) + " degrees");
-				}
-				else{
+				if (mf.isAsinParameterValid(input)) {
+					mf.setOutputMsg("asin(" + input + ") = " + mf.getAsinResult(input) + " degrees");
+				} else {
 					mf.setErrMsg("Please enter a number between -1.0 and 1.0 for arcsin");
 				}
 				break;
 			case MathFunctions.ACOS:
-				if(mf.isAcosParameterValid(input)){
-					mf.setOutputMsg("acos(" +input + ") = " + mf.getAcosResult(input) + " degrees");
-				}
-				else{
+				if (mf.isAcosParameterValid(input)) {
+					mf.setOutputMsg("acos(" + input + ") = " + mf.getAcosResult(input) + " degrees");
+				} else {
 					mf.setErrMsg("Please enter a number between -1.0 and 1.0 for arccos");
 				}
 				break;
 			case MathFunctions.ATAN:
-				if(mf.isAtanParameterValid(input)){
-					mf.setOutputMsg("atan(" +input + ") = " + mf.getAtanResult(input) + " degrees");
-				}
-				else{
-					mf.setErrMsg("Please enter a valid number");// TODO 
+				if (mf.isAtanParameterValid(input)) {
+					mf.setOutputMsg("atan(" + input + ") = " + mf.getAtanResult(input) + " degrees");
+				} else {
+					mf.setErrMsg("Please enter a valid number");// TODO
 				}
 				break;
 			case MathFunctions.LN:
-				if(mf.isLnParameterValid(input)){
-					mf.setOutputMsg("ln(" +input + ") = " + mf.getLnResult(input));
-				}
-				else{
+				if (mf.isLnParameterValid(input)) {
+					mf.setOutputMsg("ln(" + input + ") = " + mf.getLnResult(input));
+				} else {
 					mf.setErrMsg("Please enter a positive number");
 				}
 				break;
 			case MathFunctions.SQRT:
-				if(mf.isSqrtParameterValid(input)){
-					mf.setOutputMsg("sqrt(" +input + ") = " + mf.getSqrtResult(input));
-				}
-				else{
+				if (mf.isSqrtParameterValid(input)) {
+					mf.setOutputMsg("sqrt(" + input + ") = " + mf.getSqrtResult(input));
+				} else {
 					mf.setErrMsg("Please enter a positive number or zero");
 				}
 				break;
 			case MathFunctions.POW:
-				mf.setOutputMsg("pow(" +input + ", 2) = " + mf.getPowResult(input,2));
+				mf.setOutputMsg("pow(" + input + ", 2) = " + mf.getPowResult(input, 2));
 				break;
 			case MathFunctions.FACT:
-				if(mf.isFactParameterValid(input)){
-					mf.setOutputMsg("sqrt(" +input + ") = " + mf.getFactResult(input));
-				}
-				else{
+				String out = "";
+				if (mf.isFactParameterValid(input)) {
+					out += "factorial(" + input + ") = ";
+					if (input < 13) {
+						out += mf.factorialInt((int) input);
+					} else if (input < 21) {
+						out += mf.factorialLong((long) input);
+					} else {
+						out += mf.factorialBig(BigInteger.valueOf((long) input)).toString();
+					}
+					mf.setOutputMsg(out);
+				} else {
 					mf.setErrMsg("Please enter a positive integer or zero");
 				}
 				break;
-				
+			default:
+				mf.setErrMsg("Please choose a number from the menu");
+				break;
+
 			}
 
 		}
@@ -218,20 +263,6 @@ public class MathFunctions {
 		return true;
 	}
 
-	private double getFactResult(double input) {
-		if(input<13){
-			return this.factorialInt((int) input);
-		}
-		else if(input<21){
-			return this.factorialLong((long) input);
-		}
-		else{
-			this.factorialBig(BigInteger.valueOf((long) input));
-			// TODO return value
-		}
-		return 0;
-	}
-	
 	private int factorialInt(int input) {
 		if(input==0 || input==1){
 			return 1;
