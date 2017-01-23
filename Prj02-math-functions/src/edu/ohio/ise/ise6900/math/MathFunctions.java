@@ -72,6 +72,7 @@ public class MathFunctions {
 		}
 	}
 	private String errMsg, outputMsg;
+	private double outputValue;
 	/**
 	 * @param args
 	 * @throws InterruptedException 
@@ -105,8 +106,8 @@ public class MathFunctions {
 				continue;
 			}
 
-			Options.SIN.getOption();
-			
+//			Options.SIN.getOption();
+			mf.setOutputValue(Double.MIN_VALUE);
 			switch (choice) {
 			case MathFunctions.SIN:
 				mf.setOutputMsg("sin(" + input + ") = " + mf.getSinResult(input));
@@ -151,11 +152,13 @@ public class MathFunctions {
 			case MathFunctions.POW:
 				System.out.print("  Enter power:");
 				double power = Double.parseDouble(scan.nextLine());
-				mf.setOutputMsg("pow(" + input + ", 2) = " + mf.getPowResult(input, power));
+				mf.setOutputMsg("pow(" + input + ", "+ power+") = %.0f");
+				mf.setOutputValue(mf.getPowResult(input, power));
 				break;
 			case MathFunctions.FACT:
 				String out = "";
 				if (mf.isFactParameterValid(input)) {
+					
 					out += "factorial(" + input + ") = ";
 					if (input < 13) {
 						out += mf.factorialInt((int) input);
@@ -315,8 +318,9 @@ public class MathFunctions {
 		}
 		
 		if(this.getOutputMsg() != null){
-			System.out.println(" LAST RESULT:\n"
-					+ " ##> " + this.getOutputMsg() + "\n");
+			double outv = this.getOutputValue();
+			String outm = " LAST RESULT:\n ##> " +this.getOutputMsg() + "\n\n";
+			System.out.printf(outm, outv);
 		}
 		
 		System.out.print("  $$ select ->");
@@ -348,6 +352,20 @@ public class MathFunctions {
 	 */
 	public void setOutputMsg(String outMsg) {
 		this.outputMsg = outMsg;
+	}
+
+	/**
+	 * @return the outputValue
+	 */
+	public double getOutputValue() {
+		return outputValue;
+	}
+
+	/**
+	 * @param outputValue the outputValue to set
+	 */
+	public void setOutputValue(double outputValue) {
+		this.outputValue = outputValue;
 	}
 
 }
