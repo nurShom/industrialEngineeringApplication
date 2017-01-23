@@ -1,7 +1,10 @@
 package edu.ohio.ise.ise6900.math;
 import java.math.BigInteger;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Locale;
 /*
  * ISE6900 Object Oriented Application in Industrial Engineering
  * Programming Project 01 
@@ -72,7 +75,8 @@ public class MathFunctions {
 		}
 	}
 	private String errMsg, outputMsg;
-	private double outputValue;
+	private boolean doubleOutput;
+	private double outputValue=0;
 	/**
 	 * @param args
 	 * @throws InterruptedException 
@@ -106,45 +110,53 @@ public class MathFunctions {
 				continue;
 			}
 
-//			Options.SIN.getOption();
-			mf.setOutputValue(Double.MIN_VALUE);
+			mf.setDoubleOutput(true);
+
 			switch (choice) {
 			case MathFunctions.SIN:
-				mf.setOutputMsg("sin(" + input + ") = " + mf.getSinResult(input));
+				mf.setOutputMsg("sin(" + input + ") = ");
+				mf.setOutputValue(mf.getSinResult(input));
 				break;
 			case MathFunctions.COS:
-				mf.setOutputMsg("cos(" + input + ") = " + mf.getCosResult(input));
+				mf.setOutputMsg("cos(" + input + ") = ");
+				mf.setOutputValue(mf.getCosResult(input));
 				break;
 			case MathFunctions.TAN:
-				mf.setOutputMsg("tan(" + input + ") = " + mf.getTanResult(input));
+				mf.setOutputMsg("tan(" + input + ") = ");
+				mf.setOutputValue(mf.getTanResult(input));
 				break;
 			case MathFunctions.ASIN:
-				if (mf.isAsinParameterValid(input)) {
-					mf.setOutputMsg("asin(" + input + ") = " + mf.getAsinResult(input) + " degrees");
+				if (mf.isValidAsinParameter(input)) {
+					mf.setOutputMsg("asin(" + input + ") = (degrees) ");
+					mf.setOutputValue(mf.getAsinResult(input));
 				} else {
 					mf.setErrMsg("Please enter a number between -1.0 and 1.0 for arcsin");
 				}
 				break;
 			case MathFunctions.ACOS:
-				if (mf.isAcosParameterValid(input)) {
-					mf.setOutputMsg("acos(" + input + ") = " + mf.getAcosResult(input) + " degrees");
+				if (mf.isValidAcosParameter(input)) {
+					mf.setOutputMsg("acos(" + input + ") = (degrees) ");
+					mf.setOutputValue(mf.getAcosResult(input));
 				} else {
 					mf.setErrMsg("Please enter a number between -1.0 and 1.0 for arccos");
 				}
 				break;
 			case MathFunctions.ATAN:
-				mf.setOutputMsg("atan(" + input + ") = " + mf.getAtanResult(input) + " degrees");
+				mf.setOutputMsg("atan(" + input + ") = (degrees) ");
+				mf.setOutputValue(mf.getAtanResult(input));
 				break;
 			case MathFunctions.LN:
-				if (mf.isLnParameterValid(input)) {
-					mf.setOutputMsg("ln(" + input + ") = " + mf.getLnResult(input));
+				if (mf.isValidLnParameter(input)) {
+					mf.setOutputMsg("ln(" + input + ") = ");
+					mf.setOutputValue(mf.getLnResult(input));
 				} else {
 					mf.setErrMsg("Please enter a positive number");
 				}
 				break;
 			case MathFunctions.SQRT:
-				if (mf.isSqrtParameterValid(input)) {
-					mf.setOutputMsg("sqrt(" + input + ") = " + mf.getSqrtResult(input));
+				if (mf.isValidSqrtParameter(input)) {
+					mf.setOutputMsg("sqrt(" + input + ") = ");
+					mf.setOutputValue(mf.getSqrtResult(input));
 				} else {
 					mf.setErrMsg("Please enter a positive number or zero");
 				}
@@ -152,12 +164,12 @@ public class MathFunctions {
 			case MathFunctions.POW:
 				System.out.print("  Enter power:");
 				double power = Double.parseDouble(scan.nextLine());
-				mf.setOutputMsg("pow(" + input + ", "+ power+") = %.0f");
+				mf.setOutputMsg("pow(" + input + ", "+ power+") = ");
 				mf.setOutputValue(mf.getPowResult(input, power));
 				break;
 			case MathFunctions.FACT:
 				String out = "";
-				if (mf.isFactParameterValid(input)) {
+				if (mf.isValidFactParameter(input)) {
 					
 					out += "factorial(" + input + ") = ";
 					if (input < 13) {
@@ -168,6 +180,7 @@ public class MathFunctions {
 						out += mf.factorialBig(BigInteger.valueOf((long) input)).toString();
 					}
 					mf.setOutputMsg(out);
+					mf.setDoubleOutput(false);
 				} else {
 					mf.setErrMsg("Please enter a positive integer or zero");
 				}
@@ -183,71 +196,71 @@ public class MathFunctions {
 
 	}
 	
-	private double getSinResult(double input) {
+	public double getSinResult(double input) {
 		return Math.sin(Math.toRadians(input));
 	}
 	
-	private double getCosResult(double input) {
+	public double getCosResult(double input) {
 		return Math.cos(Math.toRadians(input));
 	}
 	
-	private double getTanResult(double input) {
+	public double getTanResult(double input) {
 		return Math.tan(Math.toRadians(input));
 	}
 	
-	private double getAsinResult(double input) {
+	public double getAsinResult(double input) {
 		return Math.toDegrees((Math.asin(input)));
 	}
 
-	private boolean isAsinParameterValid(double input) {
+	public boolean isValidAsinParameter(double input) {
 		if(input>=-1 && input<=1){
 			return true;
 		}
 		return false;
 	}
 		
-	private double getAcosResult(double input) {
+	public double getAcosResult(double input) {
 		return Math.toDegrees((Math.acos(input)));
 	}
 
-	private boolean isAcosParameterValid(double input) {
+	public boolean isValidAcosParameter(double input) {
 		if(input>=-1 && input<=1){
 			return true;
 		}
 		return false;
 	}	
 	
-	private double getAtanResult(double input) {
+	public double getAtanResult(double input) {
 		return Math.toDegrees((Math.atan(input)));
 	}
 
-	private double getLnResult(double input) {
+	public double getLnResult(double input) {
 		return Math.log(input);
 	}
 	
-	private boolean isLnParameterValid(double input) {
+	public boolean isValidLnParameter(double input) {
 		if(input > 0){
 			return true;
 		}
 		return false;
 	}
 
-	private double getSqrtResult(double input) {
+	public double getSqrtResult(double input) {
 		return Math.sqrt(input);
 	}
 	
-	private boolean isSqrtParameterValid(double input) {
+	public boolean isValidSqrtParameter(double input) {
 		if(input >= 0){
 			return true;
 		}
 		return false;
 	}
 
-	private double getPowResult(double base, double power) {
+	public double getPowResult(double base, double power) {
 		return Math.pow(base, power);
 	}
 	
-	private boolean isFactParameterValid(double input) {
+	public boolean isValidFactParameter(double input) {
 		if(input < 0){
 			return false;
 		}
@@ -259,21 +272,21 @@ public class MathFunctions {
 		return true;
 	}
 
-	private int factorialInt(int input) {
+	public int factorialInt(int input) {
 		if(input==0 || input==1){
 			return 1;
 		}
 		return factorialInt(input-1)*input;
 	}
 	
-	private long factorialLong(long input) {
+	public long factorialLong(long input) {
 		if(input==0 || input==1){
 			return 1;
 		}
 		return factorialLong(input-1) * input;
 	}
 	
-	private BigInteger factorialBig(BigInteger num){
+	public BigInteger factorialBig(BigInteger num){
 		if(num.equals(BigInteger.ZERO) || num.equals(BigInteger.ONE) ){
 			return BigInteger.ONE;
 		}
@@ -318,9 +331,15 @@ public class MathFunctions {
 		}
 		
 		if(this.getOutputMsg() != null){
-			double outv = this.getOutputValue();
-			String outm = " LAST RESULT:\n ##> " +this.getOutputMsg() + "\n\n";
-			System.out.printf(outm, outv);
+			if(this.isDoubleOutput()){
+				DecimalFormat df = new DecimalFormat("0", DecimalFormatSymbols.getInstance(Locale.ENGLISH));
+				df.setMaximumFractionDigits(340);//DecimalFormat.DOUBLE_FRACTION_DIGITS
+				String outv = df.format(this.getOutputValue());
+				System.out.println(" LAST RESULT:\n ##> " +this.getOutputMsg() + outv + "\n");
+			}
+			else{
+				System.out.println(" LAST RESULT:\n ##> " +this.getOutputMsg() + "\n");
+			}
 		}
 		
 		System.out.print("  $$ select ->");
@@ -329,7 +348,7 @@ public class MathFunctions {
 	/**
 	 * @return the errMsg
 	 */
-	public String getErrMsg() {
+	private String getErrMsg() {
 		return errMsg;
 	}
 
@@ -343,7 +362,7 @@ public class MathFunctions {
 	/**
 	 * @return the outMsg
 	 */
-	public String getOutputMsg() {
+	private String getOutputMsg() {
 		return outputMsg;
 	}
 
@@ -357,7 +376,7 @@ public class MathFunctions {
 	/**
 	 * @return the outputValue
 	 */
-	public double getOutputValue() {
+	private double getOutputValue() {
 		return outputValue;
 	}
 
@@ -366,6 +385,20 @@ public class MathFunctions {
 	 */
 	public void setOutputValue(double outputValue) {
 		this.outputValue = outputValue;
+	}
+
+	/**
+	 * @return the doubleOutput
+	 */
+	private boolean isDoubleOutput() {
+		return doubleOutput;
+	}
+
+	/**
+	 * @param doubleOutput the doubleOutput to set
+	 */
+	public void setDoubleOutput(boolean doubleOutput) {
+		this.doubleOutput = doubleOutput;
 	}
 
 }
