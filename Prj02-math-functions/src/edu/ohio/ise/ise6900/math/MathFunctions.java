@@ -95,7 +95,7 @@ public class MathFunctions {
 			try {
 				choice = Integer.parseInt(option);
 //				if(choice){
-//					
+//					TODO 
 //				}
 				System.out.print("  Enter input:");
 				input = Double.parseDouble(scan.nextLine());
@@ -149,7 +149,9 @@ public class MathFunctions {
 				}
 				break;
 			case MathFunctions.POW:
-				mf.setOutputMsg("pow(" + input + ", 2) = " + mf.getPowResult(input, 2));
+				System.out.print("  Enter power:");
+				double power = Double.parseDouble(scan.nextLine());
+				mf.setOutputMsg("pow(" + input + ", 2) = " + mf.getPowResult(input, power));
 				break;
 			case MathFunctions.FACT:
 				String out = "";
