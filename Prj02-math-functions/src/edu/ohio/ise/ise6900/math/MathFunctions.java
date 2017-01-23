@@ -132,11 +132,7 @@ public class MathFunctions {
 				}
 				break;
 			case MathFunctions.ATAN:
-				if (mf.isAtanParameterValid(input)) {
-					mf.setOutputMsg("atan(" + input + ") = " + mf.getAtanResult(input) + " degrees");
-				} else {
-					mf.setErrMsg("Please enter a valid number");// TODO
-				}
+				mf.setOutputMsg("atan(" + input + ") = " + mf.getAtanResult(input) + " degrees");
 				break;
 			case MathFunctions.LN:
 				if (mf.isLnParameterValid(input)) {
@@ -218,11 +214,6 @@ public class MathFunctions {
 	
 	private double getAtanResult(double input) {
 		return Math.toDegrees((Math.atan(input)));
-	}
-
-	private boolean isAtanParameterValid(double input) {
-		// TODO check function validity
-		return true;
 	}
 
 	private double getLnResult(double input) {
