@@ -42,48 +42,18 @@ public class MathFunctions {
 			SQRT = 8,
 			POW = 9,
 			FACT = 10;
-	protected static enum Options {
-		SIN(1),
-		COS(2),
-		TAN(3),
-		ASIN(4),
-		ACOS(5),
-		ATAN(6),
-		LN(7),
-		SQRT(8),
-		POW(9),
-		FACT(10);
-		private int option;
-		private ArrayList options;
-		Options(int choice){
-			this.setOption(choice);
-			Options[] optSet = Options.values();
-			ArrayList<Options> optionSet = new ArrayList<Options>(Arrays.asList(optSet));
-			this.options = optionSet;
-		}
-		public int getOption() {
-			return option;
-		}
-		public void setOption(int choice) {
-			this.option = choice;
-		}
-		public boolean contains(int opt){
-			if(this.options.contains("")){
-				//TODO how to compare this??
-			}
-			return false;
-		}
-	}
+	private final Integer[] optSet = {SIN, COS, TAN, ASIN, ACOS, ATAN, LN, SQRT, POW, FACT};
+	protected final ArrayList<Integer> options = new ArrayList<Integer>(Arrays.asList(optSet));
 	private String errMsg, outputMsg;
 	private boolean doubleOutput;
 	private double outputValue=0;
+
 	/**
 	 * @param args
-	 * @throws InterruptedException 
 	 */
 	public static void main(String[] args) {
 
-		int choice = 0;
+		Integer choice = 0;
 		double input = 0;
 		Scanner scan = new Scanner(System.in);
 		String option = null;
@@ -99,11 +69,14 @@ public class MathFunctions {
 			}
 			try {
 				choice = Integer.parseInt(option);
-//				if(choice){
-//					TODO 
-//				}
-				System.out.print("  Enter input:");
-				input = Double.parseDouble(scan.nextLine());
+				if(mf.options.contains(choice)){
+					System.out.print("  Enter input:");
+					input = Double.parseDouble(scan.nextLine());
+				}
+				else{
+					mf.setErrMsg("Please choose a number from the menu");
+					continue;
+				}
 			} catch (NumberFormatException nfe) {
 //				nfe.printStackTrace();
 				mf.setErrMsg("Please enter a valid number");
