@@ -17,24 +17,28 @@ public class TestRange {
 	 */
 	public static void main(String[] args) {
 
+		TestRange tr = new TestRange();
+		Scanner scan = new Scanner(System.in);
 		// for(int i=-1440; i<=0; i++){
 		// System.out.println(i + ": " + Math.toRadians(i) + " : " +
 		// Math.atan(Math.toRadians(i)));
 		// }
 
-		// for(int i=-100; i<=100; i++){
-		// System.out.println("ln("+i+"): " + Math.log(i));
-		// }
-		int num;
-		TestRange tr = new TestRange();
-		Scanner scan = new Scanner(System.in);
-		for (int i = 0; i < 100; i++) {
-			System.out.print("Enter number:");
-			num = Integer.parseInt(scan.nextLine());
-			System.out.println("int factorial(" + num + "): " + tr.factorial(num));
-			System.out.println("long factorial(" + num + "): " + tr.factLong(num));
-			System.out.println("BigInteger factorial(" + num + "): " + tr.factBig(BigInteger.valueOf(num)).toString());
+		for(double i=-100; i<=100; i+=.5){
+			System.out.println("ln("+i+"): " + Math.log(i));
 		}
+//		int num;
+//		for (int i = 0; i < 100; i++) {
+//			System.out.print("Enter number:");
+//			num = Integer.parseInt(scan.nextLine());
+//			System.out.println("int factorial(" + num + "): " + tr.factorial(num));
+//			System.out.println("long factorial(" + num + "): " + tr.factLong(num));
+//			System.out.println("BigInteger factorial(" + num + "): " + tr.factBig(BigInteger.valueOf(num)).toString());
+//		}
+		
+		
+		
+		
 		scan.close();
 	}
 	
