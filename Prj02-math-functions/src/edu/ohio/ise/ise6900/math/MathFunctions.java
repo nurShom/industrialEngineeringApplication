@@ -58,9 +58,9 @@ public class MathFunctions {
 	
 	public void runConsoleApp(){
 		Scanner scan = new Scanner(System.in);
-		double input = 0;
-		String option = null;
+		String option = null, inputStr = null;
 		Integer choice = 0;
+		double input = 0;
 		while (true) {
 			this.promptUser();
 			option = scan.nextLine();
@@ -74,14 +74,20 @@ public class MathFunctions {
 				choice = Integer.parseInt(option);
 				if(this.options.contains(choice)){
 					System.out.print("  Enter input:");
-					input = Double.parseDouble(scan.nextLine());
+					inputStr = scan.nextLine();
+					try{
+						input = Double.parseDouble(inputStr);
+					} catch (NumberFormatException doubEx) {
+						this.errMsg = "You have entered \"" + inputStr + "\" for calculation !!\n !! Only numbers are allowed";
+						continue;
+					}
 				}
 				else{
 					throw new NumberFormatException();
 				}
 			} catch (NumberFormatException nfe) {
 				// nfe.printStackTrace();
-				this.errMsg = "You have entered: \"" + option + "\" !!\n Please choose a number from the menu and enter";
+				this.errMsg = "Your selected option \"" + option + "\" is not in menu !!\n !! Please choose a number from the menu and enter";
 				continue;
 			}
 
