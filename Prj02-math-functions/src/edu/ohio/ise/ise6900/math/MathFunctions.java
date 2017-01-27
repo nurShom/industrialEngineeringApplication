@@ -152,11 +152,11 @@ public class MathFunctions {
 				if (this.isNonNegativeInteger(input)) {
 					String out = "factorial(" + input + ") = ";
 					if (input < 13) {
-						out += this.factorial((int) input);
+						out += factorial((int) input);
 					} else if (input < 21) {
-						out += this.factorial((long) input);
+						out += factorial((long) input);
 					} else {
-						out += this.factorial(BigInteger.valueOf((long) input)).toString();
+						out += factorial(BigInteger.valueOf((long) input)).toString();
 					}
 					this.outputMsg = out;
 					this.doubleOutput = false;
@@ -208,31 +208,30 @@ public class MathFunctions {
 		return true;
 	}
 
-	public int factorial(int input) {
+	public static int factorial(int input) {
 		if(input==0 || input==1){
 			return 1;
 		}
 		return factorial(input-1)*input;
 	}
 	
-	public long factorial(long input) {
+	public static long factorial(long input) {
 		if(input==0 || input==1){
 			return 1;
 		}
 		return factorial(input-1) * input;
 	}
 	
-	public BigInteger factorial(BigInteger num){
-		if(num.equals(BigInteger.ZERO) || num.equals(BigInteger.ONE) ){
+	public static BigInteger factorial(BigInteger input){
+		if(input.equals(BigInteger.ZERO) || input.equals(BigInteger.ONE) ){
 			return BigInteger.ONE;
 		}
-		return (factorial(num.subtract(BigInteger.ONE))).multiply(num);
+		return (factorial(input.subtract(BigInteger.ONE))).multiply(input);
 	}
 
 	private void promptUser(){
 		System.out.println(
 				"\n  ----------------------------------------------"
-//				+ "\n  Selection of any of the math functions is required to proceed."
 				+ "\n  (Enter 'exit' or 'quit' to exit the program)\n"
 				+ "\n  Enter any of the following numbers:" 
 				+ "\n  ->sin      :  " + MathFunctions.SIN
