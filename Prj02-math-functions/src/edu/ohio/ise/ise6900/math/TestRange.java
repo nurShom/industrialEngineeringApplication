@@ -24,9 +24,10 @@ public class TestRange {
 		// Math.atan(Math.toRadians(i)));
 		// }
 
-		for(double i=-100; i<=100; i+=.5){
-			System.out.println("ln("+i+"): " + Math.log(i));
-		}
+//		for(double i=-100; i<=100; i+=.5){
+//			System.out.println("ln("+i+"): " + Math.log(i));
+//		}
+		
 //		int num;
 //		for (int i = 0; i < 100; i++) {
 //			System.out.print("Enter number:");
@@ -35,8 +36,8 @@ public class TestRange {
 //			System.out.println("long factorial(" + num + "): " + tr.factLong(num));
 //			System.out.println("BigInteger factorial(" + num + "): " + tr.factBig(BigInteger.valueOf(num)).toString());
 //		}
-		
-		
+
+		System.out.println(Character.isLetter('$'));
 		
 		
 		scan.close();
