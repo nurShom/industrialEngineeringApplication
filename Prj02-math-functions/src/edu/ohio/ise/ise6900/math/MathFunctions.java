@@ -152,11 +152,11 @@ public class MathFunctions {
 				if (this.isNonNegativeInteger(input)) {
 					String out = "factorial(" + input + ") = ";
 					if (input < 13) {
-						out += this.factorialInt((int) input);
+						out += this.factorial((int) input);
 					} else if (input < 21) {
-						out += this.factorialLong((long) input);
+						out += this.factorial((long) input);
 					} else {
-						out += this.factorialBig(BigInteger.valueOf((long) input)).toString();
+						out += this.factorial(BigInteger.valueOf((long) input)).toString();
 					}
 					this.outputMsg = out;
 					this.doubleOutput = false;
@@ -208,25 +208,25 @@ public class MathFunctions {
 		return true;
 	}
 
-	public int factorialInt(int input) {
+	public int factorial(int input) {
 		if(input==0 || input==1){
 			return 1;
 		}
-		return factorialInt(input-1)*input;
+		return factorial(input-1)*input;
 	}
 	
-	public long factorialLong(long input) {
+	public long factorial(long input) {
 		if(input==0 || input==1){
 			return 1;
 		}
-		return factorialLong(input-1) * input;
+		return factorial(input-1) * input;
 	}
 	
-	public BigInteger factorialBig(BigInteger num){
+	public BigInteger factorial(BigInteger num){
 		if(num.equals(BigInteger.ZERO) || num.equals(BigInteger.ONE) ){
 			return BigInteger.ONE;
 		}
-		return (factorialBig(num.subtract(BigInteger.ONE))).multiply(num);
+		return (factorial(num.subtract(BigInteger.ONE))).multiply(num);
 	}
 
 	private void promptUser(){
