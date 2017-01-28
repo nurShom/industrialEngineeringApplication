@@ -17,7 +17,7 @@ public class TestRange {
 	 */
 	public static void main(String[] args) {
 
-		TestRange tr = new TestRange();
+//		TestRange tr = new TestRange();
 		Scanner scan = new Scanner(System.in);
 		// for(int i=-1440; i<=0; i++){
 		// System.out.println(i + ": " + Math.toRadians(i) + " : " +

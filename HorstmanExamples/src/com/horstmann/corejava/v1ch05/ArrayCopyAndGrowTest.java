@@ -1,14 +1,16 @@
-package arrays;
+package com.horstmann.corejava.v1ch05;
 
 import java.lang.reflect.*;
 import java.util.*;
 
 /**
  * This program demonstrates the use of reflection for manipulating arrays.
+ * The tests show that identifying an array's type and length is the key
+ * to successfully copy an array.
  * @version 1.2 2012-05-04
  * @author Cay Horstmann
  */
-public class CopyOfTest
+public class ArrayCopyAndGrowTest
 {
    public static void main(String[] args)
    {
@@ -47,9 +49,9 @@ public class CopyOfTest
     */
    public static Object goodCopyOf(Object a, int newLength) 
    {
-      Class cl = a.getClass();
+      Class<? extends Object> cl = a.getClass();
       if (!cl.isArray()) return null;
-      Class componentType = cl.getComponentType();
+      Class<?> componentType = cl.getComponentType();
       int length = Array.getLength(a);
       Object newArray = Array.newInstance(componentType, newLength);
       System.arraycopy(a, 0, newArray, 0, Math.min(length, newLength));

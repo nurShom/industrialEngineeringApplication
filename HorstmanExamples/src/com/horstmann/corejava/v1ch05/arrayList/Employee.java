@@ -1,4 +1,4 @@
-package arrayList;
+package com.horstmann.corejava.v1ch05.arrayList;
 
 import java.time.*;
 
