@@ -2,12 +2,26 @@ package edu.ohio.ise.ise6900.MfgSystem;
 
 public class MachineState extends AbstractState
 {
-	
-	public String type;
-	public Machine machine;
+
+
+	private StateType type;
 
 	public MachineState(){
 		super();
+	}
+	
+	/**
+	 * @return the type
+	 */
+	public StateType getType() {
+		return type;
+	}
+
+	/**
+	 * @param type the type to set
+	 */
+	public void setType(StateType type) {
+		this.type = type;
 	}
 
 }

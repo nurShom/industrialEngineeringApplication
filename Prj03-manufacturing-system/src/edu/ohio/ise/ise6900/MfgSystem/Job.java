@@ -1,14 +1,13 @@
 package edu.ohio.ise.ise6900.MfgSystem;
 
+import java.util.Collection;
+
 public class Job extends MfgObject
 {
 	
-	public MfgFeature features;
+	public Collection<MfgFeature> features;
 	public int batchSize;
-	public Activity activities;
-	public MfgSystem mfgSystem;
-	public Activity activity;
-	public MfgFeature mfgFeature;
+	public Collection<Activity> activities;
 
 	public Job(){
 		super();
