@@ -1,5 +1,7 @@
 package edu.ohio.ise.ise6900.MfgSystem.Geometry;
 
+import com.sun.corba.se.impl.io.TypeMismatchException;
+
 public class RightTriangle extends DrawObject {
 	
 	private double height;
@@ -50,12 +52,77 @@ public class RightTriangle extends DrawObject {
 	 */
 	@Override
 	public String toString() {
-		return "RightTriangle [height=" + height + ", base=" + base + ", Area=" + getArea() 
-				+ ", X-Coordinate=" + getxCoordinate() + ", Y-Coordinate=" + getyCoordinate() + "]";
+		return "RightTriangle [Height=" + height + ", Base=" + base + ", Area=" + getArea() 
+				+ ", [Coordinates: x=" + getxCoordinate() + ", y=" + getyCoordinate() + "]]";
 	}
 	@Override
 	public void printout() {
 		System.out.println(this.toString());
 	}
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		long temp;
+		temp = Double.doubleToLongBits(this.getxCoordinate());
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(this.getyCoordinate());
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(base);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(height);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		return result;
+	}
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (!(obj instanceof RightTriangle)) {
+			return false;
+		}
+		RightTriangle other = (RightTriangle) obj;
+		if (Double.doubleToLongBits(this.getxCoordinate()) != Double.doubleToLongBits(other.getxCoordinate())){
+			return false;
+		}
+		if (Double.doubleToLongBits(this.getyCoordinate()) != Double.doubleToLongBits(other.getyCoordinate())){
+			return false;
+		}
+		if (Double.doubleToLongBits(base) != Double.doubleToLongBits(other.base)) {
+			return false;
+		}
+		if (Double.doubleToLongBits(height) != Double.doubleToLongBits(other.height)) {
+			return false;
+		}
+		return true;
+	}
+	@Override
+	public int compareTo(DrawObject o) {
+		if(this.equals(o)){
+			return 0;
+		}
+		if (!(o instanceof RightTriangle)) {
+			throw new TypeMismatchException(o.getClass().getName() 
+						+ " is not a " + this.getClass().getName());
+		}
+		if(this.getArea() < o.getArea()){
+			return -1;
+		}
+		if(this.getArea() > o.getArea()){
+			return 1;
+		}
+		return 0;
+	}
+	
 
 }
