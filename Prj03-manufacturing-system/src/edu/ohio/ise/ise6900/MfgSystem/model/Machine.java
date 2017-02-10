@@ -9,8 +9,8 @@ public class Machine extends MfgObject
 	public MfgSystem mfgSystem;
 	public MachineState machineState;
 
-	public Machine(){
-		super();
+	public Machine(String name){
+		super(name);
 	}
 
 }

@@ -1,7 +1,7 @@
 package edu.ohio.ise.ise6900.MfgSystem.model;
 import java.util.Date;
 
-public abstract class AbstractState
+public abstract class AbstractState extends MfgObject
 {
 	
 	private Machine machine;
@@ -9,8 +9,8 @@ public abstract class AbstractState
 	private Date startTime;
 	private Date endTime;
 
-	public AbstractState(){
-		super();
+	public AbstractState(String name){
+		super(name);
 	}
 
 	/**

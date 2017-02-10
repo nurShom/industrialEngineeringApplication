@@ -9,8 +9,8 @@ public class Job extends MfgObject
 	public int batchSize;
 	public Collection<Activity> activities;
 
-	public Job(){
-		super();
+	public Job(String name){
+		super(name);
 	}
 
 }

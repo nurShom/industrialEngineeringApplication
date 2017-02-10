@@ -7,8 +7,8 @@ public class Activity extends AbstractState
 	public MfgFeature feature;
 	public Job job2;
 
-	public Activity(){
-		super();
+	public Activity(String name){
+		super(name);
 	}
 
 }

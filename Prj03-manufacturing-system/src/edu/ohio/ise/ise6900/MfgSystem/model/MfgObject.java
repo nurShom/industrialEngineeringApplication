@@ -5,8 +5,16 @@ public abstract class MfgObject
 	
 	public String name;
 
-	public MfgObject(){
+	public MfgObject(String name){
 		super();
+		this.name = name;
+	}
+
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
 	}
 
 }

@@ -1,4 +1,4 @@
-package edu.ohio.ise.ise6900.MfgSystem.Geometry;
+package edu.ohio.ise.ise6900.MfgSystem.geometry;
 
 import com.sun.corba.se.impl.io.TypeMismatchException;
 

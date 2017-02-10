@@ -6,8 +6,8 @@ public class MfgFeature extends MfgObject
 	public String memberName;
 	public Job job;
 
-	public MfgFeature(){
-		super();
+	public MfgFeature(String name){
+		super(name);
 	}
 
 }

@@ -1,58 +1,74 @@
-package edu.ohio.ise.ise6900.MfgSystem.Geometry;
+/**
+ * 
+ */
+package edu.ohio.ise.ise6900.MfgSystem.geometry;
 
 import com.sun.corba.se.impl.io.TypeMismatchException;
 
-public class RightTriangle extends DrawObject {
-	
-	private double height;
-	private double base;
+/**
+ * @author na551411
+ *
+ */
+public class Rectangle extends DrawObject {
 
-	public RightTriangle() {
-		this(0, 0);
+	private double width;
+	private double height;
+	
+	/**
+	 * 
+	 */
+	public Rectangle() {
+		this (0, 0);
 	}
+
 	/**
 	 * @param xCoordinate
 	 * @param yCoordinate
 	 */
-	public RightTriangle(double xCoordinate, double yCoordinate) {
+	public Rectangle(double xCoordinate, double yCoordinate) {
 		super(xCoordinate, yCoordinate);
-		height = 0;
-		base = 0;
+		this.width = 0;
+		this.height= 0;
 	}
+
+	@Override
+	public double getArea() {
+		return this.width * this.height;
+	}
+	/**
+	 * @return the width
+	 */
+	public double getWidth() {
+		return width;
+	}
+
+	/**
+	 * @param width the width to set
+	 */
+	public void setWidth(double width) {
+		this.width = width;
+	}
+
 	/**
 	 * @return the height
 	 */
 	public double getHeight() {
 		return height;
 	}
+
 	/**
 	 * @param height the height to set
 	 */
 	public void setHeight(double height) {
 		this.height = height;
 	}
-	/**
-	 * @return the base
-	 */
-	public double getBase() {
-		return base;
-	}
-	/**
-	 * @param base the base to set
-	 */
-	public void setBase(double base) {
-		this.base = base;
-	}
-	@Override
-	public double getArea() {
-		return base * height * 0.5;
-	}
+
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "RightTriangle [Height=" + height + ", Base=" + base + ", Area=" + getArea() 
+		return "Rectangle [Height=" + height + ", Width=" + width + ", Area=" + getArea() 
 				+ ", [Coordinates: x=" + getxCoordinate() + ", y=" + getyCoordinate() + "]]";
 	}
 	@Override
@@ -71,7 +87,7 @@ public class RightTriangle extends DrawObject {
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		temp = Double.doubleToLongBits(this.getyCoordinate());
 		result = prime * result + (int) (temp ^ (temp >>> 32));
-		temp = Double.doubleToLongBits(base);
+		temp = Double.doubleToLongBits(width);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		temp = Double.doubleToLongBits(height);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
@@ -88,30 +104,31 @@ public class RightTriangle extends DrawObject {
 		if (obj == null) {
 			return false;
 		}
-		if (!(obj instanceof RightTriangle)) {
+		if (!(obj instanceof Rectangle)) {
 			return false;
 		}
-		RightTriangle other = (RightTriangle) obj;
+		Rectangle other = (Rectangle) obj;
 		if (Double.doubleToLongBits(this.getxCoordinate()) != Double.doubleToLongBits(other.getxCoordinate())){
 			return false;
 		}
 		if (Double.doubleToLongBits(this.getyCoordinate()) != Double.doubleToLongBits(other.getyCoordinate())){
 			return false;
 		}
-		if (Double.doubleToLongBits(base) != Double.doubleToLongBits(other.base)) {
+		if (Double.doubleToLongBits(height) != Double.doubleToLongBits(other.height)) {
 			return false;
 		}
-		if (Double.doubleToLongBits(height) != Double.doubleToLongBits(other.height)) {
+		if (Double.doubleToLongBits(width) != Double.doubleToLongBits(other.width)) {
 			return false;
 		}
 		return true;
 	}
+
 	@Override
 	public int compareTo(DrawObject o) {
 		if(this.equals(o)){
 			return 0;
 		}
-		if (!(o instanceof RightTriangle)) {
+		if (!(o instanceof Rectangle)) {
 			throw new TypeMismatchException(o.getClass().getName() 
 						+ " is not a " + this.getClass().getName());
 		}
@@ -123,6 +140,5 @@ public class RightTriangle extends DrawObject {
 		}
 		return 0;
 	}
-	
 
 }

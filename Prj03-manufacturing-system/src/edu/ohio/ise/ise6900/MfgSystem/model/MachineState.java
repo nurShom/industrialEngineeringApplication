@@ -6,8 +6,8 @@ public class MachineState extends AbstractState
 
 	private StateType type;
 
-	public MachineState(){
-		super();
+	public MachineState(String name){
+		super(name);
 	}
 	
 	/**
