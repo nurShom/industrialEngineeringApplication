@@ -1,4 +1,4 @@
-package edu.ohio.ise.ise6900.MfgSystem;
+package edu.ohio.ise.ise6900.MfgSystem.model;
 import java.util.Date;
 
 public abstract class AbstractState

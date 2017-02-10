@@ -1,4 +1,4 @@
-package edu.ohio.ise.ise6900.MfgSystem;
+package edu.ohio.ise.ise6900.MfgSystem.model;
 
 public class MfgFeature extends MfgObject
 {
