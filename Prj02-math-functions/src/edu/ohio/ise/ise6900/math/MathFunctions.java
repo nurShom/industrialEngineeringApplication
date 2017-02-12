@@ -7,10 +7,10 @@ import java.util.Arrays;
 import java.util.Locale;
 /*
  * ISE6900 Object Oriented Application in Industrial Engineering
- * Programming Project 01 
+ * Programming Project 02 
  * 
  * @author Nur Shomik Arafat
- * Date: 2017-01-14
+ * Date: 2017-01-20
  * @version 1.0
  * 
  */

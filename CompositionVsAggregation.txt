@@ -1,0 +1,19 @@
+Short definition:
+- a relationship between two objects is referred as an association, 
+- an association is known as composition when one object owns another object, and
+- an association is known as aggregation when one object uses another object.
+
+In the case of Composition, an object can NOT exist without being part of the main object
+- Individual parts of a car can not function when a car is destroyed.
+- A department in a school does not exist outside the school.
+
+In the case of Aggregation, an object can exist without being part of the main object 
+- a Player which is part of a Team, can exist without a team and can become part of other teams as well.
+- when School closed, a Student still exists and then can join another School or so. 
+
+UML Notation:
+- A composition is denoted by a filled diamond, 
+- An aggregation is denoted by an empty diamond, 
+- This shows their obvious difference in terms of strength of the relationship.
+- The composition is stronger than Aggregation. 
+
