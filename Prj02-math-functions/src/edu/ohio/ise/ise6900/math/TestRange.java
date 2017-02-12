@@ -17,7 +17,7 @@ public class TestRange {
 	 */
 	public static void main(String[] args) {
 
-//		TestRange tr = new TestRange();
+		TestRange tr = new TestRange();
 		Scanner scan = new Scanner(System.in);
 		// for(int i=-1440; i<=0; i++){
 		// System.out.println(i + ": " + Math.toRadians(i) + " : " +
@@ -38,7 +38,11 @@ public class TestRange {
 //		}
 
 		System.out.println(Character.isLetter('$'));
-		
+		int x = 36;
+		BigInteger fact = tr.bigFactorial(new BigInteger("" + x));
+		System.out.println("Big fact of " + x + " with a loop: " + fact);
+
+		System.out.println("Big fact of " + x + " recursively: " + tr.factBig(new BigInteger("" + x)));
 		
 		scan.close();
 	}
@@ -62,6 +66,15 @@ public class TestRange {
 			return BigInteger.ONE;
 		}
 		return (factBig(num.subtract(BigInteger.ONE))).multiply(num);
+	}
+	
+	public BigInteger bigFactorial(BigInteger p){
+		BigInteger result = new BigInteger(p.toString());
+		for(BigInteger i = new BigInteger("1"); i.compareTo(p)==-1; i = i.add(new BigInteger("1"))){
+			result = result.multiply(i);
+			System.out.println("round "+i.toString() + ", result: " + result);
+		}
+		return result;
 	}
 
 }
