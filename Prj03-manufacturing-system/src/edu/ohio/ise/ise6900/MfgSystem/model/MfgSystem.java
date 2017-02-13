@@ -8,8 +8,8 @@ import edu.ohio.ise.ise6900.MfgSystem.model.exceptions.UnknownObjectException;
 
 public class MfgSystem extends MfgObject
 {
-	public Map<String, Job> jobs;
-	public Map<String, Machine> machines;
+	private Map<String, Job> jobs;
+	private Map<String, Machine> machines;
 
 	public MfgSystem(String name){
 		super(name);
@@ -20,7 +20,7 @@ public class MfgSystem extends MfgObject
 	public void addJob(Job j) throws AlreadyMemberException{
 		try{
 			this.findJob(j.getName());
-			throw new AlreadyMemberException("Job " + j.getName() + " is already in the mfg system.");
+			throw new AlreadyMemberException("Job '" + j.getName() + "' is already in the mfg system.");
 		}catch(UnknownObjectException uoe){
 			jobs.put(j.getName(), j);
 		}
@@ -29,9 +29,13 @@ public class MfgSystem extends MfgObject
 	public Job findJob(String jobName) throws UnknownObjectException {
 		Job job = jobs.get(jobName);
 		if(job == null){
-			throw new UnknownObjectException("Job with name " + jobName + " does not exist.");
+			throw new UnknownObjectException("Job with name '" + jobName + "' does not exist.");
 		}
 		return job;
+	}
+	
+	public int countJobs(){
+		return this.jobs.size();
 	}
 	
 	public void printJobs(){
@@ -43,7 +47,7 @@ public class MfgSystem extends MfgObject
 	public void addMachine(Machine m) throws AlreadyMemberException{
 		try{
 			this.findMachine(m.getName());
-			throw new AlreadyMemberException("Machine " + m.getName() + " is already in the mfg system.");
+			throw new AlreadyMemberException("Machine '" + m.getName() + "' is already in the mfg system.");
 		} catch (UnknownObjectException uoe){
 			machines.put(m.getName(), m);
 		}
@@ -52,7 +56,7 @@ public class MfgSystem extends MfgObject
 	public Machine findMachine(String machineName) throws UnknownObjectException {
 		Machine machine = machines.get(machineName);
 		if(machine == null){
-			throw new UnknownObjectException("Machine with name " + machineName + " does not exist.");
+			throw new UnknownObjectException("Machine with name '" + machineName + "' does not exist.");
 		}
 		return machine;
 	}
@@ -67,6 +71,8 @@ public class MfgSystem extends MfgObject
 	public String toString() {
 		return "MfgSystem " + this.getName() + "contains " + jobs.size() + " jobs and " + machines.size() + " machines.";
 	}
-		
+	
+	
+	
 }
 

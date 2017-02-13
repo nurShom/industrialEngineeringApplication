@@ -5,10 +5,10 @@ public class Activity extends AbstractState
 	
 	public Job job;
 	public MfgFeature feature;
-	public Job job2;
 
-	public Activity(String name){
+	public Activity(String name, Machine m, Job job, MfgFeature feature){
 		super(name);
+		this.setType(StateType.BUSY);
 	}
 
 }

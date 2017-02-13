@@ -6,7 +6,6 @@ public class Machine extends MfgObject
 {
 	
 	public Collection<AbstractState> machineStates;
-	public MachineState machineState;
 
 	public Machine(String name){
 		super(name);
@@ -17,7 +16,7 @@ public class Machine extends MfgObject
 	 */
 	@Override
 	public String toString() {
-		return "Machine [name=" + this.getName() + ", Machine State=" + machineState 
+		return "Machine [name=" + this.getName() 
 				+ ", machineStates=" + machineStates + "]";
 	}
 

@@ -37,13 +37,22 @@ public class MfgSystemConsoleApp {
 		commands.put("feature", Command.FEATURE);
 		commands.put("machine-state", Command.STATE);
 		
+		commands.put("activities", Command.ACTIVITIES);
+		commands.put("features", Command.FEATURES);
+		commands.put("states", Command.STATES);
+		
 		commands.put("delete", Command.DELETE);
 		commands.put("printout", Command.PRINTOUT);
 		
 		commands.put("jobs", Command.JOBS);
+		commands.put("machines", Command.MACHINES);
+		commands.put("system", Command.SYSTEM);
 		
 		commands.put("rectangle", Command.RECTANGLE);
 		commands.put("traingle", Command.TRIANGLE);
+		
+		commands.put("exit", Command.EXIT);
+		commands.put("quit", Command.QUIT);
 		
 		menu = "\nOptions : \n\t" + commands.keySet().toString() + "\nEnter the command:->";
 	}
@@ -52,9 +61,9 @@ public class MfgSystemConsoleApp {
 		Scanner sc = new Scanner(System.in);
 		StringTokenizer tokenizer;
 		MfgSystem ms = new MfgSystem("ise6900");
-		
+		boolean keepRunning = true;
 		try{
-			while (true) {
+			while (keepRunning) {
 				System.err.flush();
 				print(menu);
 
@@ -75,6 +84,11 @@ public class MfgSystemConsoleApp {
 					continue;
 				}
 				switch(cmd){
+				case EXIT:
+				case QUIT:
+					keepRunning = false;
+					printErr("Exiting the application!");
+					break;
 				case JOB:
 					//job jobName batchSize
 					//creates job
@@ -88,6 +102,16 @@ public class MfgSystemConsoleApp {
 						printErr("Batch size needs to be an integer!");
 					} catch(NoSuchElementException nsee){
 						printErr("Not enough job parameters are specified!");
+					}
+					break;
+				case JOBS:
+					//jobs
+					//lists all jobs in the system
+					if(ms.countJobs()>0){
+						ms.printJobs();	
+					}
+					else{
+						printErr("System has no Job.");
 					}
 					break;
 				case FEATURE:
@@ -104,6 +128,19 @@ public class MfgSystemConsoleApp {
 						printErr(uoe.getMessage());
 					} catch(NoSuchElementException nsee){
 						printErr("Not enough feature parameters are specified!");
+					}
+					break;
+				case FEATURES:
+					//features jobName
+					//lists all features under a job
+					try{
+						String jobName = tokenizer.nextToken();
+						Job j = ms.findJob(jobName);
+						j.listFeatures();
+					} catch(UnknownObjectException uoe){
+						printErr(uoe.getMessage());
+					} catch(NoSuchElementException nsee){
+						printErr("Job for feature listing need to be specified!");
 					}
 					break;
 				case ACTIVITIES:
@@ -126,6 +163,7 @@ public class MfgSystemConsoleApp {
 					
 					
 				default:
+					printErr("Option '" + commandText + "' not yet implemnted!");
 					break;
 				}
 

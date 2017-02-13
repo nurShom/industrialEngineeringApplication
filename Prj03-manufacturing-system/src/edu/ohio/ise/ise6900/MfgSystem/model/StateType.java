@@ -8,5 +8,5 @@ package edu.ohio.ise.ise6900.MfgSystem.model;
  *
  */
 public enum StateType {
-	IDLE, DOWN, BLOCKED
+	IDLE, DOWN, BLOCKED, BUSY
 }

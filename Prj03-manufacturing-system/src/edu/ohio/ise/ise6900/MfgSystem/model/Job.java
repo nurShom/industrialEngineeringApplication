@@ -38,7 +38,7 @@ public class Job extends MfgObject
 	}
 	
 
-	public void printFeatures(){
+	public void listFeatures(){
 		this.printout();
 		System.out.println("=>Features:");
 		for(MfgFeature f : this.features.values()){
@@ -66,7 +66,6 @@ public class Job extends MfgObject
 		return activity;
 	}
 	
-
 	public void listActivities(){
 		this.printout();
 		System.out.println("=>Activities:");
