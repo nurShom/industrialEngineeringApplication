@@ -9,8 +9,11 @@ public abstract class AbstractState extends MfgObject
 	private Date startTime;
 	private Date endTime;
 
-	public AbstractState(String name){
+	public AbstractState(String name, Machine machine, Date startTime, Date endTime){
 		super(name);
+		this.setMachine(machine);
+		this.setStartTime(startTime);
+		this.setEndTime(endTime);
 	}
 
 	/**

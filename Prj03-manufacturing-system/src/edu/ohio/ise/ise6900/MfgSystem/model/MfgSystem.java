@@ -61,6 +61,10 @@ public class MfgSystem extends MfgObject
 		return machine;
 	}
 	
+	public int countMachines(){
+		return this.machines.size();
+	}
+	
 	public void printMachines(){
 		for(Machine m : this.machines.values()){
 			m.printout();

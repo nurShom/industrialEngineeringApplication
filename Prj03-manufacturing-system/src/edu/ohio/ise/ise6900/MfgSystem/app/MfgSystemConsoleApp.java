@@ -3,6 +3,7 @@
  */
 package edu.ohio.ise.ise6900.MfgSystem.app;
 
+import java.util.Date;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.SortedMap;
@@ -61,6 +62,7 @@ public class MfgSystemConsoleApp {
 		Scanner sc = new Scanner(System.in);
 		StringTokenizer tokenizer;
 		MfgSystem ms = new MfgSystem("ise6900");
+//		MfgSystemConsoleApp.commands.
 		boolean keepRunning = true;
 		try{
 			while (keepRunning) {
@@ -87,7 +89,7 @@ public class MfgSystemConsoleApp {
 				case EXIT:
 				case QUIT:
 					keepRunning = false;
-					printErr("Exiting the application!");
+					printErr("Closing the application!");
 					break;
 				case JOB:
 					//job jobName batchSize
@@ -143,6 +145,29 @@ public class MfgSystemConsoleApp {
 						printErr("Job for feature listing need to be specified!");
 					}
 					break;
+				case ACTIVITY:
+					//activity machineName jobName featureName startTime endTime
+					//creates activity
+					try{
+						
+						String machineName = tokenizer.nextToken();
+						Machine machine = ms.findMachine(machineName);
+						String jobName = tokenizer.nextToken();
+						Job job = ms.findJob(jobName);
+						String featureName = tokenizer.nextToken();
+						MfgFeature feature = job.findFeature(featureName);
+						Date startTime = new Date(Long.parseLong(tokenizer.nextToken()));
+						Date endTime = new Date(Long.parseLong(tokenizer.nextToken()));
+						job.addActivity(new Activity("activity-"+jobName+"-"+System.currentTimeMillis(), 
+								machine, job, feature, startTime, endTime));
+					} catch(AlreadyMemberException ame){
+						printErr(ame.getMessage());
+					} catch(UnknownObjectException uoe){
+						printErr(uoe.getMessage());
+					} catch(NoSuchElementException nsee){
+						printErr("Not enough activitiy parameters are specified!");
+					}
+					break;
 				case ACTIVITIES:
 					//activities jobName
 					//lists all activities under a job
@@ -154,6 +179,61 @@ public class MfgSystemConsoleApp {
 						printErr(uoe.getMessage());
 					} catch(NoSuchElementException nsee){
 						printErr("Job for activity listing need to be specified!");
+					}
+					break;
+				case MACHINE:
+					//machine machineName
+					//creates machine
+					try{
+						String machineName = tokenizer.nextToken();
+						ms.addMachine(new Machine(machineName));
+					} catch(AlreadyMemberException ame){
+						printErr(ame.getMessage());
+					} catch(NumberFormatException mfe){
+						printErr("Batch size needs to be an integer!");
+					} catch(NoSuchElementException nsee){
+						printErr("Not enough machine parameters are specified!");
+					}
+					break;
+				case MACHINES:
+					//machines
+					//lists all machines in the system
+					if(ms.countMachines()>0){
+						ms.printMachines();	
+					}
+					else{
+						printErr("System has no Machine.");
+					}
+					break;
+				case STATE:
+					//state stateName machineName startTime endTime
+					//creates activity
+					try{
+						String stateName = tokenizer.nextToken();
+						String machineName = tokenizer.nextToken();
+						Machine machine = ms.findMachine(machineName);
+						Date startTime = new Date(Long.parseLong(tokenizer.nextToken()));
+						Date endTime = new Date(Long.parseLong(tokenizer.nextToken()));
+						machine.addState(new MachineState(stateName, machine, startTime, endTime));
+					} catch(AlreadyMemberException ame){
+						printErr(ame.getMessage());
+					} catch(UnknownObjectException uoe){
+						printErr(uoe.getMessage());
+					} catch(NoSuchElementException nsee){
+						printErr("Not enough activitiy parameters are specified!");
+					}
+					break;
+				case STATES:
+					//states machineName
+					//lists all states under a machine
+					try{
+						String machineName = tokenizer.nextToken();
+						Machine machine = ms.findMachine(machineName);
+						machine.listStates();
+					} catch(UnknownObjectException uoe){
+						printErr(uoe.getMessage());
+					} catch(NoSuchElementException nsee){
+						printErr("Machine for activity listing need to be specified!");
 					}
 					break;
 					
