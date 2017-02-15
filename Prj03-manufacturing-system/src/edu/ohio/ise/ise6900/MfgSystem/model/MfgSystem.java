@@ -26,6 +26,10 @@ public class MfgSystem extends MfgObject
 		}
 	}
 	
+	public Job deleteJob(String jobName) {
+		return jobs.remove(jobName);
+	}
+	
 	public Job findJob(String jobName) throws UnknownObjectException {
 		Job job = jobs.get(jobName);
 		if(job == null){
@@ -53,6 +57,10 @@ public class MfgSystem extends MfgObject
 		}
 	}
 	
+	public Machine deleteMachine(String machineName) {
+		return machines.remove(machineName);
+	}
+	
 	public Machine findMachine(String machineName) throws UnknownObjectException {
 		Machine machine = machines.get(machineName);
 		if(machine == null){
@@ -73,7 +81,7 @@ public class MfgSystem extends MfgObject
 	
 	@Override
 	public String toString() {
-		return "MfgSystem " + this.getName() + "contains " + jobs.size() + " jobs and " + machines.size() + " machines.";
+		return "MfgSystem '" + this.getName() + "' contains " + jobs.size() + " jobs and " + machines.size() + " machines.";
 	}
 	
 	

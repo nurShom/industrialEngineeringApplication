@@ -18,7 +18,7 @@ public class Machine extends MfgObject
 
 	public void addState(MachineState ms) throws AlreadyMemberException {
 		try{
-			this.findFeature(ms.getName());
+			this.findState(ms.getName());
 			throw new AlreadyMemberException("State '" + ms.getName() 
 								+ "' is already in machine '" + this.getName() + "'.");
 		}catch(UnknownObjectException uoe){
@@ -26,7 +26,11 @@ public class Machine extends MfgObject
 		}		
 	}
 	
-	public MachineState findFeature(String stateName) throws UnknownObjectException {
+	public MachineState deleteState(String stateName) {
+		return (MachineState) machineStates.remove(stateName);
+	}
+	
+	public MachineState findState(String stateName) throws UnknownObjectException {
 		MachineState state = (MachineState) machineStates.get(stateName);
 		if(state == null){
 			throw new UnknownObjectException("MachineState with name '" + stateName 

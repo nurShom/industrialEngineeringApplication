@@ -57,6 +57,10 @@ public class Job extends MfgObject
 		}		
 	}
 	
+	public Activity deleteActivity(String activityName) {
+		return activities.remove(activityName);
+	}
+	
 	public Activity findActivity(String activityName) throws UnknownObjectException {
 		Activity activity = activities.get(activityName);
 		if(activity == null){

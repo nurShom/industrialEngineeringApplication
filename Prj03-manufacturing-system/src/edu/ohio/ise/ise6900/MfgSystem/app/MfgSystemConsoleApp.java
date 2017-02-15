@@ -36,7 +36,7 @@ public class MfgSystemConsoleApp {
 		commands.put("machine", Command.MACHINE);
 		commands.put("activity", Command.ACTIVITY);
 		commands.put("feature", Command.FEATURE);
-		commands.put("machine-state", Command.STATE);
+		commands.put("state", Command.STATE);
 		
 		commands.put("activities", Command.ACTIVITIES);
 		commands.put("features", Command.FEATURES);
@@ -236,9 +236,95 @@ public class MfgSystemConsoleApp {
 						printErr("Machine for activity listing need to be specified!");
 					}
 					break;
-					
-					
-					
+				case SYSTEM:
+					//system
+					//prints mfg-system information
+					ms.printout();
+					break;
+				case PRINTOUT:
+					//printout job feature activity
+					//printout machine state
+					//printout job/machine
+					try {
+						int option = tokenizer.countTokens();
+						//println("token left: " + option);
+						if (option == 1) {
+							String objectName = tokenizer.nextToken();
+							try{
+								ms.findJob(objectName).printout();
+							} catch (UnknownObjectException uoe) {
+								try{
+									ms.findMachine(objectName).printout();
+								} catch (UnknownObjectException uoe2) {
+									printErr("No job or machine with name '" 
+											+ objectName + "' exists!");
+								}
+							}
+							break;
+						}
+						if (option == 2) {
+							MachineState state = ms.findMachine(tokenizer.nextToken()).findState(tokenizer.nextToken());
+							state.printout();
+							break;
+						}
+						if (option == 3) {
+							Activity activity = ms.findJob(tokenizer.nextToken()).findActivity(tokenizer.nextToken());
+							activity.printout();
+							break;
+						}
+					} catch (NoSuchElementException nsee) {
+						printErr("Machine for activity listing need to be specified!");
+					} catch (UnknownObjectException uoe) {
+						printErr(uoe.getMessage());
+					} 
+					break;
+				case DELETE:
+					//delete job feature activity
+					//delete machine state
+					//delete job/machine
+					try {
+						int option = tokenizer.countTokens();
+						//println("token left: " + option);
+						if (option == 1) {
+							String objectName = tokenizer.nextToken();
+							try{
+								ms.findJob(objectName).printout();
+								ms.deleteJob(objectName);
+								println(objectName + " deleted!");
+							} catch (UnknownObjectException uoe) {
+								try{
+									ms.findMachine(objectName).printout();
+									ms.deleteMachine(objectName);
+									println(objectName + " deleted!");
+								} catch (UnknownObjectException uoe2) {
+									printErr("No job or machine with name '" 
+											+ objectName + "' exists!");
+								}
+							}
+							break;
+						}
+						if (option == 2) {
+							Machine machine = ms.findMachine(tokenizer.nextToken());
+							MachineState state = machine.findState(tokenizer.nextToken());
+							state.printout();
+							machine.deleteState(state.getName());
+							println("Machine-State " + state.getName() + " deleted!");
+							break;
+						}
+						if (option == 3) {
+							Job job = ms.findJob(tokenizer.nextToken());
+							Activity activity = job.findActivity(tokenizer.nextToken());
+							activity.printout();
+							job.deleteActivity(activity.getName());
+							println("Activity " + activity.getName() + " deleted!");
+							break;
+						}
+					} catch (NoSuchElementException nsee) {
+						printErr("Machine for activity listing need to be specified!");
+					} catch (UnknownObjectException uoe) {
+						printErr(uoe.getMessage());
+					} 
+					break;
 					
 					
 					

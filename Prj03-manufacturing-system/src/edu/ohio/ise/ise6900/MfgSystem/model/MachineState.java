@@ -9,6 +9,14 @@ public class MachineState extends AbstractState
 		super(name, machine, startTime, endTime);
 		
 	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "MachineState [Name = " + getName() + "]";
+	}
 	
 }
 
