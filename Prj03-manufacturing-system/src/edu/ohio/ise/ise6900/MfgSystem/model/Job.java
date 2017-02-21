@@ -72,7 +72,7 @@ public class Job extends MfgObject
 	
 	public void listActivities(){
 		this.printout();
-		System.out.println("=>Activities:");
+		System.out.println("=> Activities:");
 		for(Activity a : this.activities.values()){
 			a.printout();
 		}

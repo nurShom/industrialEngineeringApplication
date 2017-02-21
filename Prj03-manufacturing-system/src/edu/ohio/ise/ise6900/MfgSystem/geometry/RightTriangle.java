@@ -52,8 +52,7 @@ public class RightTriangle extends DrawObject {
 	 */
 	@Override
 	public String toString() {
-		return "RightTriangle [Height=" + height + ", Base=" + base + ", Area=" + getArea() 
-				+ ", [Coordinates: x=" + getxCoordinate() + ", y=" + getyCoordinate() + "]]";
+		return super.toString() + ", height=" + height + ", base=" + base + ", area=" + getArea();
 	}
 	@Override
 	public void printout() {

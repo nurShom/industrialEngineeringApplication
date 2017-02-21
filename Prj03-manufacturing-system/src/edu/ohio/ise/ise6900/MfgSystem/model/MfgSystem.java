@@ -1,8 +1,10 @@
 package edu.ohio.ise.ise6900.MfgSystem.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import edu.ohio.ise.ise6900.MfgSystem.geometry.DrawObject;
 import edu.ohio.ise.ise6900.MfgSystem.model.exceptions.AlreadyMemberException;
 import edu.ohio.ise.ise6900.MfgSystem.model.exceptions.UnknownObjectException;
 
@@ -10,6 +12,7 @@ public class MfgSystem extends MfgObject
 {
 	private Map<String, Job> jobs;
 	private Map<String, Machine> machines;
+	private ArrayList<DrawObject> objects;
 
 	public MfgSystem(String name){
 		super(name);
@@ -76,6 +79,26 @@ public class MfgSystem extends MfgObject
 	public void printMachines(){
 		for(Machine m : this.machines.values()){
 			m.printout();
+		}
+	}
+	
+
+	
+	public void addDrawObject(DrawObject o) throws AlreadyMemberException{
+		objects.add(o);
+	}
+	
+	public DrawObject deleteDrawObject(DrawObject o) {
+		return objects.remove(objects.indexOf(o));
+	}
+	
+	public int countDrawObjects(){
+		return this.objects.size();
+	}
+	
+	public void printDrawObjects(){
+		for(DrawObject obj : this.objects){
+			obj.printout();
 		}
 	}
 	

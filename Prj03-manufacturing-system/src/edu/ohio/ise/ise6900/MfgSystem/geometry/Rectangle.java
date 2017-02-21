@@ -68,8 +68,7 @@ public class Rectangle extends DrawObject {
 	 */
 	@Override
 	public String toString() {
-		return "Rectangle [Height=" + height + ", Width=" + width + ", Area=" + getArea() 
-				+ ", [Coordinates: x=" + getxCoordinate() + ", y=" + getyCoordinate() + "]]";
+		return super.toString() + ", height=" + height + ", width=" + width + ", area=" + getArea();
 	}
 	@Override
 	public void printout() {

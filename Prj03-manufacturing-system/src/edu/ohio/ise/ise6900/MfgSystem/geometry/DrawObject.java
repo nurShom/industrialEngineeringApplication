@@ -27,7 +27,8 @@ public abstract class DrawObject  implements Comparable<DrawObject> {
 	 */
 	@Override
 	public String toString() {
-		return "DrawObject [Coordinates: x=" + xCoordinate + ", y=" + yCoordinate + "]";
+		return "Object " + this.getClass().getSimpleName() 
+				+ ", position: (" + xCoordinate + ", " + yCoordinate + ")";
 	}
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()

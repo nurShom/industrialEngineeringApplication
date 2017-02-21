@@ -24,7 +24,7 @@ public class MfgSystemConsoleApp {
 		ACTIVITIES, FEATURES, STATES,			//to report collection of a given object
 		DELETE, PRINTOUT,						//to delete or printout an individual object
 		JOBS, MACHINES, SYSTEM,					//to report system state and collection
-		RECTANGLE, TRIANGLE,					//to make draw -objects 
+		RECTANGLE, TRIANGLE, OBJECTS,			//to make draw -objects 
 		EXIT, QUIT								//to exit the application
 	}
 	static SortedMap<String, Command> commands;
@@ -51,6 +51,7 @@ public class MfgSystemConsoleApp {
 		
 		commands.put("rectangle", Command.RECTANGLE);
 		commands.put("traingle", Command.TRIANGLE);
+		commands.put("objects", Command.OBJECTS);
 		
 		commands.put("exit", Command.EXIT);
 		commands.put("quit", Command.QUIT);
@@ -156,16 +157,24 @@ public class MfgSystemConsoleApp {
 						Job job = ms.findJob(jobName);
 						String featureName = tokenizer.nextToken();
 						MfgFeature feature = job.findFeature(featureName);
-						Date startTime = new Date(Long.parseLong(tokenizer.nextToken()));
-						Date endTime = new Date(Long.parseLong(tokenizer.nextToken()));
-						job.addActivity(new Activity("activity-"+jobName+"-"+System.currentTimeMillis(), 
-								machine, job, feature, startTime, endTime));
+						Date startTime = new Date(Long.parseLong(tokenizer.nextToken()) * 1000);
+						Date endTime = new Date(Long.parseLong(tokenizer.nextToken()) * 1000);
+						Activity act = new Activity("act-"+jobName+"-"+featureName, 
+								machine, job, feature, startTime, endTime);
+						machine.addState(act);
+						job.addActivity(act);
 					} catch(AlreadyMemberException ame){
 						printErr(ame.getMessage());
 					} catch(UnknownObjectException uoe){
 						printErr(uoe.getMessage());
 					} catch(NoSuchElementException nsee){
 						printErr("Not enough activitiy parameters are specified!");
+					} catch(NumberFormatException nsee){
+						printErr("Only positive integers are allowed for start-time and end-time!");
+					} catch (OverlappingStateException ose) {
+						printErr(ose.getMessage());
+					} catch (InvalidStateException ise) {
+						printErr(ise.getMessage());
 					}
 					break;
 				case ACTIVITIES:
@@ -206,21 +215,29 @@ public class MfgSystemConsoleApp {
 					}
 					break;
 				case STATE:
-					//state stateName machineName startTime endTime
+					//state stateName machineName state startTime endTime
 					//creates activity
 					try{
 						String stateName = tokenizer.nextToken();
 						String machineName = tokenizer.nextToken();
 						Machine machine = ms.findMachine(machineName);
-						Date startTime = new Date(Long.parseLong(tokenizer.nextToken()));
-						Date endTime = new Date(Long.parseLong(tokenizer.nextToken()));
-						machine.addState(new MachineState(stateName, machine, startTime, endTime));
+						String state = tokenizer.nextToken();
+						StateType stype = StateType.findStateType(state); 
+						Date startTime = new Date(Long.parseLong(tokenizer.nextToken()) * 1000);
+						Date endTime = new Date(Long.parseLong(tokenizer.nextToken()) * 1000);
+						machine.addState(new MachineState(stateName, machine, stype, startTime, endTime));
 					} catch(AlreadyMemberException ame){
 						printErr(ame.getMessage());
 					} catch(UnknownObjectException uoe){
 						printErr(uoe.getMessage());
 					} catch(NoSuchElementException nsee){
 						printErr("Not enough activitiy parameters are specified!");
+					} catch (OverlappingStateException ose) {
+						printErr(ose.getMessage());
+					} catch (UnknownStateException use) {
+						printErr(use.getMessage());
+					} catch (InvalidStateException ise) {
+						printErr(ise.getMessage());
 					}
 					break;
 				case STATES:
@@ -260,23 +277,25 @@ public class MfgSystemConsoleApp {
 											+ objectName + "' exists!");
 								}
 							}
-							break;
 						}
-						if (option == 2) {
-							MachineState state = ms.findMachine(tokenizer.nextToken()).findState(tokenizer.nextToken());
+						else if (option == 2) {
+							AbstractState state = ms.findMachine(tokenizer.nextToken()).findState(tokenizer.nextToken());
 							state.printout();
-							break;
 						}
-						if (option == 3) {
+						else if (option == 3) {
 							Activity activity = ms.findJob(tokenizer.nextToken()).findActivity(tokenizer.nextToken());
 							activity.printout();
-							break;
+						}
+						else{
+							printErr("Number of parameters for " 
+									+ commandText.toUpperCase() + " should be 1, 2, or 3");
 						}
 					} catch (NoSuchElementException nsee) {
-						printErr("Machine for activity listing need to be specified!");
+						printErr("Number of parameters for "  
+								+ commandText.toUpperCase() + " should be 1, 2, or 3");
 					} catch (UnknownObjectException uoe) {
 						printErr(uoe.getMessage());
-					} 
+					}
 					break;
 				case DELETE:
 					//delete job feature activity
@@ -290,37 +309,39 @@ public class MfgSystemConsoleApp {
 							try{
 								ms.findJob(objectName).printout();
 								ms.deleteJob(objectName);
-								println(objectName + " deleted!");
+								println("Job '" + objectName + "' deleted!");
 							} catch (UnknownObjectException uoe) {
 								try{
 									ms.findMachine(objectName).printout();
 									ms.deleteMachine(objectName);
-									println(objectName + " deleted!");
+									println("Machine '" + objectName + "' deleted!");
 								} catch (UnknownObjectException uoe2) {
 									printErr("No job or machine with name '" 
 											+ objectName + "' exists!");
 								}
 							}
-							break;
 						}
-						if (option == 2) {
+						else if (option == 2) {
 							Machine machine = ms.findMachine(tokenizer.nextToken());
-							MachineState state = machine.findState(tokenizer.nextToken());
+							AbstractState state = machine.findState(tokenizer.nextToken());
 							state.printout();
 							machine.deleteState(state.getName());
 							println("Machine-State " + state.getName() + " deleted!");
-							break;
 						}
-						if (option == 3) {
+						else if (option == 3) {
 							Job job = ms.findJob(tokenizer.nextToken());
 							Activity activity = job.findActivity(tokenizer.nextToken());
 							activity.printout();
 							job.deleteActivity(activity.getName());
 							println("Activity " + activity.getName() + " deleted!");
-							break;
+						}
+						else{
+							printErr("Number of parameters for " 
+									+ commandText.toUpperCase() + " should be 1, 2, or 3");
 						}
 					} catch (NoSuchElementException nsee) {
-						printErr("Machine for activity listing need to be specified!");
+						printErr("Number of parameters for " 
+								+ commandText.toUpperCase() + " should be 1, 2, or 3");
 					} catch (UnknownObjectException uoe) {
 						printErr(uoe.getMessage());
 					} 

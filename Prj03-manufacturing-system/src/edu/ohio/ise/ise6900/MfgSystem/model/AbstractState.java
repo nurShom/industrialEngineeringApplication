@@ -1,19 +1,25 @@
 package edu.ohio.ise.ise6900.MfgSystem.model;
 import java.util.Date;
 
+import edu.ohio.ise.ise6900.MfgSystem.model.exceptions.InvalidStateException;
+
 public abstract class AbstractState extends MfgObject
 {
 	
 	private Machine machine;
-	private StateType type;
+	private StateType stateType;
 	private Date startTime;
 	private Date endTime;
 
-	public AbstractState(String name, Machine machine, Date startTime, Date endTime){
+	public AbstractState(String name, Machine machine, StateType state, Date startTime, Date endTime) throws InvalidStateException{
 		super(name);
-		this.setMachine(machine);
-		this.setStartTime(startTime);
-		this.setEndTime(endTime);
+		this.machine = machine;
+		this.stateType = state;
+		if(endTime.before(startTime)){
+			throw new InvalidStateException("State "+name+" start-time must be before end-time!");
+		}
+		this.startTime = startTime;
+		this.endTime = endTime;
 	}
 
 	/**
@@ -22,42 +28,18 @@ public abstract class AbstractState extends MfgObject
 	public Machine getMachine() {
 		return machine;
 	}
-
-	/**
-	 * @param machine the machine to set
-	 */
-	public void setMachine(Machine machine) {
-		this.machine = machine;
-	}
-
 	/**
 	 * @return the type
 	 */
-	public StateType getType() {
-		return type;
+	public StateType getStateType() {
+		return stateType;
 	}
-
-	/**
-	 * @param type the type to set
-	 */
-	public void setType(StateType type) {
-		this.type = type;
-	}
-
 	/**
 	 * @return the startTime
 	 */
 	public Date getStartTime() {
 		return startTime;
 	}
-
-	/**
-	 * @param startTime the startTime to set
-	 */
-	public void setStartTime(Date startTime) {
-		this.startTime = startTime;
-	}
-
 	/**
 	 * @return the endTime
 	 */
@@ -65,13 +47,14 @@ public abstract class AbstractState extends MfgObject
 		return endTime;
 	}
 
-	/**
-	 * @param endTime the endTime to set
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
 	 */
-	public void setEndTime(Date endTime) {
-		this.endTime = endTime;
+	@Override
+	public String toString() {
+		return "AbstractState "+ getName() + " (machine=" + machine + ", stateType=" + stateType + ", startTime=" + startTime
+				+ ", endTime=" + endTime + ")";
 	}
-
 }
 
 

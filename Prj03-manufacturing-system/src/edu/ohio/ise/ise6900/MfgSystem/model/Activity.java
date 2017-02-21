@@ -2,19 +2,16 @@ package edu.ohio.ise.ise6900.MfgSystem.model;
 
 import java.util.Date;
 
+import edu.ohio.ise.ise6900.MfgSystem.model.exceptions.InvalidStateException;
+
 public class Activity extends AbstractState
 {
 	
 	private Job job;
 	private MfgFeature feature;
-
-	public Activity(String name, Machine machine, Job job, MfgFeature feature){
-		this(name, machine, job, feature, new Date(), new Date());
-	}
 	
-	public Activity(String name, Machine machine, Job job, MfgFeature feature, Date startTime, Date endTime){
-		super(name, machine, startTime, endTime);
-		this.setType(StateType.BUSY);
+	public Activity(String name, Machine machine, Job job, MfgFeature feature, Date startTime, Date endTime) throws InvalidStateException{
+		super(name, machine, StateType.BUSY, startTime, endTime);
 		this.setJob(job);
 		this.setFeature(feature);
 	}
@@ -52,7 +49,9 @@ public class Activity extends AbstractState
 	 */
 	@Override
 	public String toString() {
-		return "Activity [name=" + getName() + ", job=" + job + ", feature=" + feature + ", ]";
+		return "Activity " + getName() + " (job=" + job.getName() + ", feature=" + feature.getName() 
+				+ ", machine=" + getMachine().getName() + ", stateType=" + getStateType().name() 
+				+ ", startTime=" + getStartTime() + ", endTime=" + getEndTime() + ")";
 	}
 
 	
