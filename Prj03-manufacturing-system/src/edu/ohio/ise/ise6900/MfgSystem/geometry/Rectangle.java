@@ -18,7 +18,7 @@ public class Rectangle extends DrawObject {
 	 * 
 	 */
 	public Rectangle() {
-		this (0, 0);
+		this (0, 0, 0, 0);
 	}
 
 	/**
@@ -26,9 +26,13 @@ public class Rectangle extends DrawObject {
 	 * @param yCoordinate
 	 */
 	public Rectangle(double xCoordinate, double yCoordinate) {
+		this(xCoordinate, yCoordinate, 0, 0);
+	}
+	
+	public Rectangle(double xCoordinate, double yCoordinate, double height, double width) {
 		super(xCoordinate, yCoordinate);
-		this.width = 0;
-		this.height= 0;
+		this.height = height;
+		this.width = width;
 	}
 
 	@Override

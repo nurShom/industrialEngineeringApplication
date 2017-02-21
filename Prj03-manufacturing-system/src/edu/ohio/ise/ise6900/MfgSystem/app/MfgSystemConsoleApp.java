@@ -10,6 +10,8 @@ import java.util.SortedMap;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 
+import edu.ohio.ise.ise6900.MfgSystem.geometry.Rectangle;
+import edu.ohio.ise.ise6900.MfgSystem.geometry.RightTriangle;
 import edu.ohio.ise.ise6900.MfgSystem.model.*;
 import edu.ohio.ise.ise6900.MfgSystem.model.exceptions.*;
 
@@ -36,7 +38,7 @@ public class MfgSystemConsoleApp {
 		commands.put("machine", Command.MACHINE);
 		commands.put("activity", Command.ACTIVITY);
 		commands.put("feature", Command.FEATURE);
-		commands.put("state", Command.STATE);
+		commands.put("machine-state", Command.STATE);
 		
 		commands.put("activities", Command.ACTIVITIES);
 		commands.put("features", Command.FEATURES);
@@ -236,7 +238,8 @@ public class MfgSystemConsoleApp {
 						printErr(ose.getMessage());
 					} catch (UnknownStateException use) {
 						printErr(use.getMessage());
-					} catch (InvalidStateException ise) {
+					} 
+					catch (InvalidStateException ise) {
 						printErr(ise.getMessage());
 					}
 					break;
@@ -346,9 +349,27 @@ public class MfgSystemConsoleApp {
 						printErr(uoe.getMessage());
 					} 
 					break;
-					
-					
-					
+				case RECTANGLE:
+				{
+					double x = Double.parseDouble(tokenizer.nextToken());
+					double y = Double.parseDouble(tokenizer.nextToken());
+					double height = Double.parseDouble(tokenizer.nextToken());
+					double width = Double.parseDouble(tokenizer.nextToken());
+					ms.addDrawObject(new Rectangle(x, y, height, width));
+					break;
+				}
+				case TRIANGLE:
+				{
+					double x = Double.parseDouble(tokenizer.nextToken());
+					double y = Double.parseDouble(tokenizer.nextToken());
+					double height = Double.parseDouble(tokenizer.nextToken());
+					double width = Double.parseDouble(tokenizer.nextToken());
+					ms.addDrawObject(new RightTriangle(x, y, height, width));
+					break;
+				}
+				case OBJECTS:
+					ms.printDrawObjects();
+					break;
 				default:
 					printErr("Option '" + commandText + "' not yet implemnted!");
 					break;

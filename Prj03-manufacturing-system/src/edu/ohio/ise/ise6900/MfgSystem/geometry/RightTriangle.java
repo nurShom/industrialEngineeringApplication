@@ -8,16 +8,16 @@ public class RightTriangle extends DrawObject {
 	private double base;
 
 	public RightTriangle() {
-		this(0, 0);
+		this(0, 0, 0, 0);
 	}
 	/**
 	 * @param xCoordinate
 	 * @param yCoordinate
 	 */
-	public RightTriangle(double xCoordinate, double yCoordinate) {
+	public RightTriangle(double xCoordinate, double yCoordinate, double height, double base) {
 		super(xCoordinate, yCoordinate);
-		height = 0;
-		base = 0;
+		this.height = height;
+		this.base = base;
 	}
 	/**
 	 * @return the height

@@ -84,7 +84,7 @@ public class MfgSystem extends MfgObject
 	
 
 	
-	public void addDrawObject(DrawObject o) throws AlreadyMemberException{
+	public void addDrawObject(DrawObject o){
 		objects.add(o);
 	}
 	
