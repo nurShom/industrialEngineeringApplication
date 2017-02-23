@@ -3,7 +3,7 @@ import java.util.Date;
 
 import edu.ohio.ise.ise6900.MfgSystem.model.exceptions.InvalidStateException;
 
-public abstract class AbstractState extends MfgObject
+public abstract class AbstractState extends MfgObject implements Comparable<AbstractState>
 {
 	
 	private Machine machine;
@@ -54,6 +54,58 @@ public abstract class AbstractState extends MfgObject
 	public String toString() {
 		return "AbstractState "+ getName() + " (machine=" + machine + ", stateType=" + stateType + ", startTime=" + startTime
 				+ ", endTime=" + endTime + ")";
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 */
+	@Override
+	public int compareTo(AbstractState o) {
+		return this.startTime.compareTo(o.startTime);
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((machine == null) ? 0 : machine.hashCode());
+		result = prime * result + ((startTime == null) ? 0 : startTime.hashCode());
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (!(obj instanceof AbstractState) || !(obj instanceof MachineState)) {
+			return false;
+		}
+		AbstractState other = (AbstractState) obj;
+		if (machine == null) {
+			if (other.machine != null) {
+				return false;
+			}
+		} else if (!machine.equals(other.machine)) {
+			return false;
+		}
+		if (startTime == null) {
+			if (other.startTime != null) {
+				return false;
+			}
+		} else if (!startTime.equals(other.startTime)) {
+			return false;
+		}
+		return true;
 	}
 }
 

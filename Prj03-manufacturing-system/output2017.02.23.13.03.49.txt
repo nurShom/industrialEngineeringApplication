@@ -1,0 +1,168 @@
+
+Options : 
+	[activities, activity, delete, exit, feature, features, job, jobs, machine, machine-state, machines, objects, printout, quit, rectangle, state, states, system, traingle]
+Enter the command:-># machines
+Input is: machine M1
+
+Options : 
+	[activities, activity, delete, exit, feature, features, job, jobs, machine, machine-state, machines, objects, printout, quit, rectangle, state, states, system, traingle]
+Enter the command:->Input is: machine M2
+
+Options : 
+	[activities, activity, delete, exit, feature, features, job, jobs, machine, machine-state, machines, objects, printout, quit, rectangle, state, states, system, traingle]
+Enter the command:->Input is: machine M3
+
+Options : 
+	[activities, activity, delete, exit, feature, features, job, jobs, machine, machine-state, machines, objects, printout, quit, rectangle, state, states, system, traingle]
+Enter the command:->Input is: machine M1
+Machine 'M1' is already in the mfg system.
+
+Options : 
+	[activities, activity, delete, exit, feature, features, job, jobs, machine, machine-state, machines, objects, printout, quit, rectangle, state, states, system, traingle]
+Enter the command:->
+# jobs
+Input is: job P1 500
+
+Options : 
+	[activities, activity, delete, exit, feature, features, job, jobs, machine, machine-state, machines, objects, printout, quit, rectangle, state, states, system, traingle]
+Enter the command:->Input is: job P2 480
+
+Options : 
+	[activities, activity, delete, exit, feature, features, job, jobs, machine, machine-state, machines, objects, printout, quit, rectangle, state, states, system, traingle]
+Enter the command:->
+Input is: jobs
+Job P1, batchSize=500
+Job P2, batchSize=480
+
+Options : 
+	[activities, activity, delete, exit, feature, features, job, jobs, machine, machine-state, machines, objects, printout, quit, rectangle, state, states, system, traingle]
+Enter the command:->
+#features
+Input is: feature hole_1 P1
+
+Options : 
+	[activities, activity, delete, exit, feature, features, job, jobs, machine, machine-state, machines, objects, printout, quit, rectangle, state, states, system, traingle]
+Enter the command:->Input is: feature hole_2 P1
+
+Options : 
+	[activities, activity, delete, exit, feature, features, job, jobs, machine, machine-state, machines, objects, printout, quit, rectangle, state, states, system, traingle]
+Enter the command:->Input is: feature step_1 P1
+
+Options : 
+	[activities, activity, delete, exit, feature, features, job, jobs, machine, machine-state, machines, objects, printout, quit, rectangle, state, states, system, traingle]
+Enter the command:->Input is: feature hole_3 P2
+
+Options : 
+	[activities, activity, delete, exit, feature, features, job, jobs, machine, machine-state, machines, objects, printout, quit, rectangle, state, states, system, traingle]
+Enter the command:->Input is: feature step_2 P2
+
+Options : 
+	[activities, activity, delete, exit, feature, features, job, jobs, machine, machine-state, machines, objects, printout, quit, rectangle, state, states, system, traingle]
+Enter the command:->Input is: feature step_3 P2
+
+Options : 
+	[activities, activity, delete, exit, feature, features, job, jobs, machine, machine-state, machines, objects, printout, quit, rectangle, state, states, system, traingle]
+Enter the command:->
+# activities and states M1
+Input is: activity M1 P1 hole_1 0 20
+
+Options : 
+	[activities, activity, delete, exit, feature, features, job, jobs, machine, machine-state, machines, objects, printout, quit, rectangle, state, states, system, traingle]
+Enter the command:->Input is: machine-state M1 idle 90 100
+Machine with name 'idle' does not exist.
+
+Options : 
+	[activities, activity, delete, exit, feature, features, job, jobs, machine, machine-state, machines, objects, printout, quit, rectangle, state, states, system, traingle]
+Enter the command:->Input is: activity M1 P2 hole_3 20 90
+act-P2-hole_3 (20, 90) overlaps with act-P1-hole_1 (0, 20)
+
+Options : 
+	[activities, activity, delete, exit, feature, features, job, jobs, machine, machine-state, machines, objects, printout, quit, rectangle, state, states, system, traingle]
+Enter the command:->
+# activities and states M2
+Input is: activity M2 P1 hole_2 0 60
+
+Options : 
+	[activities, activity, delete, exit, feature, features, job, jobs, machine, machine-state, machines, objects, printout, quit, rectangle, state, states, system, traingle]
+Enter the command:->Input is: activity M2 P2 step_2 60 100
+act-P2-step_2 (60, 100) overlaps with act-P1-hole_2 (0, 60)
+
+Options : 
+	[activities, activity, delete, exit, feature, features, job, jobs, machine, machine-state, machines, objects, printout, quit, rectangle, state, states, system, traingle]
+Enter the command:->
+# activities and states M3
+Input is: activity M3 P1 step_1 10 60
+
+Options : 
+	[activities, activity, delete, exit, feature, features, job, jobs, machine, machine-state, machines, objects, printout, quit, rectangle, state, states, system, traingle]
+Enter the command:->Input is: machine-state M3 blocked 60 70
+Machine with name 'blocked' does not exist.
+
+Options : 
+	[activities, activity, delete, exit, feature, features, job, jobs, machine, machine-state, machines, objects, printout, quit, rectangle, state, states, system, traingle]
+Enter the command:->Input is: activity M3 P2 step_3 70 100
+
+Options : 
+	[activities, activity, delete, exit, feature, features, job, jobs, machine, machine-state, machines, objects, printout, quit, rectangle, state, states, system, traingle]
+Enter the command:->Input is: machine-state M3 down 0 10
+Machine with name 'down' does not exist.
+
+Options : 
+	[activities, activity, delete, exit, feature, features, job, jobs, machine, machine-state, machines, objects, printout, quit, rectangle, state, states, system, traingle]
+Enter the command:->
+Input is: features P1
+Job P1, batchSize=500
+=>Features:
+Feature (name=step_1, job=null)
+Feature (name=hole_1, job=null)
+Feature (name=hole_2, job=null)
+
+Options : 
+	[activities, activity, delete, exit, feature, features, job, jobs, machine, machine-state, machines, objects, printout, quit, rectangle, state, states, system, traingle]
+Enter the command:->Input is: activities P2
+Job P2, batchSize=480
+=> Activities:
+Activity act-P2-step_3 (job=P2, feature=step_3, machine=M3, stateType=BUSY, startTime=Wed Dec 31 19:01:10 EST 1969, endTime=Wed Dec 31 19:01:40 EST 1969)
+
+Options : 
+	[activities, activity, delete, exit, feature, features, job, jobs, machine, machine-state, machines, objects, printout, quit, rectangle, state, states, system, traingle]
+Enter the command:->Input is: states M3
+Machine M3
+=>States:
+Activity act-P1-step_1 (job=P1, feature=step_1, machine=M3, stateType=BUSY, startTime=Wed Dec 31 19:00:10 EST 1969, endTime=Wed Dec 31 19:01:00 EST 1969)
+Activity act-P2-step_3 (job=P2, feature=step_3, machine=M3, stateType=BUSY, startTime=Wed Dec 31 19:01:10 EST 1969, endTime=Wed Dec 31 19:01:40 EST 1969)
+
+Options : 
+	[activities, activity, delete, exit, feature, features, job, jobs, machine, machine-state, machines, objects, printout, quit, rectangle, state, states, system, traingle]
+Enter the command:->
+Input is: system
+MfgSystem 'ise6900' contains 2 jobs and 3 machines.
+
+Options : 
+	[activities, activity, delete, exit, feature, features, job, jobs, machine, machine-state, machines, objects, printout, quit, rectangle, state, states, system, traingle]
+Enter the command:->
+Input is: printout P1
+Job P1, batchSize=500
+
+Options : 
+	[activities, activity, delete, exit, feature, features, job, jobs, machine, machine-state, machines, objects, printout, quit, rectangle, state, states, system, traingle]
+Enter the command:->Input is: printout P2
+Job P2, batchSize=480
+
+Options : 
+	[activities, activity, delete, exit, feature, features, job, jobs, machine, machine-state, machines, objects, printout, quit, rectangle, state, states, system, traingle]
+Enter the command:->
+Input is: delete M3
+Machine M3
+Machine 'M3' deleted!
+
+Options : 
+	[activities, activity, delete, exit, feature, features, job, jobs, machine, machine-state, machines, objects, printout, quit, rectangle, state, states, system, traingle]
+Enter the command:->Input is: delete M3 P2 step_3
+Machine with name 'M3' does not exist.
+
+Options : 
+	[activities, activity, delete, exit, feature, features, job, jobs, machine, machine-state, machines, objects, printout, quit, rectangle, state, states, system, traingle]
+Enter the command:->
+Input is: quit
+Closing the application!

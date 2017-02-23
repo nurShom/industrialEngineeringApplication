@@ -12,6 +12,11 @@ public class OverlappingStateException extends Exception {
 	/**
 	 * 
 	 */
+	private static final long serialVersionUID = 4879903211197389718L;
+
+	/**
+	 * 
+	 */
 	public OverlappingStateException() {
 		// TODO Auto-generated constructor stub
 	}

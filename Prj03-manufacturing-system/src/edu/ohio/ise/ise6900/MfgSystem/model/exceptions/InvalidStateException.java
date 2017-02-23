@@ -2,6 +2,11 @@ package edu.ohio.ise.ise6900.MfgSystem.model.exceptions;
 
 public class InvalidStateException extends Exception {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6951434166615577608L;
+
 	public InvalidStateException() {
 		// TODO Auto-generated constructor stub
 	}

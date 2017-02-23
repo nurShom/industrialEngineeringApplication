@@ -12,8 +12,8 @@ public class Activity extends AbstractState
 	
 	public Activity(String name, Machine machine, Job job, MfgFeature feature, Date startTime, Date endTime) throws InvalidStateException{
 		super(name, machine, StateType.BUSY, startTime, endTime);
-		this.setJob(job);
-		this.setFeature(feature);
+		this.job = job;
+		this.feature = feature;
 	}
 
 	/**
@@ -52,6 +52,50 @@ public class Activity extends AbstractState
 		return "Activity " + getName() + " (job=" + job.getName() + ", feature=" + feature.getName() 
 				+ ", machine=" + getMachine().getName() + ", stateType=" + getStateType().name() 
 				+ ", startTime=" + getStartTime() + ", endTime=" + getEndTime() + ")";
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((feature == null) ? 0 : feature.hashCode());
+		result = prime * result + ((job == null) ? 0 : job.hashCode());
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (!(obj instanceof Activity)) {
+			return false;
+		}
+		Activity other = (Activity) obj;
+		if (feature == null) {
+			if (other.feature != null) {
+				return false;
+			}
+		} else if (!feature.equals(other.feature)) {
+			return false;
+		}
+		if (job == null) {
+			if (other.job != null) {
+				return false;
+			}
+		} else if (!job.equals(other.job)) {
+			return false;
+		}
+		return true;
 	}
 
 	
