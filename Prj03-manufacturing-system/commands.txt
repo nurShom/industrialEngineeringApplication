@@ -61,6 +61,7 @@ printout P2 step_2
 delete M3
 # delete activity
 delete M3 P2 step_3
+printout P1
 
 quit
 

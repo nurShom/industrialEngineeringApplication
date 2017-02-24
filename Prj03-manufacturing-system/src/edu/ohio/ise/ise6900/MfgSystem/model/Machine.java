@@ -24,8 +24,13 @@ public class Machine extends MfgObject
 		for (AbstractState state : this.machineStates) {
 			if ((start.after(state.getStartTime()) && start.before(state.getEndTime()))
 					|| (end.after(state.getStartTime()) && end.before(state.getEndTime()))
-					|| start.equals(state.getStartTime()) || end.equals(state.getStartTime())
-					|| start.equals(state.getEndTime()) || end.equals(state.getEndTime())) {
+					|| (start.equals(state.getStartTime()) 
+							&& (end.equals(state.getEndTime()) || end.after(state.getEndTime()))
+						)
+					|| (end.equals(state.getEndTime()) 
+							&& (start.equals(state.getStartTime()) || start.before(state.getStartTime()))
+						)
+				) {
 				throw new OverlappingStateException(ms.getName() + " (" + ms.getStartTime().getTime() / 1000 + ", "
 						+ ms.getEndTime().getTime() / 1000 + ") overlaps with " + state.getName() + " ("
 						+ state.getStartTime().getTime() / 1000 + ", " + state.getEndTime().getTime() / 1000 + ")");
@@ -47,7 +52,7 @@ public class Machine extends MfgObject
 	public void listStates(){
 		this.printout();
 		MfgSystem.io.println("=>States:");
-		for(AbstractState ms : this.machineStates){
+		for(AbstractState ms : this.getMachineStatesSortedByStartTime()){
 			ms.printout();
 		}
 	}

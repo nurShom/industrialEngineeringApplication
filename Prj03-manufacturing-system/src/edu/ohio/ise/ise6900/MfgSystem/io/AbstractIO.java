@@ -9,9 +9,7 @@ public abstract class AbstractIO {
 
 	public abstract void println(String text);
 
-	public void printErr(String text) {
-		System.err.println(text);
-	}
+	public abstract void printErr(String text);
 	
 	public abstract String readLine() throws IOException;
 

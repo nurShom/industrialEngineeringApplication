@@ -51,7 +51,8 @@ public class Activity extends AbstractState
 	public String toString() {
 		return "Activity " + getName() + " (job=" + job.getName() + ", feature=" + feature.getName() 
 				+ ", machine=" + getMachine().getName() + ", stateType=" + getStateType().name() 
-				+ ", startTime=" + getStartTime() + ", endTime=" + getEndTime() + ")";
+				+ ", startTime=" + (getStartTime().getTime()/1000) 
+				+ ", endTime=" + (getEndTime().getTime()/1000) + ")";
 	}
 
 	/* (non-Javadoc)

@@ -4,8 +4,9 @@ public class MfgFeature extends MfgObject
 {
 	private Job job;
 
-	public MfgFeature(String name){
+	public MfgFeature(String name, Job job){
 		super(name);
+		this.job = job;
 	}
 	/**
 	 * @return the job
@@ -18,7 +19,7 @@ public class MfgFeature extends MfgObject
 	 */
 	@Override
 	public String toString() {
-		return "Feature (name="+ getName() + ", job=" + job + ")";
+		return "Feature (name="+ getName() + ", job=" + job.getName() + ")";
 	}
 
 }

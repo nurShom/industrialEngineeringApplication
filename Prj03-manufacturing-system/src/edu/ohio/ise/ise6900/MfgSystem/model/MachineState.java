@@ -17,8 +17,9 @@ public class MachineState extends AbstractState
 	@Override
 	public String toString() {
 		return "MachineState "+ getName() + " (machine=" + getMachine().getName() 
-				+ ", stateType=" + getStateType().toString() + ", startTime=" + getStartTime()
-				+ ", endTime=" + getEndTime() + ")";
+				+ ", stateType=" + getStateType().toString() + 
+				", startTime=" + (getStartTime().getTime()/1000)
+				+ ", endTime=" + (getEndTime().getTime()/1000) + ")";
 	}
 	
 }

@@ -91,8 +91,7 @@ public class FileIO extends AbstractIO {
 			System.err.println("Output file undefined: "+ this.outFile.getName());
 			return;
 		}
-		pout.flush();
-		pout.println(text);
+		pout.println("Error: "+text);
 	}
 	
 	public String readLine() throws IOException{
@@ -104,7 +103,7 @@ public class FileIO extends AbstractIO {
 		String line = bin.readLine();
 		//Checking for file comments or empty line
 		while(line != null && (line.trim().startsWith("#") || line.isEmpty())){
-			this.println(line);
+			this.println("\n"+line);
 			line = bin.readLine();
 		}
 		//Checking end of file

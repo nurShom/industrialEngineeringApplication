@@ -97,8 +97,8 @@ public class MfgSystemConsoleApp {
 				switch (cmd) {
 				case EXIT:
 				case QUIT:
-					keepRunning = false;
 					io.printErr("Closing the application!");
+					keepRunning = false;
 					break;
 				case JOB:
 					// job jobName batchSize
@@ -131,7 +131,7 @@ public class MfgSystemConsoleApp {
 						String featureName = tokenizer.nextToken();
 						String jobName = tokenizer.nextToken();
 						Job job = ms.findJob(jobName);
-						job.addFeature(new MfgFeature(featureName));
+						job.addFeature(new MfgFeature(featureName, job));
 					} catch (AlreadyMemberException ame) {
 						io.printErr(ame.getMessage());
 					} catch (UnknownObjectException uoe) {
@@ -166,8 +166,8 @@ public class MfgSystemConsoleApp {
 						MfgFeature feature = job.findFeature(featureName);
 						Date startTime = new Date(Long.parseLong(tokenizer.nextToken()) * 1000);
 						Date endTime = new Date(Long.parseLong(tokenizer.nextToken()) * 1000);
-						Activity act = new Activity("act-" + jobName + "-" + featureName, machine, job, feature,
-								startTime, endTime);
+						String actName = jobName + "-" + featureName + "-" + (startTime.getTime()/1000);
+						Activity act = new Activity(actName, machine, job, feature, startTime, endTime);
 						machine.addState(act);
 						job.addActivity(act);
 					} catch (AlreadyMemberException ame) {
@@ -224,20 +224,18 @@ public class MfgSystemConsoleApp {
 					// state stateName machineName state startTime endTime
 					// creates activity
 					try {
-						String stateName = tokenizer.nextToken();
 						String machineName = tokenizer.nextToken();
 						Machine machine = ms.findMachine(machineName);
 						String state = tokenizer.nextToken();
 						StateType stype = StateType.findStateType(state);
 						Date startTime = new Date(Long.parseLong(tokenizer.nextToken()) * 1000);
 						Date endTime = new Date(Long.parseLong(tokenizer.nextToken()) * 1000);
+						String stateName = machineName+"-"+stype+"-"+(startTime.getTime()/1000);
 						machine.addState(new MachineState(stateName, machine, stype, startTime, endTime));
 					} catch (AlreadyMemberException ame) {
 						io.printErr(ame.getMessage());
 					} catch (UnknownObjectException uoe) {
 						io.printErr(uoe.getMessage());
-					} catch (NoSuchElementException nsee) {
-						io.printErr("Not enough activitiy parameters are specified!");
 					} catch (OverlappingStateException ose) {
 						io.printErr(ose.getMessage());
 					} catch (UnknownStateException use) {
