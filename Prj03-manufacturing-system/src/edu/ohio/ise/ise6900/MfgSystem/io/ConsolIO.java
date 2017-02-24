@@ -14,10 +14,12 @@ public class ConsolIO extends AbstractIO {
 	}
 
 	public void println(String text) {
+		System.err.flush();
 		System.out.println(text);
 	}
 
 	public void printErr(String text) {
+		System.out.flush();
 		System.err.println(text);
 	}
 	

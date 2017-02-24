@@ -265,12 +265,13 @@ public class MfgSystemConsoleApp {
 					ms.printout();
 					break;
 				case PRINTOUT:
-					// printout job feature activity
-					// printout machine state
-					// printout job/machine
+					/* activity: printout machine job feature
+					 * feature: printout job feature
+					 * job: printout job
+					 * machine: printout machine 
+					 */
 					try {
 						int option = tokenizer.countTokens();
-						// io.println("token left: " + option);
 						if (option == 1) {
 							// job or machine
 							String objectName = tokenizer.nextToken();
@@ -306,13 +307,13 @@ public class MfgSystemConsoleApp {
 					}
 					break;
 				case DELETE:
-					// feature: delete machine job feature
-					// state: delete machine state
-					// job: delete job
-					// machine: delete machine
+					/* activity: printout machine job feature
+					 * feature: printout job feature
+					 * job: printout job
+					 * machine: printout machine 
+					 */
 					try {
 						int option = tokenizer.countTokens();
-						// io.println("token left: " + option);
 						if (option == 1) {
 							// job or machine
 							String objectName = tokenizer.nextToken();

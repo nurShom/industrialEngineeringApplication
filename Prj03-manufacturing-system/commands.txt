@@ -7,6 +7,8 @@ machine M1
 # jobs
 job P1 500
 job P2 480
+job P3 200
+job P1 500
 
 jobs
 
@@ -17,10 +19,12 @@ feature step_1 P1
 feature hole_3 P2
 feature step_2 P2
 feature step_3 P2
+feature hole_1 P1
 
 # activities and states M1
 activity M1 P1 hole_1 0 20
 machine-state M1 idle 90 100
+machine-state M1 blocked 90 100
 activity M1 P2 hole_3 20 90
 
 # activities and states M2
@@ -35,15 +39,28 @@ machine-state M3 down 0 10
 
 features P1
 activities P2
+
+# print machine states
+states M1
+states M2
 states M3
 
 system
 
+# print job
 printout P1
 printout P2
+# print machine
+printout M2
+# print activity
+printout M2 P2 step_2
+# print feature
+printout P2 step_2
 
+# delete machine
 delete M3
+# delete activity
 delete M3 P2 step_3
 
-#quit
+quit
 

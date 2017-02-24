@@ -77,15 +77,13 @@ public class FileIO extends AbstractIO {
 			System.err.println("Output file undefined: "+ this.outFile.getName());
 			return;
 		}
+		pout.flush();
 		pout.print(text);
 	}
 
 	public void println(String text) {
-		if(pout == null){
-			System.err.println("Output file undefined: "+ this.outFile.getName());
-			return;
-		}
-		pout.println(text);
+		this.print(text);
+		pout.println();
 	}
 
 	public void printErr(String text) {
@@ -93,8 +91,8 @@ public class FileIO extends AbstractIO {
 			System.err.println("Output file undefined: "+ this.outFile.getName());
 			return;
 		}
-		pout.println(text);
 		pout.flush();
+		pout.println(text);
 	}
 	
 	public String readLine() throws IOException{

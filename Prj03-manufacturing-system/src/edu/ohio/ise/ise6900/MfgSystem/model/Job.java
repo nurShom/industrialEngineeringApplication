@@ -57,14 +57,15 @@ public class Job extends MfgObject
 		activities.add(a);
 	}
 	
-	public Activity findActivity(MfgFeature feature) throws InvalidStateException {
+	public Activity findActivity(MfgFeature feature) throws UnknownObjectException, InvalidStateException {
 		Activity activity = new Activity("", null, this, feature, new Date(0), new Date(1000));
 		for(Activity act : activities){
 			if(act.equals(activity)){
 				return activities.get(activities.indexOf(act));
 			}
 		}
-		return null;
+		throw new UnknownObjectException("Activity for feature '" + feature.getName() 
+				+ "' does not exist in job '" + this.getName() + "'.");
 	}
 	
 	public boolean deleteActivity(Activity activity) {

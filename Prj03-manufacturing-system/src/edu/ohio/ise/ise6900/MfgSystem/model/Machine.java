@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import edu.ohio.ise.ise6900.MfgSystem.model.exceptions.AlreadyMemberException;
+import edu.ohio.ise.ise6900.MfgSystem.model.exceptions.InvalidStateException;
 import edu.ohio.ise.ise6900.MfgSystem.model.exceptions.OverlappingStateException;
 
 public class Machine extends MfgObject
@@ -49,6 +50,15 @@ public class Machine extends MfgObject
 		for(AbstractState ms : this.machineStates){
 			ms.printout();
 		}
+	}
+	
+	public int findState(AbstractState searchState) throws InvalidStateException {
+		for(AbstractState state : machineStates){
+			if(state.equals(searchState)){
+				return machineStates.indexOf(state);
+			}
+		}
+		return -1;
 	}
 	
 	public ArrayList<AbstractState> getMachineStatesSortedByStartTime(){
