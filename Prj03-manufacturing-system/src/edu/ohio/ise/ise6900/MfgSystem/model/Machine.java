@@ -45,7 +45,7 @@ public class Machine extends MfgObject
 	
 	public void listStates(){
 		this.printout();
-		MfgObject.io.println("=>States:");
+		MfgSystem.io.println("=>States:");
 		for(AbstractState ms : this.machineStates){
 			ms.printout();
 		}

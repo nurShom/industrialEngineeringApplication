@@ -5,14 +5,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 import edu.ohio.ise.ise6900.MfgSystem.geometry.DrawObject;
-import edu.ohio.ise.ise6900.MfgSystem.model.exceptions.AlreadyMemberException;
-import edu.ohio.ise.ise6900.MfgSystem.model.exceptions.UnknownObjectException;
+import edu.ohio.ise.ise6900.MfgSystem.io.*;
+import edu.ohio.ise.ise6900.MfgSystem.model.exceptions.*;
 
 public class MfgSystem extends MfgObject
 {
 	private Map<String, Job> jobs;
 	private Map<String, Machine> machines;
 	private ArrayList<DrawObject> objects;
+	protected static AbstractIO io;
+	static{
+		MfgSystem.io = new ConsolIO();
+	}
 
 	public MfgSystem(String name){
 		super(name);
@@ -108,6 +112,9 @@ public class MfgSystem extends MfgObject
 	}
 	
 	
+	public static void setIO(AbstractIO io) {
+		MfgSystem.io = io;
+	}
 	
 }
 

@@ -1,15 +1,9 @@
 package edu.ohio.ise.ise6900.MfgSystem.model;
 
-import edu.ohio.ise.ise6900.MfgSystem.io.*;
-
 public abstract class MfgObject
 {
 	
 	private String name;
-	protected static AbstractIO io;
-	static{
-		MfgObject.io = new ConsolIO();
-	}
 
 	public MfgObject(String name){
 		super();
@@ -22,10 +16,6 @@ public abstract class MfgObject
 	public String getName() {
 		return name;
 	}
-	
-	public static void setIO(AbstractIO io) {
-		MfgObject.io = io;
-	}
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
@@ -36,7 +26,7 @@ public abstract class MfgObject
 	
 	public void printout(){
 		//System.out.println(this.toString());
-		MfgObject.io.println(this.toString());
+		MfgSystem.io.println(this.toString());
 	}
 
 }

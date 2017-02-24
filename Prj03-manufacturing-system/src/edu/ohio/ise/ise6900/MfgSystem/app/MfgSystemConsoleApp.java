@@ -71,7 +71,7 @@ public class MfgSystemConsoleApp {
 		//String outFile = "";
 		try {
 			AbstractIO io = new FileIO(inFile);
-			MfgObject.setIO(io);
+			MfgSystem.setIO(io);
 			//ConsolIO io = new ConsolIO();
 			StringTokenizer tokenizer;
 			while (keepRunning) {
