@@ -1,0 +1,132 @@
+
+# machines
+Input is: machine M1
+Input is: machine M2
+Input is: machine M3
+Input is: machine M1
+Error: Machine 'M1' is already in the mfg system.
+
+
+
+# jobs
+Input is: job P1 500
+Input is: job P2 480
+Input is: job P3 200
+Input is: job P1 500
+Error: Job 'P1' is already in the mfg system.
+
+
+Input is: jobs
+Job P1, batchSize=500
+Job P2, batchSize=480
+Job P3, batchSize=200
+
+
+
+#features
+Input is: feature hole_1 P1
+Input is: feature hole_2 P1
+Input is: feature step_1 P1
+Input is: feature hole_3 P2
+Input is: feature step_2 P2
+Input is: feature step_3 P2
+Input is: feature hole_1 P1
+Error: Feature 'hole_1' is already in job 'P1'.
+
+
+
+# activities and states M1
+Input is: activity M1 P1 hole_1 0 20
+Input is: machine-state M1 idle 90 100
+Input is: machine-state M1 blocked 90 100
+Error: M1-BLOCKED-90 (90, 100) overlaps with M1-IDLE-90 (90, 100)
+Input is: activity M1 P2 hole_3 20 90
+
+
+
+# activities and states M2
+Input is: activity M2 P1 hole_2 0 60
+Input is: activity M2 P2 step_2 60 100
+
+
+
+# activities and states M3
+Input is: activity M3 P1 step_1 10 60
+Input is: machine-state M3 blocked 60 70
+Input is: activity M3 P2 step_3 70 100
+Input is: machine-state M3 down 0 10
+
+
+Input is: features P1
+Job P1, batchSize=500
+=>Features:
+Feature (name=step_1, job=P1)
+Feature (name=hole_1, job=P1)
+Feature (name=hole_2, job=P1)
+Input is: activities P2
+Job P2, batchSize=480
+=> Activities:
+Activity P2-hole_3-20 (job=P2, feature=hole_3, machine=M1, stateType=BUSY, startTime=20, endTime=90)
+Activity P2-step_2-60 (job=P2, feature=step_2, machine=M2, stateType=BUSY, startTime=60, endTime=100)
+Activity P2-step_3-70 (job=P2, feature=step_3, machine=M3, stateType=BUSY, startTime=70, endTime=100)
+
+
+
+# print machine states
+Input is: states M1
+Machine M1
+=>States:
+Activity P1-hole_1-0 (job=P1, feature=hole_1, machine=M1, stateType=BUSY, startTime=0, endTime=20)
+Activity P2-hole_3-20 (job=P2, feature=hole_3, machine=M1, stateType=BUSY, startTime=20, endTime=90)
+MachineState M1-IDLE-90 (machine=M1, stateType=IDLE, startTime=90, endTime=100)
+Input is: states M2
+Machine M2
+=>States:
+Activity P1-hole_2-0 (job=P1, feature=hole_2, machine=M2, stateType=BUSY, startTime=0, endTime=60)
+Activity P2-step_2-60 (job=P2, feature=step_2, machine=M2, stateType=BUSY, startTime=60, endTime=100)
+Input is: states M3
+Machine M3
+=>States:
+MachineState M3-DOWN-0 (machine=M3, stateType=DOWN, startTime=0, endTime=10)
+Activity P1-step_1-10 (job=P1, feature=step_1, machine=M3, stateType=BUSY, startTime=10, endTime=60)
+MachineState M3-BLOCKED-60 (machine=M3, stateType=BLOCKED, startTime=60, endTime=70)
+Activity P2-step_3-70 (job=P2, feature=step_3, machine=M3, stateType=BUSY, startTime=70, endTime=100)
+
+
+Input is: system
+MfgSystem 'ise6900' contains 3 jobs and 3 machines.
+
+
+
+# print job
+Input is: printout P1
+Job P1, batchSize=500
+Input is: printout P2
+Job P2, batchSize=480
+
+# print machine
+Input is: printout M2
+Machine M2
+
+# print activity
+Input is: printout M2 P2 step_2
+Activity P2-step_2-60 (job=P2, feature=step_2, machine=M2, stateType=BUSY, startTime=60, endTime=100)
+
+# print feature
+Input is: printout P2 step_2
+Feature (name=step_2, job=P2)
+
+
+
+# delete machine
+Input is: delete M3
+Machine M3
+Machine 'M3' deleted!
+
+# delete activity
+Input is: delete M3 P2 step_3
+Error: Machine with name 'M3' does not exist.
+Input is: printout P1
+Job P1, batchSize=500
+
+

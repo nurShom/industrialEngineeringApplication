@@ -5,6 +5,7 @@ package edu.ohio.ise.ise6900.MfgSystem.app;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.NoSuchElementException;
 import java.util.SortedMap;
@@ -21,6 +22,8 @@ import edu.ohio.ise.ise6900.MfgSystem.model.exceptions.*;
  *
  */
 public class MfgSystemConsoleApp {
+	
+	AbstractIO io;
 
 	enum Command {
 		JOB, MACHINE, ACTIVITY, FEATURE, STATE, // to create objects
@@ -63,23 +66,21 @@ public class MfgSystemConsoleApp {
 
 		menu = "\nOptions : \n\t" + commands.keySet().toString() + "\nEnter the command:->";
 	}
+	
+	public void setIO(AbstractIO io){
+		this.io = io;
+	}
 
 	public void run() {
-		MfgSystem ms = new MfgSystem("ise6900");
-		boolean keepRunning = true;
-		String inFile = "./commands.txt";
-		//String outFile = "";
 		try {
-			AbstractIO io = new FileIO(inFile);
-			MfgSystem.setIO(io);
-			//ConsolIO io = new ConsolIO();
+			MfgSystem ms = new MfgSystem("ise6900");
+			boolean keepRunning = true;
 			StringTokenizer tokenizer;
 			while (keepRunning) {
-				System.err.flush();
-				io.print(menu);
+				System.out.print(menu);
 
 				String input = io.readLine();
-				io.println("Input is: " + input);
+				io.println("\nInput is: " + input);
 
 				tokenizer = new StringTokenizer(input);
 				String commandText;
@@ -402,6 +403,16 @@ public class MfgSystemConsoleApp {
 	 */
 	public static void main(String[] args) {
 		MfgSystemConsoleApp mscApp = new MfgSystemConsoleApp();
+		if(args.length>0){
+			String inFile = args[0];
+			try {
+				mscApp.setIO(new FileIO(inFile, false));
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+		} else{
+			mscApp.setIO(new ConsolIO());
+		}
 		mscApp.run();
 	}
 

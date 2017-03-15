@@ -18,63 +18,73 @@ public class FileIO extends AbstractIO {
 	private File outFile;
 	private BufferedReader bin;
 	private PrintWriter pout;
-	
+	boolean outToFile;
+
 	public FileIO() throws FileNotFoundException {
-		this("./commands.txt");
+		this(false);
 	}
 
-	public FileIO(String inFileName) throws FileNotFoundException {
-		this(inFileName, "./output" + (new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date())) + ".txt");
+	public FileIO(boolean outToFile) throws FileNotFoundException {
+		this("./commands.mfg", outToFile);
 	}
 
-	public FileIO(String inFileName, String outFileName) throws FileNotFoundException {
+	public FileIO(String inFileName, boolean outToFile) throws FileNotFoundException {
+		this(inFileName, "./output" + (new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date())) + ".mfgo",
+				outToFile);
+	}
+
+	public FileIO(String inFileName, String outFileName, boolean outToFile) throws FileNotFoundException {
 		inFile = new File(inFileName);
-		outFile = new File(outFileName);
-		try{
+		try {
 			bin = new BufferedReader(new FileReader(inFile));
-		} catch(FileNotFoundException fnfe){
-			throw new FileNotFoundException(inFileName  + ":: " +  fnfe.getMessage());
+		} catch (FileNotFoundException fnfe) {
+			throw new FileNotFoundException(inFileName + ":: " + fnfe.getMessage());
 		}
-		try{
-			FileOutputStream fos = new FileOutputStream(outFile);
-			pout = new PrintWriter(new BufferedWriter(new OutputStreamWriter(fos)));
-		} catch(FileNotFoundException fnfe){
-			throw new FileNotFoundException(outFileName  + ":: " +  fnfe.getMessage());
+		if (outToFile) {
+			outFile = new File(outFileName);
+			try {
+				FileOutputStream fos = new FileOutputStream(outFile);
+				pout = new PrintWriter(new BufferedWriter(new OutputStreamWriter(fos, "UTF-8")));
+			} catch (FileNotFoundException fnfe) {
+				throw new FileNotFoundException(outFileName + ":: " + fnfe.getMessage());
+			}
+		} else{
+			pout = new PrintWriter(System.out);
 		}
 	}
 
 	/**
 	 * @param outFile
 	 *            the outFile to set
-	 * @throws FileNotFoundException 
+	 * @throws FileNotFoundException
 	 */
 	public void setOutFile(String outFileName) throws FileNotFoundException {
 		this.outFile = new File(outFileName);
-		try{
+		try {
 			FileOutputStream fos = new FileOutputStream(outFile);
 			pout = new PrintWriter(new BufferedWriter(new OutputStreamWriter(fos)));
-		} catch(FileNotFoundException fnfe){
-			throw new FileNotFoundException(outFileName  + ":: " +  fnfe.getMessage());
+		} catch (FileNotFoundException fnfe) {
+			throw new FileNotFoundException(outFileName + ":: " + fnfe.getMessage());
 		}
 	}
 
 	/**
 	 * @param inFile
 	 *            the inFile to set
-	 * @throws FileNotFoundException 
+	 * @throws FileNotFoundException
 	 */
 	public void setInFile(String inFileName) throws FileNotFoundException {
 		this.inFile = new File(inFileName);
-		try{
+		try {
 			bin = new BufferedReader(new FileReader(inFile));
-		} catch(FileNotFoundException fnfe){
-			throw new FileNotFoundException(inFileName  + ":: " +  fnfe.getMessage());
+		} catch (FileNotFoundException fnfe) {
+			throw new FileNotFoundException(inFileName + ":: " + fnfe.getMessage());
 		}
 	}
-	
+
 	public void print(String text) {
-		if(pout == null){
-			System.err.println("Output file undefined: "+ this.outFile.getName());
+		if (pout == null) {
+			System.err.println("Output file undefined: " + this.outFile.getName());
 			return;
 		}
 		pout.flush();
@@ -87,31 +97,31 @@ public class FileIO extends AbstractIO {
 	}
 
 	public void printErr(String text) {
-		if(pout == null){
-			System.err.println("Output file undefined: "+ this.outFile.getName());
+		if (pout == null) {
+			System.err.println("Output file undefined: " + this.outFile.getName());
 			return;
 		}
-		pout.println("Error: "+text);
+		pout.println("Error: " + text);
 	}
-	
-	public String readLine() throws IOException{
-		if(bin == null){
-			System.err.println("Input file undefined: "+ this.inFile.getName());
-			pout.println("Input file undefined: "+ this.inFile.getName());
+
+	public String readLine() throws IOException {
+		if (bin == null) {
+			System.err.println("Input file undefined: " + this.inFile.getName());
+			pout.println("Input file undefined: " + this.inFile.getName());
 		}
 		// Reading next line
 		String line = bin.readLine();
-		//Checking for file comments or empty line
-		while(line != null && (line.trim().startsWith("#") || line.isEmpty())){
-			this.println("\n"+line);
+		// Checking for file comments or empty line
+		while (line != null && (line.trim().startsWith("#") || line.isEmpty())) {
+			this.println("\n" + line);
 			line = bin.readLine();
 		}
-		//Checking end of file
-		if(line == null){
+		// Checking end of file
+		if (line == null) {
 			this.println("End of input commands file.");
 			line = "exit";
 		}
-		
+
 		return line;
 	}
 
