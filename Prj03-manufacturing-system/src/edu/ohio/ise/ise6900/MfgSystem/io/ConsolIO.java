@@ -10,12 +10,12 @@ public class ConsolIO extends AbstractIO {
 	}
 	
 	public void print(String text) {
+		System.err.flush();
 		System.out.print(text);
 	}
 
 	public void println(String text) {
-		System.err.flush();
-		System.out.println(text);
+		this.print(text+"\n");
 	}
 
 	public void printErr(String text) {

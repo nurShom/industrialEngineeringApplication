@@ -1,10 +1,17 @@
 package edu.ohio.ise.ise6900.MfgSystem.model;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.SortedMap;
+import java.util.StringTokenizer;
+import java.util.TreeMap;
 
-import edu.ohio.ise.ise6900.MfgSystem.geometry.DrawObject;
+import edu.ohio.ise.ise6900.MfgSystem.geometry.*;
 import edu.ohio.ise.ise6900.MfgSystem.io.*;
 import edu.ohio.ise.ise6900.MfgSystem.model.exceptions.*;
 
@@ -16,6 +23,52 @@ public class MfgSystem extends MfgObject
 	protected static AbstractIO io;
 	static{
 		MfgSystem.io = new ConsolIO();
+	}
+	
+	enum Command {
+		JOB, MACHINE, ACTIVITY, FEATURE, STATE, // to create objects
+		ACTIVITIES, FEATURES, STATES, // to report collection of a given object
+		DELETE, PRINTOUT, // to delete or printout an individual object
+		JOBS, MACHINES, SYSTEM, // to report system state and collection
+		RECTANGLE, TRIANGLE, OBJECTS, // to make draw -objects
+		EXIT, QUIT // to exit the application
+	}
+
+	static SortedMap<String, Command> commands;
+	static String menu;
+
+	static {
+		commands = new TreeMap<String, Command>();
+		commands.put("job", Command.JOB);
+		commands.put("machine", Command.MACHINE);
+		commands.put("activity", Command.ACTIVITY);
+		commands.put("feature", Command.FEATURE);
+		commands.put("machine-state", Command.STATE);
+		commands.put("state", Command.STATE);
+
+		commands.put("activities", Command.ACTIVITIES);
+		commands.put("features", Command.FEATURES);
+		commands.put("states", Command.STATES);
+
+		commands.put("delete", Command.DELETE);
+		commands.put("printout", Command.PRINTOUT);
+
+		commands.put("jobs", Command.JOBS);
+		commands.put("machines", Command.MACHINES);
+		commands.put("system", Command.SYSTEM);
+
+		commands.put("rectangle", Command.RECTANGLE);
+		commands.put("traingle", Command.TRIANGLE);
+		commands.put("objects", Command.OBJECTS);
+
+		commands.put("exit", Command.EXIT);
+		commands.put("quit", Command.QUIT);
+
+		menu = "\nOptions : \n\t" + commands.keySet().toString() + "\nEnter the command:->";
+	}
+	
+	public static void setIO(AbstractIO io) {
+		MfgSystem.io = io;
 	}
 
 	public MfgSystem(String name){
@@ -86,8 +139,6 @@ public class MfgSystem extends MfgObject
 		}
 	}
 	
-
-	
 	public void addDrawObject(DrawObject o){
 		objects.add(o);
 	}
@@ -111,9 +162,331 @@ public class MfgSystem extends MfgObject
 		return "MfgSystem '" + this.getName() + "' contains " + jobs.size() + " jobs and " + machines.size() + " machines.";
 	}
 	
-	
-	public static void setIO(AbstractIO io) {
-		MfgSystem.io = io;
+	public void read(){
+		try {
+			boolean keepRunning = true;
+			StringTokenizer tokenizer;
+			
+			while (keepRunning) {
+				System.out.print(menu);
+
+				String input = io.readLine();
+				io.println("\nInput is: " + input);
+
+				tokenizer = new StringTokenizer(input);
+				String commandText;
+				try {
+					commandText = tokenizer.nextToken();
+				} catch (Exception e) {
+					io.printErr("No input specified.");
+					continue;
+				}
+				Command cmd = commands.get(commandText.toLowerCase());
+				if (cmd == null) {
+					io.printErr("Your command '" + commandText + "' is not supported.");
+					continue;
+				}
+				switch (cmd) {
+				case EXIT:
+				case QUIT:
+					io.printErr("Closing the application!");
+					keepRunning = false;
+					break;
+				case JOB:
+					// job jobName batchSize
+					// creates job
+					try {
+						String jobName = tokenizer.nextToken();
+						int batchSize = Integer.parseInt(tokenizer.nextToken());
+						this.addJob(new Job(jobName, batchSize));
+					} catch (AlreadyMemberException ame) {
+						io.printErr(ame.getMessage());
+					} catch (NumberFormatException mfe) {
+						io.printErr("Batch size needs to be an integer!");
+					} catch (NoSuchElementException nsee) {
+						io.printErr("Not enough job parameters are specified!");
+					}
+					break;
+				case JOBS:
+					// jobs
+					// lists all jobs in the system
+					if (this.countJobs() > 0) {
+						this.printJobs();
+					} else {
+						io.printErr("System has no Job.");
+					}
+					break;
+				case FEATURE:
+					// feature featureName jobName
+					// creates feature
+					try {
+						String featureName = tokenizer.nextToken();
+						String jobName = tokenizer.nextToken();
+						Job job = this.findJob(jobName);
+						job.addFeature(new MfgFeature(featureName, job));
+					} catch (AlreadyMemberException ame) {
+						io.printErr(ame.getMessage());
+					} catch (UnknownObjectException uoe) {
+						io.printErr(uoe.getMessage());
+					} catch (NoSuchElementException nsee) {
+						io.printErr("Not enough feature parameters are specified!");
+					}
+					break;
+				case FEATURES:
+					// features jobName
+					// lists all features under a job
+					try {
+						String jobName = tokenizer.nextToken();
+						Job j = this.findJob(jobName);
+						j.listFeatures();
+					} catch (UnknownObjectException uoe) {
+						io.printErr(uoe.getMessage());
+					} catch (NoSuchElementException nsee) {
+						io.printErr("Job for feature listing need to be specified!");
+					}
+					break;
+				case ACTIVITY:
+					// activity machineName jobName featureName startTime endTime
+					// creates activity
+					try {
+
+						String machineName = tokenizer.nextToken();
+						Machine machine = this.findMachine(machineName);
+						String jobName = tokenizer.nextToken();
+						Job job = this.findJob(jobName);
+						String featureName = tokenizer.nextToken();
+						MfgFeature feature = job.findFeature(featureName);
+						Date startTime = new Date(Long.parseLong(tokenizer.nextToken()) * 1000);
+						Date endTime = new Date(Long.parseLong(tokenizer.nextToken()) * 1000);
+						String actName = jobName + "-" + featureName + "-" + (startTime.getTime()/1000);
+						Activity act = new Activity(actName, machine, job, feature, startTime, endTime);
+						machine.addState(act);
+						job.addActivity(act);
+					} catch (AlreadyMemberException ame) {
+						io.printErr(ame.getMessage());
+					} catch (UnknownObjectException uoe) {
+						io.printErr(uoe.getMessage());
+					} catch (NoSuchElementException nsee) {
+						io.printErr("Not enough activitiy parameters are specified!");
+					} catch (NumberFormatException nsee) {
+						io.printErr("Only positive integers are allowed for start-time and end-time!");
+					} catch (OverlappingStateException ose) {
+						io.printErr(ose.getMessage());
+					} catch (InvalidStateException ise) {
+						io.printErr(ise.getMessage());
+					}
+					break;
+				case ACTIVITIES:
+					// activities jobName
+					// lists all activities under a job
+					try {
+						String jobName = tokenizer.nextToken();
+						Job j = this.findJob(jobName);
+						j.listActivities();
+					} catch (UnknownObjectException uoe) {
+						io.printErr(uoe.getMessage());
+					} catch (NoSuchElementException nsee) {
+						io.printErr("Job for activity listing need to be specified!");
+					}
+					break;
+				case MACHINE:
+					// machine machineName
+					// creates machine
+					try {
+						String machineName = tokenizer.nextToken();
+						this.addMachine(new Machine(machineName));
+					} catch (AlreadyMemberException ame) {
+						io.printErr(ame.getMessage());
+					} catch (NumberFormatException mfe) {
+						io.printErr("Batch size needs to be an integer!");
+					} catch (NoSuchElementException nsee) {
+						io.printErr("Not enough machine parameters are specified!");
+					}
+					break;
+				case MACHINES:
+					// machines
+					// lists all machines in the system
+					if (this.countMachines() > 0) {
+						this.printMachines();
+					} else {
+						io.printErr("System has no Machine.");
+					}
+					break;
+				case STATE:
+					// state stateName machineName state startTime endTime
+					// creates activity
+					try {
+						String machineName = tokenizer.nextToken();
+						Machine machine = this.findMachine(machineName);
+						String state = tokenizer.nextToken();
+						StateType stype = StateType.findStateType(state);
+						Date startTime = new Date(Long.parseLong(tokenizer.nextToken()) * 1000);
+						Date endTime = new Date(Long.parseLong(tokenizer.nextToken()) * 1000);
+						String stateName = machineName+"-"+stype+"-"+(startTime.getTime()/1000);
+						machine.addState(new MachineState(stateName, machine, stype, startTime, endTime));
+					} catch (AlreadyMemberException ame) {
+						io.printErr(ame.getMessage());
+					} catch (UnknownObjectException uoe) {
+						io.printErr(uoe.getMessage());
+					} catch (OverlappingStateException ose) {
+						io.printErr(ose.getMessage());
+					} catch (UnknownStateException use) {
+						io.printErr(use.getMessage());
+					} catch (InvalidStateException ise) {
+						io.printErr(ise.getMessage());
+					}
+					break;
+				case STATES:
+					// states machineName
+					// lists all states under a machine
+					try {
+						String machineName = tokenizer.nextToken();
+						Machine machine = this.findMachine(machineName);
+						machine.listStates();
+					} catch (UnknownObjectException uoe) {
+						io.printErr(uoe.getMessage());
+					} catch (NoSuchElementException nsee) {
+						io.printErr("Machine for activity listing need to be specified!");
+					}
+					break;
+				case SYSTEM:
+					// system
+					// prints mfg-system information
+					this.printout();
+					break;
+				case PRINTOUT:
+					/* activity: printout machine job feature
+					 * feature: printout job feature
+					 * job: printout job
+					 * machine: printout machine 
+					 */
+					try {
+						int option = tokenizer.countTokens();
+						if (option == 1) {
+							// job or machine
+							String objectName = tokenizer.nextToken();
+							try {
+								this.findJob(objectName).printout();
+							} catch (UnknownObjectException uoe) {
+								try {
+									this.findMachine(objectName).printout();
+								} catch (UnknownObjectException uoe2) {
+									io.printErr("No job or machine with name '" + objectName + "' exists!");
+								}
+							}
+						} else if (option == 2) {
+							// feature
+							MfgFeature feature = this.findJob(tokenizer.nextToken()).findFeature(tokenizer.nextToken());
+							feature.printout();
+						} else if (option == 3) {
+							// activity
+							tokenizer.nextToken();
+							Job job = this.findJob(tokenizer.nextToken());
+							MfgFeature feature = job.findFeature(tokenizer.nextToken());
+							Activity activity = job.findActivity(feature);
+							activity.printout();
+						} else {
+							io.printErr("Number of parameters for " + commandText.toUpperCase() + " should be 1, 2, or 3");
+						}
+					} catch (NoSuchElementException nsee) {
+						io.printErr("Number of parameters for " + commandText.toUpperCase() + " should be 1, 2, or 3");
+					} catch (UnknownObjectException uoe) {
+						io.printErr(uoe.getMessage());
+					} catch (InvalidStateException ise) {
+						io.printErr(ise.getMessage());
+					}
+					break;
+				case DELETE:
+					/* activity: printout machine job feature
+					 * feature: printout job feature
+					 * job: printout job
+					 * machine: printout machine 
+					 */
+					try {
+						int option = tokenizer.countTokens();
+						if (option == 1) {
+							// job or machine
+							String objectName = tokenizer.nextToken();
+							try {
+								this.findJob(objectName).printout();
+								this.deleteJob(objectName);
+								io.println("Job '" + objectName + "' deleted!");
+							} catch (UnknownObjectException uoe) {
+								try {
+									this.findMachine(objectName).printout();
+									this.deleteMachine(objectName);
+									io.println("Machine '" + objectName + "' deleted!");
+								} catch (UnknownObjectException uoe2) {
+									io.printErr("No job or machine with name '" + objectName + "' exists!");
+								}
+							}
+						} else if (option == 2) {
+							// feature
+							Job job = this.findJob(tokenizer.nextToken());
+							String featureName = tokenizer.nextToken();
+							job.deleteFeature(featureName);
+							io.println("Feature " + featureName + " (in Job " 
+										+ job.getName() + ") deleted!");
+						} else if (option == 3) {
+							// activity
+							Machine machine = this.findMachine(tokenizer.nextToken());
+							Job job = this.findJob(tokenizer.nextToken());
+							MfgFeature feature = job.findFeature(tokenizer.nextToken());
+							Date st = new Date(0);
+							Date et = new Date(1000);
+							job.deleteActivity(new Activity("", machine, job, feature, st, et));
+							machine.deleteState(new Activity("", machine, job, feature, st, et));
+							io.println("Activity (job " + job.getName() 
+										+ ", feature " + feature.getName()  + ") deleted!");
+						} else {
+							io.printErr("Number of parameters for " + commandText.toUpperCase() + " should be 1, 2, or 3");
+						}
+					} catch (NoSuchElementException nsee) {
+						io.printErr("Number of parameters for " + commandText.toUpperCase() + " should be 1, 2, or 3");
+					} catch (UnknownObjectException uoe) {
+						io.printErr(uoe.getMessage());
+					} catch (InvalidStateException ise) {
+						io.printErr(ise.getMessage());
+					}
+					break;
+				case RECTANGLE:
+					try {
+						double x = Double.parseDouble(tokenizer.nextToken());
+						double y = Double.parseDouble(tokenizer.nextToken());
+						double height = Double.parseDouble(tokenizer.nextToken());
+						double width = Double.parseDouble(tokenizer.nextToken());
+						this.addDrawObject(new Rectangle(x, y, height, width));
+						break;
+					} catch (NumberFormatException nsee) {
+						io.printErr("Only four numbers allowed for coordinates x, y, and height and width.");
+					}
+				case TRIANGLE:
+					try {
+						double x = Double.parseDouble(tokenizer.nextToken());
+						double y = Double.parseDouble(tokenizer.nextToken());
+						double height = Double.parseDouble(tokenizer.nextToken());
+						double width = Double.parseDouble(tokenizer.nextToken());
+						this.addDrawObject(new RightTriangle(x, y, height, width));
+						break;
+					} catch (NumberFormatException nsee) {
+						io.printErr("Only four numbers allowed for coordinates x, y, and height and base.");
+					}
+				case OBJECTS:
+					this.printDrawObjects();
+					break;
+				default:
+					io.printErr("Option '" + commandText + "' not yet implemnted!");
+					break;
+				}
+
+			}
+		} catch (NoSuchElementException nse) {
+			nse.printStackTrace();
+		} catch (FileNotFoundException fnfe) {
+			System.err.println(fnfe.getMessage());
+		} catch (IOException ioe) {
+			System.err.println(ioe.getMessage());
+		}
 	}
 	
 }

@@ -402,18 +402,49 @@ public class MfgSystemConsoleApp {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		
+		/*
+		 * Project-3:
 		MfgSystemConsoleApp mscApp = new MfgSystemConsoleApp();
 		if(args.length>0){
 			String inFile = args[0];
 			try {
 				mscApp.setIO(new FileIO(inFile, false));
 			} catch (FileNotFoundException e) {
-				e.printStackTrace();
+				System.err.println(e.getMessage());
 			}
 		} else{
 			mscApp.setIO(new ConsolIO());
 		}
 		mscApp.run();
+		*/
+		
+		/*
+		 * Project-3A:
+		 */
+		MfgSystem ms;
+		if(args.length>0){
+			String inFile = args[0];
+			if(inFile.endsWith(".mfg")){
+				ms = new MfgSystem(inFile.substring(0, inFile.length()-4));
+				try {
+					MfgSystem.setIO(new FileIO(inFile));
+				} catch (FileNotFoundException e) {
+					System.out.flush();
+					System.err.println("\nFileNotFoundException:");
+					System.err.println(e.getMessage());
+				}
+			}else{
+				System.err.println("Input file name: "
+						+ inFile
+						+ "\nPlease only enter file names with extension '.mfg'!");
+				return;
+			}
+		} else{
+			ms = new MfgSystem("manual-config-system");
+		}
+		ms.read();
+		
 	}
 
 

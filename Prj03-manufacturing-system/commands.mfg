@@ -1,8 +1,12 @@
+system
+
 # machines
 machine M1
 machine M2
 machine M3
 machine M1
+
+machines
 
 # jobs
 job P1 500
