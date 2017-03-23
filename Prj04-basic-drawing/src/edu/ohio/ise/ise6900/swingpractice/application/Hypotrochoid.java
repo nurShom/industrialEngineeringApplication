@@ -12,17 +12,19 @@ import edu.ohio.ent.cs4500.draw.DrawPanel;
 
 public class Hypotrochoid extends DrawObject {
 	private Ellipse2D outer, inner;
-	private Point2D outCenter, inCenter;
+	private Point2D outCenter;
+	private Point2D inCenter; // Initial position of the inner circle
 	private double outRadius;
 	private double inRadius;
 	private double distance;
 
 	/**
 	 * Constructs a Hypotrochoid object, which is created by a moving point with 
-	 * reference to two circles, assuming the center of outer circle is at (0, 0)  
-	 * @param outR radius of the outer circle
-	 * @param inR  radius of the inner circle
-	 * @param d distance between the inner circle center and the moving point P
+	 * reference to two circles, assuming the center of outer circle, thus the 
+	 * center of the Hypotrochoid is at (0, 0)  
+	 * @param outR Radius of the outer circle
+	 * @param inR  Radius of the inner circle
+	 * @param d Distance between the inner circle center and the moving point P
 	 */
 	public Hypotrochoid(double outR, double inR, double d) {
 		this(0, 0, outR, inR, d);
@@ -31,16 +33,24 @@ public class Hypotrochoid extends DrawObject {
 	/**
 	 * Constructs a Hypotrochoid object, which is created by a moving point with 
 	 * reference to two circles  
-	 * @param x x-coordinate of center of outer circle
-	 * @param y y-coordinate of center of outer circle
-	 * @param outR radius of the outer circle
-	 * @param inR  radius of the inner circle
-	 * @param d distance between the inner circle center and the moving point P
+	 * @param x x-coordinate of the center of the outer circle, thus the center of the Hypotrochoid
+	 * @param y y-coordinate of the center of the outer circle, thus the center of the Hypotrochoid
+	 * @param outR Radius of the outer circle
+	 * @param inR  Radius of the inner circle
+	 * @param d Distance between the inner circle center and the moving point P
 	 */
 	public Hypotrochoid(double x, double y, double outR, double inR, double d) {
 		this(new Point2D.Double(x, y), outR, inR, d);
 	}
-
+	
+	/**
+	 * Constructs a Hypotrochoid object, which is created by a moving point with 
+	 * reference to two circles  
+	 * @param pos Position of the center of the outer circle, thus the center of the Hypotrochoid
+	 * @param outR Radius of the outer circle
+	 * @param inR  Radius of the inner circle
+	 * @param d Distance between the inner circle center and the moving point P
+	 */
 	public Hypotrochoid(Point2D pos, double outR, double inR, double d) {
 		super(pos);
 		
@@ -88,9 +98,12 @@ public class Hypotrochoid extends DrawObject {
 
 	public LinkedList<Shape> getDrawList() {
 		LinkedList<Shape> hypotrochoid = new LinkedList<Shape>();
-		for (double a = 0; a < 6480; a++) {
-			Line2D l1 = new Line2D.Double(this.getPosition(a), this.getPosition(a + 1));
+		Point2D p1 = this.getPosition(0);
+		for (double a=1; a < 6480; a++) {
+			Point2D p2 = this.getPosition(a);
+			Line2D l1 = new Line2D.Double(p1, p2);
 			hypotrochoid.add(l1);
+			p1 = p2;
 		}
 		return hypotrochoid;
 	}
@@ -111,7 +124,6 @@ public class Hypotrochoid extends DrawObject {
 
 	@Override
 	public double area() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
