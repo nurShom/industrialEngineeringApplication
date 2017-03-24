@@ -37,7 +37,7 @@ public class ComboBoxTest extends Main {
 			faceCombo.getItems().add("Serif");
 			faceCombo.getItems().add("SansSerif");
 			faceCombo.getItems().addAll("Monospaced", "Dialog", "DialogInput");
-			faceCombo.setValue("Serif");
+			faceCombo.setValue("Dialog");
 			faceCombo.setPromptText("Select Font");
 			faceCombo.setEditable(true);
 			
