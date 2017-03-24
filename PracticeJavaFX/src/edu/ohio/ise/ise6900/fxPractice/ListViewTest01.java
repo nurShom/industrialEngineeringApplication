@@ -7,7 +7,11 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.ComboBoxListCell;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-
+/**
+ * Class content copied from 
+ * http://docs.oracle.com/javafx/2/ui_controls/list-view.htm
+ * 
+ */
 public class ListViewTest01 extends Main {
 	public static final ObservableList<String> names = FXCollections.observableArrayList();
 	public static final ObservableList<String> data = FXCollections.observableArrayList();
