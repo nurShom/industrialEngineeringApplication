@@ -21,7 +21,7 @@ import javafx.util.Callback;
  * http://docs.oracle.com/javafx/2/ui_controls/list-view.htm
  * 
  */
-public class ListViewTest extends Main {
+public class ListViewTest02 extends Main {
 	ListView<String> list = new ListView<String>();
     ObservableList<String> data = FXCollections.observableArrayList(
             "chocolate", "salmon", "gold", "coral", "darkorchid",

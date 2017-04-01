@@ -21,7 +21,7 @@ public class ListViewTest01 extends Main {
         primaryStage.setTitle("List View Sample");        
         
         final ListView<String> listView = new ListView<String>(data);
-        listView.setPrefSize(200, 250);
+        listView.setPrefSize(200, 20);
         listView.setEditable(true);
         
         names.addAll(
