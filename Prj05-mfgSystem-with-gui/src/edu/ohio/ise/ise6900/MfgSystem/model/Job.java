@@ -53,16 +53,6 @@ public class Job extends MfgObject
 			f.printout();
 		}
 	}
-	
-	public void displayFeatures(){
-//		this.printout();
-//		MfgSystem.io.println("=>Features:");
-		for(MfgFeature f : this.features.values()){
-//			f.printout();
-			f.display(null);
-		}
-	}
-	
 
 	public void addActivity(Activity a) throws AlreadyMemberException {
 		activities.add(a);

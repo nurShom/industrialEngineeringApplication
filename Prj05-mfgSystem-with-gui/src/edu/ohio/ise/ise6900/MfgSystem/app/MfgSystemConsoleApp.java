@@ -17,7 +17,7 @@ import edu.ohio.ise.ise6900.MfgSystem.model.*;
 import edu.ohio.ise.ise6900.MfgSystem.model.exceptions.*;
 
 /**
- * @author na551411
+ * @author Nur Shomik Arafat
  *
  */
 public class MfgSystemConsoleApp {

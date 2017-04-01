@@ -110,12 +110,6 @@ public class MfgSystem extends MfgObject
 		}
 	}
 	
-	public void displayJobs(){
-		for(Job j : this.jobs.values()){
-			j.display(null);
-		}
-	}
-	
 	public void addMachine(Machine m) throws AlreadyMemberException{
 		try{
 			this.findMachine(m.getName());
@@ -144,12 +138,6 @@ public class MfgSystem extends MfgObject
 	public void printMachines(){
 		for(Machine m : this.machines.values()){
 			m.printout();
-		}
-	}
-	
-	public void displayMachines(){
-		for(Machine m : this.machines.values()){
-			m.display(null);
 		}
 	}
 	
@@ -226,7 +214,6 @@ public class MfgSystem extends MfgObject
 					// lists all jobs in the system
 					if (this.countJobs() > 0) {
 						this.printJobs();
-						this.displayJobs();
 					} else {
 						io.printErr("System has no Job.");
 					}
