@@ -8,6 +8,7 @@ import edu.ohio.ise.ise6900.MfgSystem.gui.test.DrawableTester;
 import edu.ohio.ise.ise6900.MfgSystem.model.exceptions.InvalidStateException;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import javafx.scene.text.Text;
 //abstract 
 public class AbstractState extends MfgObject implements Comparable<AbstractState>
 {
@@ -117,14 +118,16 @@ public class AbstractState extends MfgObject implements Comparable<AbstractState
 	@Override
 	public LinkedList<Shape> makeShapes() {
 		LinkedList<Shape> shapes = new LinkedList<Shape>();
-		Rectangle state = 
-				new Rectangle(OFFSET + SCALE * this.startTime.getTime(), 
+		Rectangle machineState = 
+				new Rectangle(40 + OFFSET + SCALE * (this.startTime.getTime()/1000),
 							OFFSET + SCALE * this.machine.getLevel(), 
-							SCALE * (this.endTime.getTime() - this.startTime.getTime()), 
+							SCALE * ((this.endTime.getTime() - this.startTime.getTime())/1000), 
 							SCALE * HEIGHT
 						);
-		state.setFill(this.stateType.getColor());
-		shapes.add(state);
+		machineState.setFill(this.stateType.getColor());
+		machineState.setStroke(this.stateType.getColor());
+		machineState.setStrokeWidth(2);
+		shapes.add(machineState);
 		return shapes;
 	}
 	

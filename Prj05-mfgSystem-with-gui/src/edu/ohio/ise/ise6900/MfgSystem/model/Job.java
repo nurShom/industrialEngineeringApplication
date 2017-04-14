@@ -7,14 +7,20 @@ import java.util.LinkedList;
 import java.util.Map;
 
 import edu.ohio.ise.ise6900.MfgSystem.model.exceptions.*;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 
 public class Job extends MfgObject
 {
-	public int batchSize;
-	public Map<String, MfgFeature> features;
-	public ArrayList<Activity> activities;
-
+	protected int batchSize;
+	protected Map<String, MfgFeature> features;
+	protected ArrayList<Activity> activities;
+	protected Color color;
+	{
+		String colorName = super.getProperty(this.getClass().getName() + "." + this.getName(), "black");
+		color = Color.valueOf(colorName);
+	}
+	
 	public Job(String name, int batchSize){
 		super(name);
 		this.batchSize = batchSize;

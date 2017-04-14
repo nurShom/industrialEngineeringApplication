@@ -12,7 +12,7 @@ import javafx.scene.paint.Color;
  *
  */
 public enum StateType {
-	IDLE(Color.YELLOW), DOWN(Color.DARKRED), BLOCKED(Color.PURPLE), BUSY(Color.ORANGERED);
+	IDLE(Color.LIGHTPINK), DOWN(Color.BISQUE), BLOCKED(Color.MEDIUMVIOLETRED), BUSY(Color.LIGHTCORAL);
 	private Color color;
 	
 	StateType(Color color){

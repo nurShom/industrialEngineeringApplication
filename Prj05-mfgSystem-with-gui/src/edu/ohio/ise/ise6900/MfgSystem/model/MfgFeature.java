@@ -28,8 +28,13 @@ public class MfgFeature extends MfgObject
 	
 	@Override
 	public LinkedList<Shape> makeShapes() {
-		// TODO Auto-generated method stub
-		return null;
+		LinkedList<Shape> shapes = new LinkedList<Shape>();
+		for(Activity a : this.job.activities){
+			if(a.getFeature() == this){
+				shapes.addAll(a.makeShapes());
+			}
+		}
+		return shapes;
 	}
 
 }

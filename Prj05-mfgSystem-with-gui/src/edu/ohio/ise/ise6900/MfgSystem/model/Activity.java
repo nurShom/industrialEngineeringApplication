@@ -1,7 +1,12 @@
 package edu.ohio.ise.ise6900.MfgSystem.model;
 
 import java.util.Date;
+import java.util.LinkedList;
+
 import edu.ohio.ise.ise6900.MfgSystem.model.exceptions.InvalidStateException;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 
 public class Activity extends AbstractState
 {
@@ -98,5 +103,15 @@ public class Activity extends AbstractState
 		return true;
 	}
 
+
+	@Override
+	public LinkedList<Shape> makeShapes() {
+		LinkedList<Shape> shapes = super.makeShapes();
+		for(Shape shape : shapes){
+			shape.setStroke(this.job.color);
+			shape.setStrokeWidth(2);
+		}
+		return shapes;
+	}
 }
 
