@@ -16,7 +16,9 @@ public class Machine extends MfgObject
 	private ArrayList<AbstractState> machineStates;
 
 	double level = Double.parseDouble(super.getProperty(this.getClass().getName() + "." + this.getName(), "100"));
-	
+	{
+		System.err.println("Machine " + this.getName() + " level: " + this.level);
+	}
 	
 	public Machine(String name){
 		super(name);

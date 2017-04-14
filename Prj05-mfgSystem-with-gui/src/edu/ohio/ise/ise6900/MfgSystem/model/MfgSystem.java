@@ -24,16 +24,17 @@ public class MfgSystem extends MfgObject
 	private ArrayList<DrawObject> objects;
 	protected static AbstractIO io;
 	static{
-		MfgSystem.io = new ConsolIO();
+		MfgSystem.io = new ConsoleIO();
 	}
 	
 	enum Command {
 		JOB, MACHINE, ACTIVITY, FEATURE, STATE, // to create objects
 		ACTIVITIES, FEATURES, STATES, // to report collection of a given object
-		DELETE, PRINTOUT, // to delete or printout an individual object
+		DELETE, PRINTOUT, DISPLAY, // to delete, printout, or display an individual object
 		JOBS, MACHINES, SYSTEM, // to report system state and collection
 		RECTANGLE, TRIANGLE, OBJECTS, // to make draw -objects
-		EXIT, QUIT // to exit the application
+		EXIT, QUIT, // to exit the application
+		CONSOLE // to read data from console 
 	}
 
 	static SortedMap<String, Command> commands;
@@ -54,6 +55,7 @@ public class MfgSystem extends MfgObject
 
 		commands.put("delete", Command.DELETE);
 		commands.put("printout", Command.PRINTOUT);
+		commands.put("display", Command.DISPLAY);
 
 		commands.put("jobs", Command.JOBS);
 		commands.put("machines", Command.MACHINES);
@@ -65,6 +67,7 @@ public class MfgSystem extends MfgObject
 
 		commands.put("exit", Command.EXIT);
 		commands.put("quit", Command.QUIT);
+		commands.put("console", Command.CONSOLE);
 
 		menu = "\nOptions : \n\t" + commands.keySet().toString() + "\nEnter the command:->";
 	}
@@ -451,6 +454,50 @@ public class MfgSystem extends MfgObject
 						io.printErr(ise.getMessage());
 					}
 					break;
+				case DISPLAY:
+					/* activity: display machine job feature
+					 * feature: display job feature
+					 * job: display job
+					 * machine: display machine 
+					 */
+					try {
+						int option = tokenizer.countTokens();
+						if (option == 1) {
+							// job or machine
+							String objectName = tokenizer.nextToken();
+							try {
+								Job j = this.findJob(objectName);
+								j.display(null);
+							} catch (UnknownObjectException uoe) {
+								try {
+									Machine m = this.findMachine(objectName);
+									m.display(null);
+								} catch (UnknownObjectException uoe2) {
+									io.printErr("No job or machine with name '" + objectName + "' exists!");
+								}
+							}
+						} else if (option == 2) {
+							// feature
+							MfgFeature feature = this.findJob(tokenizer.nextToken()).findFeature(tokenizer.nextToken());
+							feature.printout();
+						} else if (option == 3) {
+							// activity
+							tokenizer.nextToken();
+							Job job = this.findJob(tokenizer.nextToken());
+							MfgFeature feature = job.findFeature(tokenizer.nextToken());
+							Activity activity = job.findActivity(feature);
+							activity.printout();
+						} else {
+							io.printErr("Number of parameters for " + commandText.toUpperCase() + " should be 1, 2, or 3");
+						}
+					} catch (NoSuchElementException nsee) {
+						io.printErr("Number of parameters for " + commandText.toUpperCase() + " should be 1, 2, or 3");
+					} catch (UnknownObjectException uoe) {
+						io.printErr(uoe.getMessage());
+					} catch (InvalidStateException ise) {
+						io.printErr(ise.getMessage());
+					}
+					break;
 				case RECTANGLE:
 					try {
 						double x = Double.parseDouble(tokenizer.nextToken());
@@ -476,11 +523,13 @@ public class MfgSystem extends MfgObject
 				case OBJECTS:
 					this.printDrawObjects();
 					break;
+				case CONSOLE:
+					io = new ConsoleIO();
+					break;
 				default:
 					io.printErr("Option '" + commandText + "' not yet implemnted!");
 					break;
 				}
-
 			}
 		} catch (NoSuchElementException nse) {
 			nse.printStackTrace();

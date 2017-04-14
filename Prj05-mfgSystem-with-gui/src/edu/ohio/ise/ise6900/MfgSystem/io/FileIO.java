@@ -166,7 +166,8 @@ public class FileIO extends AbstractIO {
 		// Checking end of file
 		if (line == null) {
 			this.println("End of input commands file.");
-			line = "exit";
+			//line = "exit";
+			line = "console";
 		}
 
 		return line;

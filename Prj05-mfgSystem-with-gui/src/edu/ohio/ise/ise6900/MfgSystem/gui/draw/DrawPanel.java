@@ -6,7 +6,7 @@ import javafx.scene.Group;
 
 public class DrawPanel extends Group {
 	LinkedList<Drawable> targets;
-	
+	 
 	public DrawPanel(){
 		this(new LinkedList<Drawable>());
 	}
@@ -15,7 +15,7 @@ public class DrawPanel extends Group {
 		this.targets = targets;
 	}
 	
-	public void display(String[] args){
+	public void display(String [] args){
 		this.display(args, "Mfg System with GUI", 800, 600);
 	}
 	

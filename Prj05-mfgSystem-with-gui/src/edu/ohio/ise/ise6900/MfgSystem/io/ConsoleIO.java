@@ -2,10 +2,10 @@ package edu.ohio.ise.ise6900.MfgSystem.io;
 
 import java.util.Scanner;
 
-public class ConsolIO extends AbstractIO {
+public class ConsoleIO extends AbstractIO {
 	private Scanner scanner;
 	
-	public ConsolIO() {
+	public ConsoleIO() {
 		scanner = new Scanner(System.in);
 	}
 	
