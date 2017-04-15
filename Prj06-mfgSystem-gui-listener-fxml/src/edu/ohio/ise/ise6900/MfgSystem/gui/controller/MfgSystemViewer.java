@@ -1,18 +1,24 @@
-package application;
-	
+package edu.ohio.ise.ise6900.MfgSystem.gui.controller;
+
+import edu.ohio.ise.ise6900.MfgSystem.model.MfgSystem;
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 
-
-public class Main extends Application {
+public class MfgSystemViewer extends Application {
+	public MfgSystem ms;
+	
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			BorderPane root = new BorderPane();
-			Scene scene = new Scene(root,400,400);
+			Parent root = 
+				FXMLLoader.load(MfgSystemController.class.getResource("../view/MfgSystemView.fxml"));
+			Scene scene = new Scene(root, 1080, 800);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			
 			primaryStage.setScene(scene);
 			primaryStage.show();
 		} catch(Exception e) {
@@ -22,5 +28,10 @@ public class Main extends Application {
 	
 	public static void main(String[] args) {
 		launch(args);
+	}
+
+
+	public void show() {
+		
 	}
 }
