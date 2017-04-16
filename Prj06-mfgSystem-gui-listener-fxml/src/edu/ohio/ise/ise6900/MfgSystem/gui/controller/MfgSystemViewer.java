@@ -9,7 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 
 public class MfgSystemViewer extends Application {
-	public MfgSystem ms;
+//	private 
 	
 	@Override
 	public void start(Stage primaryStage) {
@@ -19,6 +19,8 @@ public class MfgSystemViewer extends Application {
 			Scene scene = new Scene(root, 1080, 800);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			
+			primaryStage.setTitle("Manufacturing System Dashboard");
+			MfgSystemController.setStage(primaryStage);
 			primaryStage.setScene(scene);
 			primaryStage.show();
 		} catch(Exception e) {
@@ -29,7 +31,6 @@ public class MfgSystemViewer extends Application {
 	public static void main(String[] args) {
 		launch(args);
 	}
-
 
 	public void show() {
 		

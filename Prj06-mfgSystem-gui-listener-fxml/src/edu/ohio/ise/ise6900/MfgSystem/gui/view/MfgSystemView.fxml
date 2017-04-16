@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 
-<AnchorPane prefHeight="800.0" prefWidth="1080.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8"
+<AnchorPane fx:id="root" prefHeight="800.0" prefWidth="1080.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8"
 			fx:controller="edu.ohio.ise.ise6900.MfgSystem.gui.controller.MfgSystemController">
    <children>
       <BorderPane prefHeight="800.0" prefWidth="1080.0">
@@ -30,7 +30,7 @@
                 <Menu mnemonicParsing="false" text="File">
                   <items>
                     <MenuItem fx:id="openFile" onAction="#handleOpenFile" mnemonicParsing="false" text="Open" />
-                    <MenuItem fx:id="closeFile" mnemonicParsing="false" text="Close" />
+                    <MenuItem fx:id="closeFile" onAction="#handleCloseFile" mnemonicParsing="false" text="Close" />
                     <MenuItem fx:id="exitApp" onAction="#handleExit" mnemonicParsing="false" text="Exit" />
                   </items>
                 </Menu>
