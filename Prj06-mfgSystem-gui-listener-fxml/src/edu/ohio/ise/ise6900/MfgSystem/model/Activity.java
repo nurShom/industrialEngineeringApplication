@@ -53,10 +53,12 @@ public class Activity extends AbstractState
 	 */
 	@Override
 	public String toString() {
-		return "Activity " + getName() + " (job=" + job.getName() + ", feature=" + feature.getName() 
-				+ ", machine=" + getMachine().getName() + ", stateType=" + getStateType().name() 
-				+ ", startTime=" + (getStartTime().getTime()/1000) 
-				+ ", endTime=" + (getEndTime().getTime()/1000) + ")";
+		return "Activity " + getName()  
+				+ "(startTime=" + (getStartTime().getTime()/1000) 
+				+ ", endTime=" + (getEndTime().getTime()/1000)
+				+ ", job=" + job.getName() + ", feature=" + feature.getName() 
+				+ ", machine=" + getMachine().getName() 
+				+ ", stateType=" + getStateType().name() + ")";
 	}
 
 	/* (non-Javadoc)

@@ -51,15 +51,6 @@ public class AbstractState extends MfgObject implements Comparable<AbstractState
 	}
 
 	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return "AbstractState "+ getName() + " (machine=" + machine + ", stateType=" + stateType + ", startTime=" + startTime
-				+ ", endTime=" + endTime + ")";
-	}
-
-	/* (non-Javadoc)
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	@Override

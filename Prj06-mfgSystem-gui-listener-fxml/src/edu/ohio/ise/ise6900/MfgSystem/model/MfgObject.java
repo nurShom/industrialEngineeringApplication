@@ -31,6 +31,22 @@ public abstract class MfgObject implements Drawable {
 		}
 	}
 
+	public static double getSCALE() {
+		return SCALE;
+	}
+
+	public static void setSCALE(double sCALE) {
+		SCALE = sCALE;
+	}
+
+	public static double getHEIGHT() {
+		return HEIGHT;
+	}
+
+	public static void setHEIGHT(double hEIGHT) {
+		HEIGHT = hEIGHT;
+	}
+
 	public MfgObject(String name) {
 		super();
 		this.name = name;

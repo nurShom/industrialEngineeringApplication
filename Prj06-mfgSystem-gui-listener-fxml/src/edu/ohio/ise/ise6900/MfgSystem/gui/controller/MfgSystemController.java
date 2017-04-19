@@ -3,18 +3,21 @@ package edu.ohio.ise.ise6900.MfgSystem.gui.controller;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URL;
+import java.util.LinkedList;
 import java.util.ResourceBundle;
 
-import edu.ohio.ise.ise6900.MfgSystem.gui.draw.DrawPanel;
 import edu.ohio.ise.ise6900.MfgSystem.gui.draw.Drawable;
 import edu.ohio.ise.ise6900.MfgSystem.io.FileIO;
 import edu.ohio.ise.ise6900.MfgSystem.model.Activity;
 import edu.ohio.ise.ise6900.MfgSystem.model.Job;
 import edu.ohio.ise.ise6900.MfgSystem.model.Machine;
 import edu.ohio.ise.ise6900.MfgSystem.model.MfgFeature;
+import edu.ohio.ise.ise6900.MfgSystem.model.MfgObject;
 import edu.ohio.ise.ise6900.MfgSystem.model.MfgSystem;
 import edu.ohio.ise.ise6900.MfgSystem.model.exceptions.AlreadyMemberException;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -25,6 +28,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -32,12 +36,13 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.shape.Shape;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 
-public class MfgSystemController implements Initializable  {
+public class MfgSystemController implements Initializable {
 	public MfgSystem ms;
 	private static Stage stage;
 	private static String title;
@@ -46,12 +51,12 @@ public class MfgSystemController implements Initializable  {
 	@FXML
 	private Label machineListLabel;
 	@FXML
-	private ListView<String> machineList;
-	ObservableList<String> machineNames;
+	private ListView<Machine> machineList;
 	@FXML
-	private TreeView<String> jobTree;
+	private TreeView<MfgObject> jobTree;
 	@FXML
 	private Group ganttChart;
+	private Drawable chartContent;
 
 	public MfgSystemController() {
 		// TODO Auto-generated constructor stub
@@ -59,121 +64,198 @@ public class MfgSystemController implements Initializable  {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		// TODO Auto-generated method stub
+
+		machineList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Machine>() {
+			@Override
+			public void changed(ObservableValue<? extends Machine> observable, Machine oldValue, Machine newValue) {
+				if(newValue != null){
+					updateGanttChart(newValue);
+				}
+			}
+		});
 		
+		jobTree.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<TreeItem<MfgObject>>() {
+			@Override
+			public void changed(ObservableValue<? extends TreeItem<MfgObject>> observable, TreeItem<MfgObject> oldValue,
+					TreeItem<MfgObject> newValue) {
+				if(newValue != null){
+					updateGanttChart(newValue.getValue());
+				}
+			}
+		});
+
 	}
-	
+
 	@FXML
-	private void handleOpenFile(ActionEvent event){
+	private void handleOpenFile(ActionEvent event) {
 		FileChooser fc = new FileChooser();
 		fc.setTitle("Open Mfg File");
 		File currentDir = new File(".");
-		if(currentDir.exists()){
+		if (currentDir.exists()) {
 			fc.setInitialDirectory(currentDir);
-		} else{
+		} else {
 			fc.setInitialDirectory(new File("."));
 		}
-		fc.getExtensionFilters().addAll(
-				new ExtensionFilter("Mfg File", "*.mfg"),
+		fc.getExtensionFilters().addAll(new ExtensionFilter("Mfg File", "*.mfg"),
 				new ExtensionFilter("All Files", "*.*"));
 		File inFile = fc.showOpenDialog(new Stage());
 		if (inFile != null) {
 			System.out.println("Selected file: " + inFile);
-			String sysName = inFile.getName().substring(0, inFile.getName().length()-4);
-            ms = new MfgSystem(sysName);
-            try {
+			String sysName = inFile.getName().substring(0, inFile.getName().length() - 4);
+			ms = new MfgSystem(sysName);
+			try {
 				MfgSystem.setIO(new FileIO(inFile));
-	    		ms.read();
-	    		stage.setTitle(MfgSystemController.title + " - " + sysName);
-	            this.updateMachineList();
-	        	this.updateJobTree();
-	        	this.updateGanttChart(ms);
+				ms.read();
+				stage.setTitle(MfgSystemController.title + " - " + sysName);
+				this.updateMachineList();
+				this.updateJobTree();
+				this.updateGanttChart(ms);
 			} catch (FileNotFoundException e) {
 				System.err.println(e.getMessage());
 				this.alertError(e.getMessage());
 			}
-        }
+		}
 	}
-	
-	private void updateMachineList(){
+
+	private void updateMachineList() {
 		machineListLabel.setText("Machines");
 		machineListLabel.setTextAlignment(TextAlignment.CENTER);
 		machineListLabel.setBorder(new Border(new BorderStroke(null, BorderStrokeStyle.DOTTED, null, null)));
-        machineNames = FXCollections.observableArrayList();
-        for(String mName : ms.getMachines().keySet()){
-        	machineNames.add(mName);
-        }
-        machineList.setItems(machineNames);
-//        machineList.getItems().addListener<>({
-//        	
-//        });
+		ObservableList<Machine> machines = FXCollections.observableArrayList();
+		for (Machine m : ms.getMachines().values()) {
+			machines.add(m);
+		}
+		machineList.setItems(machines);
 	}
-	private void updateJobTree(){
-		TreeItem<String> rootItem = new TreeItem<>("Jobs");
-        //rootItem.getChildren().clear();
-        //rootItem.setValue("Jobs");
-        for(Job job : ms.getJobs().values()){
-        	TreeItem<String> jobItem = new TreeItem<>(job.getName());
-        	for(MfgFeature feature : job.getFeatures().values()){
-        		TreeItem<String> featureItem = new TreeItem<>(feature.getName());
-        		for(Activity act : feature.getActivities()){
-            		TreeItem<String> activityItem = new TreeItem<>(act.getName());
-            		featureItem.getChildren().add(activityItem);
-            	}
-        		jobItem.getChildren().add(featureItem);
-        	}
-        	rootItem.getChildren().add(jobItem);
-        }
-        jobTree.setRoot(rootItem);
+
+	private void updateJobTree() {
+		TreeItem<MfgObject> rootItem = new TreeItem<>(ms);
+		// rootItem.getChildren().clear();
+		// rootItem.setValue("Jobs");
+		for (Job job : ms.getJobs().values()) {
+			TreeItem<MfgObject> jobItem = new TreeItem<>(job);
+			for (MfgFeature feature : job.getFeatures().values()) {
+				TreeItem<MfgObject> featureItem = new TreeItem<>(feature);
+				for (Activity act : feature.getActivities()) {
+					TreeItem<MfgObject> activityItem = new TreeItem<>(act);
+					featureItem.getChildren().add(activityItem);
+				}
+				jobItem.getChildren().add(featureItem);
+			}
+			rootItem.getChildren().add(jobItem);
+		}
+		jobTree.setRoot(rootItem);
 	}
-	
-	@FXML
-	private void updateGanttChart(Drawable d){
+
+	private void updateGanttChart(Drawable d) {
 		ganttChart.getChildren().clear();
-		ganttChart.getChildren().addAll(d.makeShapes());
+		this.chartContent = d;
+		ganttChart.getChildren().addAll(this.chartContent.makeShapes());
+		System.out.println("Displaying chart for " + d.toString());
+	}
+
+	
+	@FXML
+	private void handleSaveFile(ActionEvent event) {
+		actionNotImplemented("Save File");
 	}
 	
 	@FXML
-	private void handleCloseFile(ActionEvent event){
-        ms = new MfgSystem(null);
+	private void handleCloseFile(ActionEvent event) {
+		ms = new MfgSystem("Empty");
 		stage.setTitle(MfgSystemController.title);
-        this.updateMachineList();
-    	this.updateJobTree();
-        ganttChart.getChildren().clear();
+		this.updateMachineList();
+		this.updateJobTree();
+		ganttChart.getChildren().clear();
+		if(this.chartContent != null){
+			this.chartContent = null;
+		}
+		System.out.println("Closing mfg system file");
 	}
-	
+
 	@FXML
-	private void handleExit(ActionEvent event){
+	private void handleExit(ActionEvent event) {
 		System.exit(0);
 		Platform.exit();
 	}
-	
+
 	@FXML
-	private void handleAddMachine(ActionEvent event){
+	private void handleAddMachine(ActionEvent event) {
 		TextInputDialog dia = new TextInputDialog();
 		dia.setTitle("Add Machine");
 		dia.setHeaderText("Add a new machine.");
 		dia.setContentText("Please enter machine name:");
 		dia.showAndWait().ifPresent(mName -> {
+			if(ms == null)
+				return;
 			try {
 				Machine m = new Machine(mName);
 				ms.addMachine(m);
-		    	this.updateGanttChart(m);
+				this.updateGanttChart(m);
 			} catch (AlreadyMemberException e) {
 				this.alertError(e.getMessage());
 				System.err.println(e.getMessage());
 			}
+			this.updateMachineList();
 		});
-		this.updateMachineList();
 	}
 	
-	private void alertError(String msg){
+	@FXML
+	private void handleAddJob(ActionEvent event) {
+		this.actionNotImplemented("Add Job");
+	}
+	
+	@FXML
+	private void handleAddActivity(ActionEvent event) {
+		this.actionNotImplemented("Add Activity");
+	}
+	
+	@FXML
+	private void handleAddState(ActionEvent event) {
+		this.actionNotImplemented("Add State");
+	}
+	
+	@FXML
+	private void handleDelete(ActionEvent event) {
+		this.actionNotImplemented("Delete");
+	}
+	
+	@FXML
+	private void handleZoomIn(ActionEvent event) {
+		if(this.chartContent != null){
+			MfgObject.setSCALE(MfgObject.getSCALE() * 1.25);
+			MfgObject.setHEIGHT(MfgObject.getHEIGHT() * 1.25);
+			ganttChart.getChildren().clear();
+			ganttChart.getChildren().addAll(this.chartContent.makeShapes());
+			System.out.println("Zooming in. SCALE: " + MfgObject.getSCALE());
+		}
+	}
+	
+	@FXML
+	private void handleZoomOut(ActionEvent event) {
+		if(this.chartContent != null){
+			MfgObject.setSCALE(MfgObject.getSCALE() * 0.80);
+			MfgObject.setHEIGHT(MfgObject.getHEIGHT() * 0.80);
+			ganttChart.getChildren().clear();
+			ganttChart.getChildren().addAll(this.chartContent.makeShapes());
+			System.out.println("Zooming out. SCALE: " + MfgObject.getSCALE());
+		}
+	}
+
+	private void alertError(String msg) {
 		Alert alert = new Alert(AlertType.ERROR);
 		alert.setTitle("Error!");
 		alert.setContentText(msg);
 		alert.showAndWait();
 	}
 
+	private void actionNotImplemented(String msg){
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("FYI");
+		alert.setContentText(msg + " : this option is not available at this moment: ");
+		alert.showAndWait();
+	}
+	
 	public static Stage getStage() {
 		return stage;
 	}
