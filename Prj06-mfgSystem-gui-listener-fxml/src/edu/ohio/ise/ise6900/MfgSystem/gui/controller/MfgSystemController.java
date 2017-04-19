@@ -3,14 +3,17 @@ package edu.ohio.ise.ise6900.MfgSystem.gui.controller;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.ResourceBundle;
 
 import edu.ohio.ise.ise6900.MfgSystem.gui.draw.Drawable;
 import edu.ohio.ise.ise6900.MfgSystem.io.FileIO;
+import edu.ohio.ise.ise6900.MfgSystem.model.AbstractState;
 import edu.ohio.ise.ise6900.MfgSystem.model.Activity;
 import edu.ohio.ise.ise6900.MfgSystem.model.Job;
 import edu.ohio.ise.ise6900.MfgSystem.model.Machine;
+import edu.ohio.ise.ise6900.MfgSystem.model.MachineState;
 import edu.ohio.ise.ise6900.MfgSystem.model.MfgFeature;
 import edu.ohio.ise.ise6900.MfgSystem.model.MfgObject;
 import edu.ohio.ise.ise6900.MfgSystem.model.MfgSystem;
@@ -57,6 +60,7 @@ public class MfgSystemController implements Initializable {
 	@FXML
 	private Group ganttChart;
 	private Drawable chartContent;
+	private MfgObject selected;
 
 	public MfgSystemController() {
 		// TODO Auto-generated constructor stub
@@ -70,6 +74,7 @@ public class MfgSystemController implements Initializable {
 			public void changed(ObservableValue<? extends Machine> observable, Machine oldValue, Machine newValue) {
 				if(newValue != null){
 					updateGanttChart(newValue);
+					selected = newValue;
 				}
 			}
 		});
@@ -80,6 +85,7 @@ public class MfgSystemController implements Initializable {
 					TreeItem<MfgObject> newValue) {
 				if(newValue != null){
 					updateGanttChart(newValue.getValue());
+					selected = newValue.getValue();
 				}
 			}
 		});
@@ -217,7 +223,68 @@ public class MfgSystemController implements Initializable {
 	
 	@FXML
 	private void handleDelete(ActionEvent event) {
-		this.actionNotImplemented("Delete");
+//		this.actionNotImplemented("Delete");
+		if(this.selected instanceof Machine){
+			deleteMachine();
+		} else if(this.selected instanceof Job){
+			deleteJob();
+		} else if(this.selected instanceof MfgFeature){
+			deleteFeature();
+		} else if(this.selected instanceof Activity){
+			deleteActivity();
+		} else if(this.selected instanceof MachineState){
+			deleteState();
+		}
+		this.updateMachineList();
+		this.updateJobTree();
+		this.updateGanttChart(ms);
+	}
+	
+	private void deleteMachine(){
+		Machine m = (Machine) selected;
+		ms.deleteMachine(m.getName());
+		for(AbstractState as : m.getMachineStates()){
+			if(as instanceof Activity){
+				Activity a = (Activity) as;
+				a.getFeature().deleteActivity(a);
+				a.getJob().deleteActivity(a);
+			}
+		}
+	}
+	
+	private void deleteJob(){
+		Job j = (Job) selected;
+		ms.deleteJob(j.getName());
+		for(Activity a : j.getActivities()){
+			a.getMachine().deleteState(a);
+		}
+	}
+	
+	private void deleteFeature(){
+		MfgFeature f = (MfgFeature) selected;
+		Job j = f.getJob();
+		ArrayList<Activity> acts = (ArrayList<Activity>) f.getActivities();
+		j.deleteFeature(f.getName());
+		for(Activity a : acts){
+			j.deleteActivity(a);
+			a.getMachine().deleteState(a);
+		}
+	}
+	
+	private void deleteActivity(){
+		Activity a = (Activity) selected;
+		Job j = a.getJob();
+		Machine m = a.getMachine();
+		MfgFeature f = a.getFeature();
+		f.deleteActivity(a);
+		j.deleteActivity(a);
+		m.deleteState(a);
+	}
+	
+	private void deleteState(){
+		MachineState s = (MachineState) selected;
+		Machine m = s.getMachine();
+		m.deleteState(s);
 	}
 	
 	@FXML

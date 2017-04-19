@@ -80,6 +80,10 @@ public class Machine extends MfgObject
 		Collections.sort(sortedStates);
 		return sortedStates;
 	}
+	
+	public ArrayList<AbstractState> getMachineStates(){
+		return machineStates;
+	}
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()

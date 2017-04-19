@@ -46,6 +46,9 @@ public class MfgFeature extends MfgObject
 		}
 		return shapes;
 	}
+	public void deleteActivity(Activity a) {
+		this.activities.remove(a);
+	}
 
 }
 

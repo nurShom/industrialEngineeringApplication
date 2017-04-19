@@ -1,6 +1,7 @@
 package edu.ohio.ise.ise6900.MfgSystem.model;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -111,6 +112,10 @@ public class Job extends MfgObject
 
 	public Map<String, MfgFeature> getFeatures() {
 		return this.features;
+	}
+	
+	public Collection<Activity> getActivities() {
+		return this.activities;
 	}
 }
 
