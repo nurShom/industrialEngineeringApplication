@@ -34,7 +34,8 @@ public class MfgSystem extends MfgObject
 		JOBS, MACHINES, SYSTEM, // to report system state and collection
 		RECTANGLE, TRIANGLE, OBJECTS, // to make draw -objects
 		EXIT, QUIT, // to exit the application
-		CONSOLE // to read data from console 
+		CONSOLE, // to read data from console
+		EOF // to close file reader when end of file reached
 	}
 
 	static SortedMap<String, Command> commands;
@@ -68,6 +69,7 @@ public class MfgSystem extends MfgObject
 		commands.put("exit", Command.EXIT);
 		commands.put("quit", Command.QUIT);
 		commands.put("console", Command.CONSOLE);
+		commands.put("eof", Command.EOF);
 
 		menu = "\nOptions : \n\t" + commands.keySet().toString() + "\nEnter the command:->";
 	}
@@ -206,9 +208,11 @@ public class MfgSystem extends MfgObject
 					continue;
 				}
 				switch (cmd) {
+				case EOF:
+					io.printErr("End of file reached...");
 				case EXIT:
 				case QUIT:
-					io.printErr("Closing the application!");
+					io.printErr("Closing the reader application!");
 					keepRunning = false;
 					break;
 				case JOB:

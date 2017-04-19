@@ -3,7 +3,11 @@
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.Group?>
 
 
 <AnchorPane fx:id="root" prefHeight="800.0" prefWidth="1080.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8"
@@ -11,7 +15,10 @@
    <children>
       <BorderPane prefHeight="800.0" prefWidth="1080.0">
          <left>
-            <ListView fx:id="machineList" prefHeight="450.0" prefWidth="150.0" BorderPane.alignment="CENTER" />
+         	<VBox >
+	         	<Label fx:id="machineListLabel" prefWidth="150.0" BorderPane.alignment="CENTER"></Label>
+	            <ListView fx:id="machineList" prefHeight="450.0" prefWidth="150.0" BorderPane.alignment="CENTER" />
+         	</VBox>
          </left>
          <right>
             <TreeView fx:id="jobTree" prefHeight="450.0" prefWidth="300.0" BorderPane.alignment="CENTER">
@@ -19,43 +26,56 @@
             </TreeView>
          </right>
          <bottom>
-            <ScrollPane prefHeight="125.0" prefWidth="646.0" BorderPane.alignment="CENTER" />
+            <ScrollPane prefHeight="350.0" prefWidth="646.0" BorderPane.alignment="CENTER">
+            <!-- AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="239.0" prefWidth="200.0" BorderPane.alignment="CENTER"-->
+          		<Group fx:id="ganttChart"></Group>
+          	<!--/AnchorPane-->
+          	</ScrollPane>
          </bottom>
          <center>
-          <AnchorPane fx:id="ganttChart" minHeight="0.0" minWidth="0.0" prefHeight="239.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="239.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+          	<!--Group fx:id="ganttChart"></Group-->
+          </AnchorPane>
          </center>
          <top>
-            <MenuBar BorderPane.alignment="CENTER">
-              <menus>
-                <Menu mnemonicParsing="false" text="File">
-                  <items>
-                    <MenuItem fx:id="openFile" onAction="#handleOpenFile" mnemonicParsing="false" text="Open" />
-                    <MenuItem fx:id="closeFile" onAction="#handleCloseFile" mnemonicParsing="false" text="Close" />
-                    <MenuItem fx:id="exitApp" onAction="#handleExit" mnemonicParsing="false" text="Exit" />
-                  </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Edit">
-                  <items>
-                    <MenuItem fx:id="addMachine" mnemonicParsing="false" text="Add Machine" />
-                    <MenuItem fx:id="addJob" mnemonicParsing="false" text="Add Job" />
-                    <MenuItem fx:id="addActivity" mnemonicParsing="false" text="Add Activity" />
-                    <MenuItem fx:id="addState" mnemonicParsing="false" text="Add State" />
-                    <MenuItem fx:id="delete" mnemonicParsing="false" text="Delete" />
-                  </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="View">
-                  <items>
-                    <MenuItem fx:id="zoomIn" mnemonicParsing="false" text="Zoom In" />
-                    <MenuItem fx:id="zoomOut" mnemonicParsing="false" text="Zoom Out" />
-                  </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Help">
-                  <items>
-                    <MenuItem mnemonicParsing="false" text="About" />
-                  </items>
-                </Menu>
-              </menus>
-            </MenuBar>
+         	<VBox >
+	            <MenuBar BorderPane.alignment="CENTER">
+	              <menus>
+	                <Menu mnemonicParsing="false" text="File">
+	                  <items>
+	                    <MenuItem fx:id="openFile" onAction="#handleOpenFile" mnemonicParsing="false" text="Open" />
+	                    <MenuItem fx:id="closeFile" onAction="#handleCloseFile" mnemonicParsing="false" text="Close" />
+	                    <MenuItem fx:id="exitApp" onAction="#handleExit" mnemonicParsing="false" text="Exit" />
+	                  </items>
+	                </Menu>
+	                <Menu mnemonicParsing="false" text="Edit">
+	                  <items>
+	                    <MenuItem fx:id="addMachine" onAction="#handleAddMachine" mnemonicParsing="false" text="Add Machine" />
+	                    <MenuItem fx:id="addJob" mnemonicParsing="false" text="Add Job" />
+	                    <MenuItem fx:id="addActivity" mnemonicParsing="false" text="Add Activity" />
+	                    <MenuItem fx:id="addState" mnemonicParsing="false" text="Add State" />
+	                    <MenuItem fx:id="delete" mnemonicParsing="false" text="Delete" />
+	                  </items>
+	                </Menu>
+	                <Menu mnemonicParsing="false" text="View">
+	                  <items>
+	                    <MenuItem fx:id="zoomIn" mnemonicParsing="false" text="Zoom In" />
+	                    <MenuItem fx:id="zoomOut" mnemonicParsing="false" text="Zoom Out" />
+	                  </items>
+	                </Menu>
+	                <Menu mnemonicParsing="false" text="Help">
+	                  <items>
+	                    <MenuItem fx:id="aboutApplication" mnemonicParsing="false" text="About" />
+	                  </items>
+	                </Menu>
+	              </menus>
+	            </MenuBar>
+	         	<ToolBar BorderPane.alignment="CENTER">
+	         		<Button fx:id="openFileButton" onAction="#handleOpenFile" mnemonicParsing="false" text="Open File" />
+	         		<Region styleClass="spacer" />
+	         		<Button fx:id="addMachineButton" onAction="#handleAddMachine"  text="Add Macine" />
+	         	</ToolBar>
+         	</VBox>
          </top>
       </BorderPane>
    </children>

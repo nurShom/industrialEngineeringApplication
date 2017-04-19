@@ -1,0 +1,125 @@
+# this  is complete file from FSS software demo.fss
+# DSormaz 03-11-2017
+# 
+
+# machines
+machine v-mill
+machine h-mill
+machine lathe
+machine drill
+machine bore
+machine Broach
+machine Press
+machine CMM
+
+# parts
+job part_1 500
+job part_2 480
+job part_3 500
+job part_4 450
+job part_5 500
+
+# features
+feature hole_1 part_1
+feature hole_2 part_1
+feature hole_3 part_1
+feature step_2 part_1
+feature hole_4 part_1
+feature step_3 part_1
+
+feature pocket_1 part_2
+feature step_1 part_2
+feature pocket_2 part_2
+feature step_2 part_2
+feature pocket_3 part_2
+feature step_3 part_2
+
+feature face_1 part_3
+feature face_2 part_3
+feature pocket_1 part_3
+feature slot_2 part_3
+feature slot_3 part_3
+feature slot_4 part_3
+
+feature pocket_3 part_4
+feature hole_3 part_4
+feature hole_4 part_4
+feature hole_5 part_4
+
+feature pocket_4 part_5
+feature step_4 part_5
+feature slot_5 part_5
+feature step_5 part_5
+feature slot_6 part_5
+
+
+# v-mill states
+activity v-mill part_1 hole_1 0 50
+machine-state v-mill idle 50 89
+activity v-mill part_1 hole_2 89 131
+machine-state v-mill down 131 180
+machine-state v-mill idle 180 205
+activity v-mill part_1 hole_3 205 250
+machine-state v-mill blocked 250 300
+activity v-mill part_1 step_2 300 336
+machine-state v-mill down 336 360
+activity v-mill part_1 hole_4 360 400 
+machine-state v-mill blocked 400 427
+activity v-mill part_1 step_3 427 477 
+machine-state v-mill down 477 500
+
+# h-mill states
+machine-state h-mill idle 0 80
+activity h-mill part_2 pocket_1 80 130
+machine-state h-mill blocked 130 209
+activity h-mill part_2 step_1 209 277
+machine-state h-mill down 277 290
+activity h-mill part_2 pocket_2 290 320
+machine-state h-mill blocked 320 330
+activity h-mill part_2 step_2 330 375
+activity h-mill part_2 pocket_2 375 409 
+machine-state h-mill blocked 409 470
+activity h-mill part_2 step_3 470 500 
+
+# lathe states
+machine-state lathe down 0 88
+activity lathe part_3 face_1 88 177
+activity lathe part_3 face_2 177 203
+machine-state lathe idle 203 255
+activity lathe part_3 pocket_1 255 273
+machine-state lathe blocked 273 300
+activity lathe part_3 slot_2 300 333
+machine-state lathe idle 333 360
+machine-state lathe blocked 360 388
+activity lathe part_3 slot_3 388 440 
+machine-state lathe idle 440 500
+
+# drill states
+activity drill part_4 pocket_3 0 40
+machine-state drill idle 40 109
+activity drill part_4 hole_3 109 174
+machine-state drill blocked 174 230 
+activity drill part_4 pocket_3 230 244
+machine-state drill down 244 288 
+activity drill part_4 hole_4 288 311
+machine-state drill blocked 311 340 
+machine-state drill down 340 424 
+activity drill part_4 hole_5 424 477
+machine-state drill blocked  477 500
+
+# bore states
+activity bore part_5 pocket_4 0 66
+machine-state bore blocked 66 122
+activity bore part_5 step_4 122 200
+activity bore part_5 slot_5 200 280
+machine-state bore idle 280 300 
+machine-state bore blocked 300 311
+activity bore part_5 step_5 311 344
+activity bore part_5 slot_6 344 370
+machine-state bore blocked 370 398 
+activity bore part_5 step_5 398 438
+activity bore part_4 hole_5 438 500
+
+display
+# bore part_5 pocket_4
+

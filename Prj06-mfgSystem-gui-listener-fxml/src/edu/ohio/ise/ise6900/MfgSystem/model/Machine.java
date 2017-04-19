@@ -9,7 +9,6 @@ import edu.ohio.ise.ise6900.MfgSystem.model.exceptions.AlreadyMemberException;
 import edu.ohio.ise.ise6900.MfgSystem.model.exceptions.InvalidStateException;
 import edu.ohio.ise.ise6900.MfgSystem.model.exceptions.OverlappingStateException;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 
@@ -93,7 +92,7 @@ public class Machine extends MfgObject
 	@Override
 	public LinkedList<Shape> makeShapes() {
 		LinkedList<Shape> shapes = new LinkedList<Shape>();
-		Text machineLabel = new Text(SCALE * 10, 20 + OFFSET + SCALE * this.level, this.getName());
+		Text machineLabel = new Text(OFFSET + SCALE * 10, 20 + OFFSET + SCALE * this.level, this.getName());
 		machineLabel.setStroke(Color.MEDIUMBLUE);
 		machineLabel.setFill(Color.BEIGE);
 		shapes.add(machineLabel);
