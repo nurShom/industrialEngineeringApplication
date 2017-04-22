@@ -42,6 +42,8 @@ public class MfgSystemController implements Initializable {
 	public MfgSystem ms;
 	private static Stage stage;
 	private static String title;
+	FileChooser fc = new FileChooser();
+	File currentDir = new File(".");
 	@FXML
 	private AnchorPane root;
 	@FXML
@@ -83,9 +85,7 @@ public class MfgSystemController implements Initializable {
 
 	@FXML
 	private void handleOpenFile(ActionEvent event) {
-		FileChooser fc = new FileChooser();
 		fc.setTitle("Open Mfg File");
-		File currentDir = new File(".");
 		if (currentDir.exists()) {
 			fc.setInitialDirectory(currentDir);
 		} else {
@@ -94,6 +94,7 @@ public class MfgSystemController implements Initializable {
 		fc.getExtensionFilters().addAll(new ExtensionFilter("Mfg File", "*.mfg"),
 				new ExtensionFilter("All Files", "*.*"));
 		File inFile = fc.showOpenDialog(new Stage());
+		currentDir = inFile.getParentFile();
 		if (inFile != null) {
 			System.out.println("Selected file: " + inFile);
 			String sysName = inFile.getName().substring(0, inFile.getName().length() - 4);
