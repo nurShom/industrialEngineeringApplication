@@ -51,6 +51,7 @@
 	                  <items>
 	                    <MenuItem fx:id="addMachine" onAction="#handleAddMachine" mnemonicParsing="false" text="Add Machine" />
 	                    <MenuItem fx:id="addJob" onAction="#handleAddJob" mnemonicParsing="false" text="Add Job" />
+	                    <MenuItem fx:id="addFeature" onAction="#handleAddFeature" mnemonicParsing="false" text="Add Feature" />
 	                    <MenuItem fx:id="addActivity" onAction="#handleAddActivity" mnemonicParsing="false" text="Add Activity" />
 	                    <MenuItem fx:id="addState" onAction="#handleAddState" mnemonicParsing="false" text="Add State" />
 	                    <MenuItem fx:id="delete" onAction="#handleDelete" mnemonicParsing="false" text="Delete" />
@@ -74,14 +75,19 @@
 	         		<Button fx:id="saveFileButton" onAction="#handleSaveFile" mnemonicParsing="false" text="Save" />
 	                <Button fx:id="closeFileButton" onAction="#handleCloseFile" mnemonicParsing="false" text="Close" />
 	         		<Region styleClass="spacer" />
+	         		<Region styleClass="spacer" />
 	         		<Button fx:id="zoomInButton" onAction="#handleZoomIn" mnemonicParsing="false" text="Zoom In" />
 	                <Button fx:id="zoomOutButton" onAction="#handleZoomOut" mnemonicParsing="false" text="Zoom Out" />
 	         		<Region styleClass="spacer" />
+	         		<Region styleClass="spacer" />
 	         		<Button fx:id="addMachineButton" onAction="#handleAddMachine"  text="Add Machine" />
 	         		<Button fx:id="addJobButton" onAction="#handleAddJob" mnemonicParsing="false" text="Add Job" />
+	                <Button fx:id="addFeatureButton" onAction="#handleAddFeature" mnemonicParsing="false" text="Add Feature" />
 	                <Button fx:id="addActivityButton" onAction="#handleAddActivity" mnemonicParsing="false" text="Add Activity" />
 	                <Button fx:id="addStateButton" onAction="#handleAddState" mnemonicParsing="false" text="Add State" />
-	                <Button fx:id="deleteButton" onAction="#handleDelete" mnemonicParsing="false" text="Delete" />
+	                <Region styleClass="spacer" />
+	         		<Region styleClass="spacer" />
+	         		<Button fx:id="deleteButton" onAction="#handleDelete" mnemonicParsing="false" text="Delete" />
 	            </ToolBar>
          	</VBox>
          </top>
