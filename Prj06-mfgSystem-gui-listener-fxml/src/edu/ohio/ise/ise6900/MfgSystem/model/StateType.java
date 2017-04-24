@@ -29,7 +29,7 @@ public enum StateType {
 	}
 	
 	public static StateType findStateType(String type) throws UnknownStateException{
-		StateType st = StateType.types.get(type.toLowerCase());
+		StateType st = StateType.types.get(type.trim().toLowerCase());
 		if(st==null){
 			throw new UnknownStateException("Invalid StateType string '" + type + "' provided! "
 						+ "Valid states include: " + types.values().toString() );

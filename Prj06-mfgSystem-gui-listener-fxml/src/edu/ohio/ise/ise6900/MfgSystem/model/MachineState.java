@@ -22,6 +22,16 @@ public class MachineState extends AbstractState
 				+ ", machine=" + getMachine().getName() 
 				+ ", stateType=" + getStateType().toString() + ")";
 	}
+
+	@Override
+	public void write() {
+		//state machineName state startTime endTime
+		io.println("state"
+				+ " " + this.getMachine().getName()
+				+ " " + this.getStateType().toString().toUpperCase() 
+				+ " " + (this.getStartTime().getTime()/1000) 
+				+ " " + (this.getEndTime().getTime()/1000));
+	}
 	
 }
 

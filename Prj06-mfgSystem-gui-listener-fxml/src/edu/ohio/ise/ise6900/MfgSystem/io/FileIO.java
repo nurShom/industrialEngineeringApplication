@@ -47,6 +47,10 @@ public class FileIO extends AbstractIO {
 		this(new BufferedReader(new FileReader(inFile)), outToFile);
 	}
 	
+	public FileIO(File inFile, File outFile) throws IOException {
+		this(new BufferedReader(new FileReader(inFile)), outFile.getCanonicalPath(), true);
+	}
+	
 	public FileIO(String inFileName, String outFileName, boolean outToFile) throws FileNotFoundException {
 		this(new BufferedReader(new FileReader(new File(inFileName))), outFileName, outToFile);
 	}
@@ -61,7 +65,7 @@ public class FileIO extends AbstractIO {
 		
 	public FileIO(BufferedReader inFileReader, boolean outToFile) throws FileNotFoundException {
 		this(inFileReader, "./output" 
-				+ (new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date())) + ".mfgo",
+				+ (new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date())) + ".mfg",
 				outToFile);
 	}
 
@@ -159,7 +163,7 @@ public class FileIO extends AbstractIO {
 		// Reading next line
 		String line = bin.readLine();
 		// Checking for file comments or empty line
-		while (line != null && (line.trim().startsWith("#") || line.isEmpty())) {
+		while (line != null && (line.trim().startsWith("#") || line.trim().isEmpty())) {
 			this.println("\n" + line);
 			line = bin.readLine();
 		}
@@ -173,4 +177,7 @@ public class FileIO extends AbstractIO {
 		return line;
 	}
 
+	public void flush(){
+		this.pout.flush();
+	}
 }

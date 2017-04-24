@@ -49,6 +49,10 @@ public class MfgFeature extends MfgObject
 	public void deleteActivity(Activity a) {
 		this.activities.remove(a);
 	}
+	@Override
+	public void write() {
+		io.println("feature " + this.getName() + " " + this.job.getName());
+	}
 
 }
 

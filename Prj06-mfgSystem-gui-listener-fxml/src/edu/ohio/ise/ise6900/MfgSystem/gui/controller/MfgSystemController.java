@@ -2,14 +2,14 @@ package edu.ohio.ise.ise6900.MfgSystem.gui.controller;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.ResourceBundle;
-import java.util.Map.Entry;
-
 import edu.ohio.ise.ise6900.MfgSystem.gui.draw.Drawable;
 import edu.ohio.ise.ise6900.MfgSystem.io.FileIO;
 import edu.ohio.ise.ise6900.MfgSystem.model.*;
@@ -28,7 +28,6 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -89,18 +88,28 @@ public class MfgSystemController implements Initializable {
 	
 	@FXML
 	private void handleNewFile(ActionEvent event) {
+		if(this.fileModified){
+			String prompt = "If you continue, any unsaved work will be lost. Do you want to continue with creating a new file?";
+			if(!this.promptFileSave(prompt))
+				return;
+		}
 		stage.setTitle(MfgSystemController.title + " - New Mfg System");
 		ms = new MfgSystem("New Mfg System");
 		this.updateMachineList();
 		this.updateJobTree();
 		this.updateGanttChart(ms);
 		this.chartContent = null;
-		this.fileModified = true;
+		this.fileModified = false;
 		System.out.println("Creating new mfg system file");
 	}
 
 	@FXML
 	private void handleOpenFile(ActionEvent event) {
+		if(this.fileModified){
+			String prompt = "If you continue, any unsaved work will be lost. Do you want to continue with opening another file?";
+			if(!this.promptFileSave(prompt))
+				return;
+		}
 		fc.setTitle("Open Mfg File");
 		if (currentDir.exists()) {
 			fc.setInitialDirectory(currentDir);
@@ -110,6 +119,9 @@ public class MfgSystemController implements Initializable {
 		fc.getExtensionFilters().addAll(new ExtensionFilter("Mfg File", "*.mfg"),
 				new ExtensionFilter("All Files", "*.*"));
 		File inFile = fc.showOpenDialog(new Stage());
+		if(inFile == null){//file was not selected
+			return;
+		}
 		currentDir = inFile.getParentFile();
 		if (inFile != null) {
 			System.out.println("Selected file: " + inFile);
@@ -181,7 +193,56 @@ public class MfgSystemController implements Initializable {
 	
 	@FXML
 	private void handleSaveFile(ActionEvent event) {
+		if(ms == null){
+			this.fileModified = false;
+			return;
+		}
 		actionNotImplemented("Save File");
+		
+		try {
+			String fIlePath = this.currentDir.getPath() + "\\" + ms.getName() + ".mfg";
+			File file = new File(fIlePath);
+			MfgSystem.setIO(new FileIO(file, file));
+		} catch (FileNotFoundException e) {
+			this.alertError(e.getMessage());
+			System.err.println(e.getMessage());
+			e.printStackTrace();
+			//return;
+		} catch (IOException e) {
+			this.alertError(e.getMessage());
+			e.printStackTrace();
+		}
+		MfgSystem.getIO().println("# Manufacturing System: " + ms.getName());
+		MfgSystem.getIO().println("\n# machines");
+		for(Machine m : ms.getMachines().values()){
+			m.write();
+		}
+		MfgSystem.getIO().println("\n# jobs");
+		for(Job j : ms.getJobs().values()){
+			MfgSystem.getIO().println("");
+			j.write();
+			MfgSystem.getIO().println("# job " + j.getName() + " features");
+			for(MfgFeature f : j.getFeatures().values()){
+				f.write();
+			}
+			MfgSystem.getIO().println("# job " + j.getName() + " activities");
+			for(Activity a : j.getActivities()){
+				a.write();
+			}
+		}
+		for(Machine m : ms.getMachines().values()){
+			MfgSystem.getIO().println("\n# machine " + m.getName() + " states, total: " + m.getMachineStates().size());
+			System.out.println("Number of states:" + m.getMachineStates().size()); 
+			for(AbstractState as : m.getMachineStates()){
+				if(as instanceof MachineState){
+					((MachineState) as).write();
+				}
+			}
+		}
+		MfgSystem.getIO().print("\n# End of file");
+		((FileIO)MfgSystem.getIO()).flush();
+		this.fileModified = false;
+		System.out.println("Saved mfg system file");
 	}
 
 	private boolean continueWoSaving;
@@ -203,6 +264,7 @@ public class MfgSystemController implements Initializable {
 	@FXML
 	private void handleCloseFile(ActionEvent event) {
 		if(ms == null){
+			this.fileModified = false;
 			return;
 		}
 		if(this.fileModified){
@@ -216,6 +278,7 @@ public class MfgSystemController implements Initializable {
 		this.updateJobTree();
 		this.updateGanttChart(null);
 		this.chartContent = null;
+		this.fileModified = false;
 		System.out.println("Closing mfg system file");
 	}
 
@@ -230,20 +293,37 @@ public class MfgSystemController implements Initializable {
 		System.exit(0);
 		Platform.exit();
 	}
+	
+	private double findAvailableMachineLevel(){
+		double offset = MfgSystem.getOFFSET();
+		LinkedList<Double> levels = new LinkedList<Double>(); 
+		for(Machine m : ms.getMachines().values()){
+			levels.add(m.getLevel());
+		}
+		double l=offset;
+		for(; l< 10000; l+=offset){
+			if(!levels.contains(l)){
+				return l;
+			}
+		}
+		return l+offset;
+	}
 
 	@FXML
 	private void handleAddMachine(ActionEvent event) {
+		if(ms == null){
+			this.alertError("No file available! Create a new file or open an existing file first.");
+			return;
+		}
 		TextInputDialog dia = new TextInputDialog();
 		dia.setTitle("Add Machine");
 		dia.setHeaderText(null);
 		dia.setContentText("Machine name:");
 		dia.showAndWait().ifPresent(mName -> {
-			if(ms == null){
-				this.alertError("System not initialized!");
-				return;
-			}
 			try {
 				Machine m = new Machine(mName);
+				m.setLevel(this.findAvailableMachineLevel());
+				System.err.println(m.toString() + " level " + m.getLevel());
 				ms.addMachine(m);
 				this.updateGanttChart(m);
 				this.updateMachineList();
@@ -262,6 +342,10 @@ public class MfgSystemController implements Initializable {
 	 */
 	@FXML
 	private void handleAddJob(ActionEvent event) {
+		if(ms == null){
+			this.alertError("No file available! Create a new file or open an existing file first.");
+			return;
+		}
 		HashMap<String, String> fields = new LinkedHashMap<String, String>();
 		fields.put("job", "Job name");
 		fields.put("batch", "Batch size");
@@ -270,10 +354,6 @@ public class MfgSystemController implements Initializable {
 		dialog.setHeaderText(null);
 		
 		dialog.showAndWait().ifPresent(results -> {
-			if(ms == null){
-				this.alertError("System not initialized!");
-				return;
-			}
 			try {
 				String jName = results.get("job");
 				int bSize = Integer.parseInt(results.get("batch"));
@@ -291,6 +371,10 @@ public class MfgSystemController implements Initializable {
 	
 	@FXML
 	private void handleAddFeature(ActionEvent event) {
+		if(ms == null){
+			this.alertError("No file available! Create a new file or open an existing file first.");
+			return;
+		}
 		HashMap<String, String> fields = new LinkedHashMap<String, String>();
 		fields.put("feature", "Feature name");
 		fields.put("job", "Job name");
@@ -299,10 +383,6 @@ public class MfgSystemController implements Initializable {
 		dialog.setHeaderText(null);
 		
 		dialog.showAndWait().ifPresent(results -> {
-			if(ms == null){
-				this.alertError("System not initialized!");
-				return;
-			}
 			try {
 				String jName = results.get("job");
 				Job j = ms.findJob(jName);
@@ -320,6 +400,10 @@ public class MfgSystemController implements Initializable {
 	
 	@FXML
 	private void handleAddActivity(ActionEvent event) {
+		if(ms == null){
+			this.alertError("No file available! Create a new file or open an existing file first.");
+			return;
+		}
 		HashMap<String, String> fields = new LinkedHashMap<String, String>();
 		fields.put("machine", "Machine name");
 		fields.put("job", "Job name");
@@ -331,10 +415,6 @@ public class MfgSystemController implements Initializable {
 		dialog.setHeaderText(null);
 		
 		dialog.showAndWait().ifPresent(input -> {
-			if(ms == null){
-				this.alertError("System not initialized!");
-				return;
-			}
 			try {
 				String mName = input.get("machine");
 				Machine m = ms.findMachine(mName);
@@ -371,6 +451,10 @@ public class MfgSystemController implements Initializable {
 	
 	@FXML
 	private void handleAddState(ActionEvent event) {
+		if(ms == null){
+			this.alertError("No file available! Create a new file or open an existing file first.");
+			return;
+		}
 		HashMap<String, String> fields = new LinkedHashMap<String, String>();
 		fields.put("machine", "Machine name");
 		fields.put("state", "State type");
@@ -381,10 +465,6 @@ public class MfgSystemController implements Initializable {
 		dialog.setHeaderText(null);
 		
 		dialog.showAndWait().ifPresent(inputs -> {
-			if(ms == null){
-				this.alertError("System not initialized!");
-				return;
-			}
 			try {
 				String mName = inputs.get("machine");
 				Machine m = ms.findMachine(mName);
@@ -398,6 +478,7 @@ public class MfgSystemController implements Initializable {
 				this.updateGanttChart(mSt);
 				this.updateJobTree();
 				this.fileModified = true;
+				System.out.println("New state added at index:" + m.findState(mSt));
 			} catch (UnknownObjectException e) {
 				this.alertError(e.getMessage());
 				System.err.println(e.getMessage());
@@ -419,6 +500,10 @@ public class MfgSystemController implements Initializable {
 	
 	@FXML
 	private void handleDelete(ActionEvent event) {
+		if(ms == null){
+			this.alertError("No file available! Create a new file or open an existing file first.");
+			return;
+		}
 //		this.actionNotImplemented("Delete");
 		if(this.selected instanceof MfgSystem){
 			this.handleCloseFile(new ActionEvent());
@@ -502,6 +587,18 @@ public class MfgSystemController implements Initializable {
 			ganttChart.getChildren().addAll(this.chartContent.makeShapes());
 			System.out.println("Zooming out. SCALE: " + MfgObject.getSCALE());
 		}
+	}
+	
+	@FXML
+	private void handleAboutApp(ActionEvent event) {
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("About Manufacturing System Designer");
+		alert.setHeaderText(null);
+		alert.setContentText("This application is developed by Nur Arafat.\n\n"
+					+"Application is used for creating, loading, and/or displaying manufacturing systems.");
+		alert.getButtonTypes().clear();
+		alert.getButtonTypes().add(ButtonType.OK);
+		alert.showAndWait();
 	}
 
 	private void alertError(String msg) {

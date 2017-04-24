@@ -110,5 +110,17 @@ public class Machine extends MfgObject
 		return level;
 	}
 
+	/**
+	 * @param level the level to set
+	 */
+	public void setLevel(double level) {
+		this.level = level;
+	}
+
+	@Override
+	public void write() {
+		io.println("machine " + this.getName());
+	}
+
 }
 

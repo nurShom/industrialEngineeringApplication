@@ -1,71 +1,54 @@
-system
+# Manufacturing System: commands
 
 # machines
 machine M1
 machine M2
-machine M3
-machine M1
-
-machines
+machine m3
 
 # jobs
-job P1 500
-job P2 480
-job P3 200
-job P1 500
 
-jobs
-
-#features
+job P1 500
+# job P1 features
+feature step_1 P1
 feature hole_1 P1
 feature hole_2 P1
-feature step_1 P1
-feature hole_3 P2
-feature step_2 P2
-feature step_3 P2
-feature hole_1 P1
-
-# activities and states M1
+# job P1 activities
 activity M1 P1 hole_1 0 20
-machine-state M1 idle 90 100
-machine-state M1 blocked 90 100
-activity M1 P2 hole_3 20 90
-
-# activities and states M2
 activity M2 P1 hole_2 0 60
+
+job P2 480
+# job P2 features
+feature step_2 P2
+feature hole_3 P2
+feature step_3 P2
+# job P2 activities
+activity M1 P2 hole_3 20 90
 activity M2 P2 step_2 60 100
 
-# activities and states M3
-activity M3 P1 step_1 10 60
-machine-state M3 blocked 60 70
-activity M3 P2 step_3 70 100
-machine-state M3 down 0 10
+job P3 200
+# job P3 features
+# job P3 activities
 
-features P1
-activities P2
+job j1 122
+# job j1 features
+feature f1 j1
+# job j1 activities
+activity m3 j1 f1 10 150
+activity m3 j1 f1 300 350
+activity m3 j1 f1 500 550
 
-# print machine states
-states M1
-states M2
-states M3
+# machine M1 states, total: 3
+state M1 IDLE 90 100
 
-system
+# machine M2 states, total: 2
 
-# print job
-printout P1
-printout P2
-# print machine
-printout M2
-# print activity
-printout M2 P2 step_2
-# print feature
-printout P2 step_2
+# machine m3 states, total: 10
+state m3 DOWN 160 250
+state m3 IDLE 255 300
+state m3 BLOCKED 350 450
+state m3 IDLE 450 500
+state m3 IDLE 550 600
+state m3 BLOCKED 600 650
+state m3 DOWN 650 700
 
-# delete machine
-delete M3
-# delete activity
-delete M3 P2 step_3
-printout P1
-
-#quit
-
+# End of file

@@ -117,5 +117,10 @@ public class Job extends MfgObject
 	public Collection<Activity> getActivities() {
 		return this.activities;
 	}
+
+	@Override
+	public void write() {
+		io.println("job " + this.getName() + " " + this.batchSize);
+	}
 }
 

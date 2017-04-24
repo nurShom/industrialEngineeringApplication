@@ -66,7 +66,7 @@
 	                </Menu>
 	                <Menu mnemonicParsing="false" text="Help">
 	                  <items>
-	                    <MenuItem fx:id="aboutApplication" mnemonicParsing="false" text="About" />
+	                    <MenuItem fx:id="aboutApplication" onAction="#handleAboutApp" mnemonicParsing="false" text="About" />
 	                  </items>
 	                </Menu>
 	              </menus>
@@ -90,6 +90,9 @@
 	                <Region styleClass="spacer" />
 	         		<Region styleClass="spacer" />
 	         		<Button fx:id="deleteButton" onAction="#handleDelete" mnemonicParsing="false" text="Delete" />
+	         		<Region styleClass="spacer" />
+	         		<Region styleClass="spacer" />
+	         		<Button  fx:id="aboutApplicationButton" onAction="#handleAboutApp" mnemonicParsing="false" text="About" />
 	            </ToolBar>
          	</VBox>
          </top>

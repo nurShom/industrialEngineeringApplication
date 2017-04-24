@@ -22,10 +22,6 @@ public class MfgSystem extends MfgObject
 	private Map<String, Job> jobs;
 	private Map<String, Machine> machines;
 	private ArrayList<DrawObject> objects;
-	protected static AbstractIO io;
-	static{
-		MfgSystem.io = new ConsoleIO();
-	}
 	
 	enum Command {
 		JOB, MACHINE, ACTIVITY, FEATURE, STATE, // to create objects
@@ -46,12 +42,15 @@ public class MfgSystem extends MfgObject
 		commands.put("job", Command.JOB);
 		commands.put("machine", Command.MACHINE);
 		commands.put("activity", Command.ACTIVITY);
+		commands.put("mfgfeature", Command.FEATURE);
 		commands.put("feature", Command.FEATURE);
 		commands.put("machine-state", Command.STATE);
 		commands.put("state", Command.STATE);
 
 		commands.put("activities", Command.ACTIVITIES);
+		commands.put("mfgfeatures", Command.FEATURES);
 		commands.put("features", Command.FEATURES);
+		commands.put("machine-states", Command.STATES);
 		commands.put("states", Command.STATES);
 
 		commands.put("delete", Command.DELETE);
@@ -75,7 +74,10 @@ public class MfgSystem extends MfgObject
 	}
 	
 	public static void setIO(AbstractIO io) {
-		MfgSystem.io = io;
+		MfgObject.io = io;
+	}
+	public static AbstractIO getIO() {
+		return MfgObject.io;
 	}
 
 	public MfgSystem(String name){
@@ -338,7 +340,7 @@ public class MfgSystem extends MfgObject
 					}
 					break;
 				case STATE:
-					// state stateName machineName state startTime endTime
+					// state machineName state startTime endTime
 					// creates activity
 					try {
 						String machineName = tokenizer.nextToken();
@@ -526,6 +528,11 @@ public class MfgSystem extends MfgObject
 //			shapes.addAll(j.makeShapes());
 //		}
 		return shapes;
+	}
+
+	@Override
+	public void write() {
+		io.println("# Manufaturing System: " + this.getName());
 	}
 	
 }

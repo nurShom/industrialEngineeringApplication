@@ -6,7 +6,7 @@ import edu.ohio.ise.ise6900.MfgSystem.model.exceptions.InvalidStateException;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 //abstract 
-public class AbstractState extends MfgObject implements Comparable<AbstractState>
+public abstract class AbstractState extends MfgObject implements Comparable<AbstractState>
 {
 	
 	private Machine machine;

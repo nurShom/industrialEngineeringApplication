@@ -6,13 +6,17 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
-import edu.ohio.ise.ise6900.MfgSystem.gui.controller.MfgSystemViewer;
 import edu.ohio.ise.ise6900.MfgSystem.gui.draw.*;
-import edu.ohio.ise.ise6900.MfgSystem.model.exceptions.InvalidStateException;
+import edu.ohio.ise.ise6900.MfgSystem.io.AbstractIO;
+import edu.ohio.ise.ise6900.MfgSystem.io.ConsoleIO;
 
 public abstract class MfgObject implements Drawable {
 	private String name;
 //	protected static MfgSystemViewer da = new MfgSystemViewer();
+	protected static AbstractIO io;
+	static{
+		MfgObject.io = new ConsoleIO();
+	}
 	protected static double OFFSET = 0.0;
 	protected static double SCALE = 1.0;
 	protected static double HEIGHT = 10.0;
@@ -49,6 +53,12 @@ public abstract class MfgObject implements Drawable {
 	public static void setHEIGHT(double hEIGHT) {
 		HEIGHT = hEIGHT;
 	}
+	public static double getOFFSET() {
+		return OFFSET;
+	}
+	public static void setOFFSET(double oFFSET) {
+		OFFSET = oFFSET;
+	}
 	protected static String getProperty(String propertyName, String oldValue) {
 		return properties.getProperty(propertyName, oldValue); 
 	}
@@ -69,6 +79,8 @@ public abstract class MfgObject implements Drawable {
 		// System.out.println(this.toString());
 		MfgSystem.io.println(this.toString());
 	}
+	
+	public abstract void write();
 	
 	public static void main(String[] args) {
 		

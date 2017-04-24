@@ -4,8 +4,6 @@ import java.util.Date;
 import java.util.LinkedList;
 
 import edu.ohio.ise.ise6900.MfgSystem.model.exceptions.InvalidStateException;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 
 public class Activity extends AbstractState
@@ -114,6 +112,17 @@ public class Activity extends AbstractState
 			shape.setStrokeWidth(2);
 		}
 		return shapes;
+	}
+
+	@Override
+	public void write() {
+		// activity machineName jobName featureName startTime endTime
+		io.println("activity" 
+				+ " " + this.getMachine().getName() 
+				+ " " + this.job.getName() 
+				+ " " + this.feature.getName()
+				+ " " + (this.getStartTime().getTime()/1000) 
+				+ " " + (this.getEndTime().getTime()/1000));
 	}
 }
 
