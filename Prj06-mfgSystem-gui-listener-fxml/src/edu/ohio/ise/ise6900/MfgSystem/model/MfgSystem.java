@@ -474,60 +474,6 @@ public class MfgSystem extends MfgObject
 						io.printErr(ise.getMessage());
 					}
 					break;
-				case DISPLAY:
-					/* activity: display machine job feature
-					 * feature: display job feature
-					 * job: display job
-					 * machine: display machine 
-					 */
-					try {
-						int option = tokenizer.countTokens();
-						if(option == 0){
-							String args[] = {this.getName()};
-							this.display(args);
-						} else if (option == 1) {
-							// job or machine
-							String objectName = tokenizer.nextToken();
-							String args[] = {objectName};
-							try {
-								Job j = this.findJob(objectName);
-								j.display(args);
-							} catch (UnknownObjectException uoe) {
-								try {
-									Machine m = this.findMachine(objectName);
-									m.display(args);
-								} catch (UnknownObjectException uoe2) {
-									io.printErr("No job or machine with name '" + objectName + "' exists!");
-								}
-							}
-						} else if (option == 2) {
-							// feature
-							String jName = tokenizer.nextToken();
-							String fName = tokenizer.nextToken();
-							String args[] = {jName, fName};
-							MfgFeature feature = this.findJob(jName).findFeature(fName);
-							feature.display(args);
-						} else if (option == 3) {
-							// activity
-							String mName = tokenizer.nextToken();
-							String jName = tokenizer.nextToken();
-							String fName = tokenizer.nextToken();
-							String args[] = {mName, jName, fName};
-							Job job = this.findJob(jName);
-							MfgFeature feature = job.findFeature(fName);
-							Activity activity = job.findActivity(feature);
-							activity.display(args);
-						} else {
-							io.printErr("Number of parameters for " + commandText.toUpperCase() + " should be 1, 2, or 3");
-						}
-					} catch (NoSuchElementException nsee) {
-						io.printErr("Number of parameters for " + commandText.toUpperCase() + " should be 1, 2, or 3");
-					} catch (UnknownObjectException uoe) {
-						io.printErr(uoe.getMessage());
-					} catch (InvalidStateException ise) {
-						io.printErr(ise.getMessage());
-					}
-					break;
 				case RECTANGLE:
 					try {
 						double x = Double.parseDouble(tokenizer.nextToken());

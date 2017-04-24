@@ -117,13 +117,7 @@ public class AbstractState extends MfgObject implements Comparable<AbstractState
 		shapes.add(machineState);
 		return shapes;
 	}
-	
-	public static void main(String[] args) throws InvalidStateException {
-		Machine m1 = new Machine("m1");
-		AbstractState as = new AbstractState("state1", m1, StateType.BUSY, new Date(100), new Date(200));
-		as.display(args);
 
-	}
 }
 
 

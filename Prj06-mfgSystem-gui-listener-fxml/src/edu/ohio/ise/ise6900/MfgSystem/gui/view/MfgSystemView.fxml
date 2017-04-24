@@ -41,9 +41,10 @@
 	              <menus>
 	                <Menu mnemonicParsing="false" text="File">
 	                  <items>
-	                    <MenuItem fx:id="openFile" onAction="#handleOpenFile" mnemonicParsing="false" text="Open" />
-	                    <MenuItem fx:id="saveFile" onAction="#handleSaveFile" mnemonicParsing="false" text="Save" />
-	                    <MenuItem fx:id="closeFile" onAction="#handleCloseFile" mnemonicParsing="false" text="Close" />
+	                    <MenuItem fx:id="newFile" onAction="#handleNewFile" mnemonicParsing="false" text="New Document" />
+	                    <MenuItem fx:id="openFile" onAction="#handleOpenFile" mnemonicParsing="false" text="Open File" />
+	                    <MenuItem fx:id="saveFile" onAction="#handleSaveFile" mnemonicParsing="false" text="Save File" />
+	                    <MenuItem fx:id="closeFile" onAction="#handleCloseFile" mnemonicParsing="false" text="Close File" />
 	                    <MenuItem fx:id="exitApp" onAction="#handleExit" mnemonicParsing="false" text="Exit" />
 	                  </items>
 	                </Menu>
@@ -71,6 +72,7 @@
 	              </menus>
 	            </MenuBar>
 	         	<ToolBar BorderPane.alignment="CENTER">
+	         		<Button fx:id="newFileButton" onAction="#handleNewFile" mnemonicParsing="false" text="New" />
 	         		<Button fx:id="openFileButton" onAction="#handleOpenFile" mnemonicParsing="false" text="Open" />
 	         		<Button fx:id="saveFileButton" onAction="#handleSaveFile" mnemonicParsing="false" text="Save" />
 	                <Button fx:id="closeFileButton" onAction="#handleCloseFile" mnemonicParsing="false" text="Close" />

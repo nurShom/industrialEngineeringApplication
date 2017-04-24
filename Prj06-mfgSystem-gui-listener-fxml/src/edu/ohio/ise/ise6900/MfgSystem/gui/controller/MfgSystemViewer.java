@@ -17,7 +17,7 @@ public class MfgSystemViewer extends Application {
 			Scene scene = new Scene(root, 1080, 800);
 			scene.getStylesheets().add(MfgSystemController.class.getResource("application.css").toExternalForm());
 			
-			primaryStage.setTitle("Manufacturing System Dashboard");
+			primaryStage.setTitle("Manufacturing System Designer");
 			MfgSystemController.setStage(primaryStage);
 			primaryStage.setScene(scene);
 			primaryStage.show();

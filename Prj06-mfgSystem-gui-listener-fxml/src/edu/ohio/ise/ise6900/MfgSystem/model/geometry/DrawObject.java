@@ -74,18 +74,6 @@ public abstract class DrawObject implements Comparable<DrawObject>, Drawable {
 
 	public abstract void printout();
 	
-
-	@Override
-	public void display(String[] args) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void display(String[] args, String title, double width, double height) {
-		// TODO Auto-generated method stub
-		
-	}
-	
 	public static void main(String[] args) {
 		DrawObject rtr01 = new RightTriangle();
 		DrawObject rec01 = new Rectangle();

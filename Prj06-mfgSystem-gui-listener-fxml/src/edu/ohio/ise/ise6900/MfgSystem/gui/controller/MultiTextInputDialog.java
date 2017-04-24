@@ -16,15 +16,15 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 
-public class MultiInputDialog extends Dialog<HashMap<String, String>> {
+public class MultiTextInputDialog extends Dialog<HashMap<String, String>> {
 
 	private Map<String, String> fields;
 	
-	public MultiInputDialog(){
+	public MultiTextInputDialog(){
 		this(new HashMap<String, String>());
 	}
 	
-	public MultiInputDialog(HashMap<String, String> fields){
+	public MultiTextInputDialog(HashMap<String, String> fields){
 		this.fields = fields;
 		this.makeDialog();
 	}

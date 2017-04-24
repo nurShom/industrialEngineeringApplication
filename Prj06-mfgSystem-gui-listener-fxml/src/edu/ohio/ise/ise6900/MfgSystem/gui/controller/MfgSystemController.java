@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.ResourceBundle;
+import java.util.Map.Entry;
 
 import edu.ohio.ise.ise6900.MfgSystem.gui.draw.Drawable;
 import edu.ohio.ise.ise6900.MfgSystem.io.FileIO;
@@ -23,9 +24,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -42,8 +45,9 @@ public class MfgSystemController implements Initializable {
 	public MfgSystem ms;
 	private static Stage stage;
 	private static String title;
-	FileChooser fc = new FileChooser();
-	File currentDir = new File(".");
+	private FileChooser fc = new FileChooser();
+	private File currentDir = new File(".");
+	private boolean fileModified = false;
 	@FXML
 	private AnchorPane root;
 	@FXML
@@ -82,6 +86,18 @@ public class MfgSystemController implements Initializable {
 		});
 
 	}
+	
+	@FXML
+	private void handleNewFile(ActionEvent event) {
+		stage.setTitle(MfgSystemController.title + " - New Mfg System");
+		ms = new MfgSystem("New Mfg System");
+		this.updateMachineList();
+		this.updateJobTree();
+		this.updateGanttChart(ms);
+		this.chartContent = null;
+		this.fileModified = true;
+		System.out.println("Creating new mfg system file");
+	}
 
 	@FXML
 	private void handleOpenFile(ActionEvent event) {
@@ -106,6 +122,7 @@ public class MfgSystemController implements Initializable {
 				this.updateMachineList();
 				this.updateJobTree();
 				this.updateGanttChart(ms);
+				this.fileModified = false;
 			} catch (FileNotFoundException e) {
 				System.err.println(e.getMessage());
 				this.alertError(e.getMessage());
@@ -114,6 +131,10 @@ public class MfgSystemController implements Initializable {
 	}
 
 	private void updateMachineList() {
+		if(ms == null){
+			machineList.setItems(null);
+			return;
+		}
 		machineListLabel.setText("Machines");
 		machineListLabel.setTextAlignment(TextAlignment.CENTER);
 		machineListLabel.setBorder(new Border(new BorderStroke(null, BorderStrokeStyle.DOTTED, null, null)));
@@ -125,6 +146,10 @@ public class MfgSystemController implements Initializable {
 	}
 
 	private void updateJobTree() {
+		if(ms == null){
+			jobTree.setRoot(null);
+			return;
+		}
 		TreeItem<MfgObject> rootItem = new TreeItem<>(ms);
 		// rootItem.getChildren().clear();
 		// rootItem.setValue("Jobs");
@@ -145,6 +170,9 @@ public class MfgSystemController implements Initializable {
 
 	private void updateGanttChart(Drawable d) {
 		ganttChart.getChildren().clear();
+		if(d==null || ms == null){
+			return;
+		}
 		this.chartContent = d;
 		ganttChart.getChildren().addAll(this.chartContent.makeShapes());
 		System.out.println("Displaying chart for " + d.toString());
@@ -155,22 +183,49 @@ public class MfgSystemController implements Initializable {
 	private void handleSaveFile(ActionEvent event) {
 		actionNotImplemented("Save File");
 	}
+
+	private boolean continueWoSaving;
+	private boolean promptFileSave(String msg){
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle(null);
+		alert.setHeaderText(null);
+		alert.setContentText(msg);
+		continueWoSaving = false;
+		alert.showAndWait().ifPresent(result -> {
+			if(result == ButtonType.OK){
+				//this.handleSaveFile(new ActionEvent());
+				continueWoSaving = true;
+			}
+		});
+		return continueWoSaving;
+	}
 	
 	@FXML
 	private void handleCloseFile(ActionEvent event) {
-		ms = new MfgSystem("Empty");
+		if(ms == null){
+			return;
+		}
+		if(this.fileModified){
+			String prompt = "If you continue, any unsaved work will be lost. Do you want to continue with closing the file?";
+			if(!this.promptFileSave(prompt))
+				return;
+		}
 		stage.setTitle(MfgSystemController.title);
+		this.ms = null;
 		this.updateMachineList();
 		this.updateJobTree();
-		ganttChart.getChildren().clear();
-		if(this.chartContent != null){
-			this.chartContent = null;
-		}
+		this.updateGanttChart(null);
+		this.chartContent = null;
 		System.out.println("Closing mfg system file");
 	}
 
 	@FXML
 	private void handleExit(ActionEvent event) {
+		if(this.fileModified){
+			String prompt = "If you continue, any unsaved work will be lost. Do you want to continue with exiting the application?";
+			if(!this.promptFileSave(prompt))
+				return;
+		}
 		System.out.println("Exiting mfg system application");
 		System.exit(0);
 		Platform.exit();
@@ -192,6 +247,8 @@ public class MfgSystemController implements Initializable {
 				ms.addMachine(m);
 				this.updateGanttChart(m);
 				this.updateMachineList();
+				this.updateJobTree();
+				this.fileModified = true;
 			} catch (AlreadyMemberException e) {
 				this.alertError(e.getMessage());
 				System.err.println(e.getMessage());
@@ -208,7 +265,7 @@ public class MfgSystemController implements Initializable {
 		HashMap<String, String> fields = new LinkedHashMap<String, String>();
 		fields.put("job", "Job name");
 		fields.put("batch", "Batch size");
-		MultiInputDialog dialog = new MultiInputDialog(fields);
+		MultiTextInputDialog dialog = new MultiTextInputDialog(fields);
 		dialog.setTitle("Add Activity");
 		dialog.setHeaderText(null);
 		
@@ -224,6 +281,7 @@ public class MfgSystemController implements Initializable {
 				ms.addJob(j);
 				this.updateGanttChart(j);
 				this.updateJobTree();
+				this.fileModified = true;
 			} catch (AlreadyMemberException e) {
 				this.alertError(e.getMessage());
 				System.err.println(e.getMessage());
@@ -236,7 +294,7 @@ public class MfgSystemController implements Initializable {
 		HashMap<String, String> fields = new LinkedHashMap<String, String>();
 		fields.put("feature", "Feature name");
 		fields.put("job", "Job name");
-		MultiInputDialog dialog = new MultiInputDialog(fields);
+		MultiTextInputDialog dialog = new MultiTextInputDialog(fields);
 		dialog.setTitle("Add Feature");
 		dialog.setHeaderText(null);
 		
@@ -252,6 +310,7 @@ public class MfgSystemController implements Initializable {
 				j.addFeature(new MfgFeature(fName, j));
 				this.updateGanttChart(j);
 				this.updateJobTree();
+				this.fileModified = true;
 			} catch (AlreadyMemberException | UnknownObjectException e) {
 				this.alertError(e.getMessage());
 				System.err.println(e.getMessage());
@@ -267,7 +326,7 @@ public class MfgSystemController implements Initializable {
 		fields.put("feature", "Feature name");
 		fields.put("start", "Start time");
 		fields.put("end", "End time");
-		MultiInputDialog dialog = new MultiInputDialog(fields);
+		MultiTextInputDialog dialog = new MultiTextInputDialog(fields);
 		dialog.setTitle("Add Activity");
 		dialog.setHeaderText(null);
 		
@@ -293,6 +352,7 @@ public class MfgSystemController implements Initializable {
 				f.addActivity(act);
 				this.updateGanttChart(act);
 				this.updateJobTree();
+				this.fileModified = true;
 			} catch (UnknownObjectException e) {
 				this.alertError(e.getMessage());
 				System.err.println(e.getMessage());
@@ -316,7 +376,7 @@ public class MfgSystemController implements Initializable {
 		fields.put("state", "State type");
 		fields.put("start", "Start time");
 		fields.put("end", "End time");
-		MultiInputDialog dialog = new MultiInputDialog(fields);
+		MultiTextInputDialog dialog = new MultiTextInputDialog(fields);
 		dialog.setTitle("Add State");
 		dialog.setHeaderText(null);
 		
@@ -337,6 +397,7 @@ public class MfgSystemController implements Initializable {
 				m.addState(mSt);
 				this.updateGanttChart(mSt);
 				this.updateJobTree();
+				this.fileModified = true;
 			} catch (UnknownObjectException e) {
 				this.alertError(e.getMessage());
 				System.err.println(e.getMessage());
@@ -360,7 +421,7 @@ public class MfgSystemController implements Initializable {
 	private void handleDelete(ActionEvent event) {
 //		this.actionNotImplemented("Delete");
 		if(this.selected instanceof MfgSystem){
-			this.ms = new MfgSystem("Empty");
+			this.handleCloseFile(new ActionEvent());
 		} else if(this.selected instanceof Machine){
 			deleteMachine();
 		} else if(this.selected instanceof Job){
@@ -375,6 +436,7 @@ public class MfgSystemController implements Initializable {
 		this.updateMachineList();
 		this.updateJobTree();
 		this.updateGanttChart(ms);
+		this.fileModified = true;
 	}
 	
 	private void deleteMachine(){

@@ -30,28 +30,25 @@ public abstract class MfgObject implements Drawable {
 
 		}
 	}
-
-	public static double getSCALE() {
-		return SCALE;
-	}
-
-	public static void setSCALE(double sCALE) {
-		SCALE = sCALE;
-	}
-
-	public static double getHEIGHT() {
-		return HEIGHT;
-	}
-
-	public static void setHEIGHT(double hEIGHT) {
-		HEIGHT = hEIGHT;
-	}
-
+	
 	public MfgObject(String name) {
 		super();
 		this.name = name;
 	}
 
+
+	public static double getSCALE() {
+		return SCALE;
+	}
+	public static void setSCALE(double sCALE) {
+		SCALE = sCALE;
+	}
+	public static double getHEIGHT() {
+		return HEIGHT;
+	}
+	public static void setHEIGHT(double hEIGHT) {
+		HEIGHT = hEIGHT;
+	}
 	protected static String getProperty(String propertyName, String oldValue) {
 		return properties.getProperty(propertyName, oldValue); 
 	}
@@ -62,12 +59,7 @@ public abstract class MfgObject implements Drawable {
 	public String getName() {
 		return name;
 	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#toString()
-	 */
+	
 	@Override
 	public String toString() {
 		return "MfgObject [name=" + name + "]";
@@ -78,29 +70,8 @@ public abstract class MfgObject implements Drawable {
 		MfgSystem.io.println(this.toString());
 	}
 	
-	@Override
-	public void display(String[] args) {
-		this.display(args, "Mfg System with GUI TEST", 800, 600);
-	}
-
-	@Override
-	public void display(String[] args, String title, double width, double height) {		
-//		da.getCanvas().getChildren().clear();
-//		da.getCanvas().clear();
-//		da.getCanvas().addTarget(this);
-//		
-//		try{
-//			da.main(args);
-//		} catch(Exception e){
-//			da.show();
-//		}
-//		
-	}
-	
-	public static void main(String[] args) throws InvalidStateException {
-		Machine m1 = new Machine("m1");
-		m1.display(args);
-
+	public static void main(String[] args) {
+		
 	}
 
 }
