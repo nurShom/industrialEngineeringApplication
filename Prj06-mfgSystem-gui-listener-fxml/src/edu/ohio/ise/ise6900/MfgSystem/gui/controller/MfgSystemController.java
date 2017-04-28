@@ -49,8 +49,8 @@ public class MfgSystemController implements Initializable {
 	private boolean fileModified = false;
 	@FXML
 	private AnchorPane root;
-	@FXML
-	private Label machineListLabel;
+	//@FXML
+	//private Label machineListLabel;WSS
 	@FXML
 	private ListView<Machine> machineList;
 	@FXML
@@ -78,8 +78,8 @@ public class MfgSystemController implements Initializable {
 			public void changed(ObservableValue<? extends TreeItem<MfgObject>> observable, TreeItem<MfgObject> oldValue,
 					TreeItem<MfgObject> newValue) {
 				if(newValue != null){
-					updateGanttChart(newValue.getValue());
 					selected = newValue.getValue();
+					updateGanttChart(selected);
 				}
 			}
 		});
@@ -147,9 +147,9 @@ public class MfgSystemController implements Initializable {
 			machineList.setItems(null);
 			return;
 		}
-		machineListLabel.setText("Machines");
-		machineListLabel.setTextAlignment(TextAlignment.CENTER);
-		machineListLabel.setBorder(new Border(new BorderStroke(null, BorderStrokeStyle.DOTTED, null, null)));
+		//machineListLabel.setText("Machines");
+		//machineListLabel.setTextAlignment(TextAlignment.CENTER);
+		//machineListLabel.setBorder(new Border(new BorderStroke(null, BorderStrokeStyle.DOTTED, null, null)));
 		ObservableList<Machine> machines = FXCollections.observableArrayList();
 		for (Machine m : ms.getMachines().values()) {
 			machines.add(m);
@@ -197,52 +197,33 @@ public class MfgSystemController implements Initializable {
 			this.fileModified = false;
 			return;
 		}
-		actionNotImplemented("Save File");
-		
-		try {
-			String fIlePath = this.currentDir.getPath() + "\\" + ms.getName() + ".mfg";
-			File file = new File(fIlePath);
-			MfgSystem.setIO(new FileIO(file, file));
-		} catch (FileNotFoundException e) {
-			this.alertError(e.getMessage());
-			System.err.println(e.getMessage());
-			e.printStackTrace();
-			//return;
-		} catch (IOException e) {
-			this.alertError(e.getMessage());
-			e.printStackTrace();
+		if(!this.fileModified){
+			return;
 		}
-		MfgSystem.getIO().println("# Manufacturing System: " + ms.getName());
-		MfgSystem.getIO().println("\n# machines");
-		for(Machine m : ms.getMachines().values()){
-			m.write();
+
+		fc.setTitle("Save Mfg File");
+		if (currentDir.exists()) {
+			fc.setInitialDirectory(currentDir);
+		} else {
+			fc.setInitialDirectory(new File("."));
 		}
-		MfgSystem.getIO().println("\n# jobs");
-		for(Job j : ms.getJobs().values()){
-			MfgSystem.getIO().println("");
-			j.write();
-			MfgSystem.getIO().println("# job " + j.getName() + " features");
-			for(MfgFeature f : j.getFeatures().values()){
-				f.write();
-			}
-			MfgSystem.getIO().println("# job " + j.getName() + " activities");
-			for(Activity a : j.getActivities()){
-				a.write();
+		fc.getExtensionFilters().addAll(new ExtensionFilter("Mfg File", "*.mfg"),
+				new ExtensionFilter("All Files", "*.*"));
+		File outFile = fc.showSaveDialog(new Stage());
+		if(outFile != null){
+			try {
+				outFile.createNewFile();
+				MfgSystem.setIO(new FileIO(outFile, outFile));
+				ms.write();
+				((FileIO)MfgSystem.getIO()).flush();
+				this.fileModified = false;
+				System.out.println("Saved mfg system file");
+			} catch (IOException e) {
+				this.alertError(e.getMessage());
+				e.printStackTrace();
+				return;
 			}
 		}
-		for(Machine m : ms.getMachines().values()){
-			MfgSystem.getIO().println("\n# machine " + m.getName() + " states, total: " + m.getMachineStates().size());
-			System.out.println("Number of states:" + m.getMachineStates().size()); 
-			for(AbstractState as : m.getMachineStates()){
-				if(as instanceof MachineState){
-					((MachineState) as).write();
-				}
-			}
-		}
-		MfgSystem.getIO().print("\n# End of file");
-		((FileIO)MfgSystem.getIO()).flush();
-		this.fileModified = false;
-		System.out.println("Saved mfg system file");
 	}
 
 	private boolean continueWoSaving;
@@ -506,7 +487,14 @@ public class MfgSystemController implements Initializable {
 		}
 //		this.actionNotImplemented("Delete");
 		if(this.selected instanceof MfgSystem){
-			this.handleCloseFile(new ActionEvent());
+			stage.setTitle(MfgSystemController.title);
+			this.ms = null;
+			this.updateMachineList();
+			this.updateJobTree();
+			this.updateGanttChart(null);
+			this.chartContent = null;
+			this.fileModified = false;
+			System.out.println("Deleting mfg system");
 		} else if(this.selected instanceof Machine){
 			deleteMachine();
 		} else if(this.selected instanceof Job){
@@ -556,8 +544,11 @@ public class MfgSystemController implements Initializable {
 	
 	private void deleteActivity(){
 		Activity a = (Activity) selected;
+		System.out.println("Deleting " + a.getName() + " from " + a.getFeature());
 		a.getFeature().deleteActivity(a);
+		System.out.println("Deleting " + a.getName() + " from " + a.getJob());
 		a.getJob().deleteActivity(a);
+		System.out.println("Deleting " + a.getName() + " from " + a.getMachine());
 		a.getMachine().deleteState(a);
 	}
 	

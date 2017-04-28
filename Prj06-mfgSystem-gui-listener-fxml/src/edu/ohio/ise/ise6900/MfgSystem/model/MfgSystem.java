@@ -154,12 +154,18 @@ public class MfgSystem extends MfgObject
 	public Map<String, Job> getJobs() {
 		return jobs;
 	}
+	public void setJobs(Map<String, Job> jobs) {
+		this.jobs = jobs;
+	}
 
 	/**
 	 * @return the machines
 	 */
 	public Map<String, Machine> getMachines() {
 		return machines;
+	}
+	public void setMachines(Map<String, Machine> machines) {
+		this.machines = machines;
 	}
 
 	public void addDrawObject(DrawObject o){
@@ -532,7 +538,34 @@ public class MfgSystem extends MfgObject
 
 	@Override
 	public void write() {
-		io.println("# Manufaturing System: " + this.getName());
+		MfgSystem.getIO().println("# Manufacturing System: " + this.getName());
+		MfgSystem.getIO().println("\n# machines");
+		for(Machine m : this.getMachines().values()){
+			m.write();
+		}
+		MfgSystem.getIO().println("\n# jobs");
+		for(Job j : this.getJobs().values()){
+			MfgSystem.getIO().println("");
+			j.write();
+			MfgSystem.getIO().println("# job " + j.getName() + " features");
+			for(MfgFeature f : j.getFeatures().values()){
+				f.write();
+			}
+			MfgSystem.getIO().println("# job " + j.getName() + " activities");
+			for(Activity a : j.getActivities()){
+				a.write();
+			}
+		}
+		for(Machine m : this.getMachines().values()){
+			MfgSystem.getIO().println("\n# machine " + m.getName() + " states, total: " + m.getMachineStates().size());
+			System.out.println("Number of states:" + m.getMachineStates().size()); 
+			for(AbstractState as : m.getMachineStates()){
+				if(as instanceof MachineState){
+					((MachineState) as).write();
+				}
+			}
+		}
+		MfgSystem.getIO().print("\n# End of file");
 	}
 	
 }
